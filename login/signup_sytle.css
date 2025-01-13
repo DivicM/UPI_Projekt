@@ -93,3 +93,17 @@ a:hover{
     text-decoration: underline;
 }
 
+.incorrect label{
+    background-color: red;
+}
+
+.incorrect input{
+    border-color: red;
+}
+
+#greske-poruka{
+    color: red;
+}
+
+
+
