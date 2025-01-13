@@ -54,13 +54,12 @@ function GetSignupFormErrors(firstname, email, password, repeatPassword) {
         password_input.parentElement.classList.add('incorrect');
         repeatpassword_input.parentElement.classList.add('incorrect');
     }
-    if (password.length < 8 && password.length != 0) {
-        greske.push('Duljina lozinke mora biti barem 8 znakova!');
+    if (!validPassword(password)) {
+        greske.push('Lozinka pre jednostavna!');
         password_input.parentElement.classList.add('incorrect');
         repeatpassword_input.parentElement.classList.add('incorrect');
     }
     if (!password.contains)
-
         return greske;
 }
 
@@ -90,6 +89,27 @@ function GetLoginFormErrors(email, password) {
     return greske;
 }
 
+
+
+function validPassword(password) {
+    const posebni = /[@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
+
+    if (password == "")
+        return false;
+
+    if (password.length < 8) {
+        return false;
+    }
+    if (!posebni.test(password)) {
+        return false;
+    }
+    if (!/\d/.test(password)) {
+        return false;
+    }
+    return true;
+}
+
+//exports.validPassword = validPassword;
 
 
 
