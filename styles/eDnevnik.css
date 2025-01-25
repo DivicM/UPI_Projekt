@@ -8,7 +8,6 @@ body {
   
   .dashboard {
     display: flex;
-    height: 100vh;
   }
   
   /* Sidebar */
@@ -78,9 +77,9 @@ body {
     transition: background-color 0.3s ease;
   }
   
-  .sidebar .menu ul li a:hover {
-    background-color: #388E3C;
-  }
+  
+  
+  
   
   /* Glavni sadržaj */
   .main-content {
@@ -97,8 +96,10 @@ body {
   }
   
   .main-content header h1 {
-    font-size: 1.8rem;
+    font-size: 3rem;
     color: #4CAF50;
+    margin-left: 300px;
+    text-decoration: underline;
   }
   
   .main-content header button {
