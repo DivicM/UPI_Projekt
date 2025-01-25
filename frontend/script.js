@@ -28,7 +28,7 @@ loginForm.addEventListener('submit', async (e) => {
 
   if (response.ok) {
     alert('Login successful!');
-    window.location.href = 'eDnevnik.html'; // Preusmjeravanje na novu stranicu
+    window.location.href = 'home.html'; // Preusmjeravanje na novu stranicu
   } else {
     alert('Invalid credentials!');
   }
