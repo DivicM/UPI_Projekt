@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matematika</title>
+  <link rel="stylesheet" href="/styles/predmet.css">
+  <script src="/frontend/js/tzk.js" defer></script>
+</head>
+<body>
+  <header>
+    <h1>TZK</h1>
+    <a href="/frontend/pages/predmeti.html">← Povratak na predmete</a>
+  </header>
+  <main>
+    <section class="grades">
+      <h2>Ocjene</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Datum</th>
+            <th>Ocjena</th>
+            <th>Bilješka</th>
+          </tr>
+        </thead>
+        <tbody id="grades-table">
+          <!-- Dinamički popunjeno u predmet-matematika.js -->
+        </tbody>
+      </table>
+    </section>
+
+    <section class="notes">
+      <h2>Bilješke</h2>
+      <ul id="notes-list">
+        <!-- Dinamički popunjeno u predmet-matematika.js -->
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
