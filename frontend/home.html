@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>e-Dnevnik - Home</title>
+  <link rel="stylesheet" href="/styles/eDnevnik.css">
+  <script src="/frontend/js/home.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="dashboard">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="profile">
+        <img src="/images/school.jpg" alt="Profile Picture">
+        <h2>John Doe</h2><br>
+        <button id="profile">Uredi profil</button>
+      </div>
+      <nav class="menu">
+        <ul>
+          <li><a href="home.html">Home</a></li>
+          <li><a href="/pages/predmeti.html">Predmeti</a></li>
+          <li><a href="/frontend/pages/izostanci.html">Izostanci</a></li>
+          <li><a href="frontend/pages/raspored.html">Raspored</a></li>
+          <li><a href="frontend/pages/kalendar-nastave.html">Kalendar nastave</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Glavni sadržaj -->
+    <main class="main-content">
+      <header>
+        <h1>Dobrodošli u e-Dnevnik</h1>
+        <button id="logoutButton">Logout</button>
+      </header>
+
+      <!-- Statistike -->
+      <section class="statistics">
+        <div class="stat">
+          <h3>13</h3>
+          <p>Predmeta</p>
+        </div>
+        <div class="stat">
+            <h3>4.4</h3>
+            <p>Prosjek ocjena</p>
+        </div>
+        <div class="stat">
+          <h3>3</h3>
+          <p>Izostanka</p>
+        </div>
+      </section>
+
+      <!-- Grafikon -->
+      <section class="chart">
+        <h2>Pregled ocjena</h2>
+        <canvas id="gradesChart"></canvas>
+      </section>
+
+      <!-- Podsjetnici -->
+      <section class="reminders">
+        <h2>Podsjetnici</h2>
+        <ul>
+          <li>Rok za predaju eseja iz Hrvatskog jezika - 25.1.2025.</li>
+          <li>Provjera znanja iz Matematike - 30.1.2025.</li>
+          <li>Praktični rad iz Informatike - 1.2.2025.</li>
+        </ul>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
