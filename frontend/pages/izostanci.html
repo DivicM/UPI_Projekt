@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pregled izostanaka</title>
+  <link rel="stylesheet" href="/styles/izostanci.css">
+  <script src="/frontend/js/izostanci.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard">
+    <aside class="sidebar">
+        <div class="profile">
+          <img src="/images/school.jpg" alt="Profile Picture">
+          <h2>John Doe</h2><br>
+          <button id="profile">Uredi profil</button>
+        </div>
+        <nav class="menu">
+          <ul>
+            <li><a href="/frontend/home.html">Home</a></li>
+            <li><a href="predmeti.html">Predmeti</a></li>
+            <li><a href="izostanci.html">Izostanci</a></li>
+            <li><a href="raspored.html">Raspored</a></li>
+            <li><a href="kalendar-nastave.html">Kalendar nastave</a></li>
+          </ul>
+        </nav>
+      </aside>
+      <main class="main-content">
+  <header>
+    <h1>Pregled izostanaka</h1>
+  </header>
+    <!-- Upozorenje na broj izostanaka -->
+    <section class="warning">
+      <h2>Upozorenje</h2>
+      <p id="warning-text">Broj izostanaka je u granici normale.</p>
+    </section>
+
+    <!-- Filter po vremenskom periodu -->
+    <section class="filter">
+      <h2>Filtriraj izostanke po vremenskom periodu</h2>
+      <label for="fromDate">Od:</label>
+      <input type="date" id="fromDate">
+      <label for="toDate">Do:</label>
+      <input type="date" id="toDate">
+      <button id="filterButton">Primjeni filter</button>
+    </section>
+
+    <!-- Pregled izostanaka -->
+    <section class="overview">
+      <h2>Pregled izostanaka</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Datum</th>
+            <th>Vrsta izostanka</th>
+            <th>Napomena</th>
+          </tr>
+        </thead>
+        <tbody id="absence-table">
+          <!-- Podaci će biti dinamički generisani ovde -->
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Vrste izostanaka -->
+    <section class="absence-types">
+      <h2>Vrste izostanaka</h2>
+      <ul id="absence-types-list">
+        <!-- Podaci će biti dinamički generisani ovde -->
+      </ul>
+    </section>
+
+    <!-- Graf izostanaka -->
+    <section class="chart">
+      <h2>Graf izostanaka</h2>
+      <canvas id="absenceChart" width="100" height="100"></canvas>
+    </section>
+  </main>
+    </div>
+</body>
+</html>
