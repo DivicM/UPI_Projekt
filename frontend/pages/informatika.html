@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>informatika</title>
+  <link rel="stylesheet" href="/styles/predmet.css">
+  <script src="/frontend/js/informatika.js" defer></script>
+</head>
+<body>
+  <header>
+    <h1>INFORMATIKA</h1>
+    <a href="/frontend/pages/predmeti.html">← Povratak na predmete</a>
+  </header>
+  <main>
+    <section class="grades">
+      <h2>Ocjene</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Datum</th>
+            <th>Ocjena</th>
+            <th>Bilješka</th>
+          </tr>
+        </thead>
+        <tbody id="grades-table">
+          <!-- Dinamički popunjeno u predmet-matematika.js -->
+        </tbody>
+      </table>
+    </section>
+
+    <section class="notes">
+      <h2>Bilješke</h2>
+      <ul id="notes-list">
+        <!-- Dinamički popunjeno u predmet-matematika.js -->
+      </ul>
+    </section>
+
+    <!-- Sekcija za gradivo -->
+    <section class="curriculum">
+        <h2>Obrađeno gradivo</h2>
+        <ul id="curriculum-list">
+          <!-- Dinamički popunjeno preko informatika.js -->
+        </ul>
+      </section>
+  
+      <!-- Sekcija za pripremu za završni ispit -->
+      <section class="final-exam">
+        <h2>Priprema za završni ispit</h2>
+        <p>Preuzmi materijale za vežbanje:</p>
+        <ul>
+          <li><a href="/materials/html-css.pdf" download>HTML i CSS (PDF)</a></li>
+          <li><a href="/materials/programming-basics.pdf" download>Osnove programiranja (PDF)</a></li>
+          <li><a href="/materials/algorithms.pdf" download>Algoritmi i strukture podataka (PDF)</a></li>
+        </ul>
+      </section>
+  </main>
+</body>
+</html>

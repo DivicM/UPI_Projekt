@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Engleski jezik</title>
+  <link rel="stylesheet" href="/styles/predmet.css">
+  <script src="/frontend/js/engleski.js" defer></script>
+</head>
+<body>
+  <header>
+    <h1>ENGLESKI JEZIK</h1>
+    <a href="/frontend/pages/predmeti.html">← Povratak na predmete</a>
+  </header>
+  <main>
+    <section class="grades">
+      <h2>Ocjene</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Datum</th>
+            <th>Ocjena</th>
+            <th>Bilješka</th>
+          </tr>
+        </thead>
+        <tbody id="grades-table">
+          <!-- Dinamički popunjeno u predmet-matematika.js -->
+        </tbody>
+      </table>
+    </section>
+
+    <section class="notes">
+      <h2>Bilješke</h2>
+      <ul id="notes-list">
+        <!-- Dinamički popunjeno u predmet-matematika.js -->
+      </ul>
+    </section>
+
+    <!-- Sekcija za gradivo -->
+    <section class="curriculum">
+        <h2>Obrađeno gradivo</h2>
+        <ul id="curriculum-list">
+          <!-- Dinamički popunjeno preko engleski-jezik.js -->
+        </ul>
+      </section>
+  
+      <!-- Sekcija za pripremu za završni ispit -->
+      <section class="final-exam">
+        <h2>Priprema za završni ispit</h2>
+        <p>Preuzmi materijale za vežbanje:</p>
+        <ul>
+          <li><a href="/materials/grammar.pdf" download>Gramatika (PDF)</a></li>
+          <li><a href="/materials/vocabulary.pdf" download>Rečnik i vokabular (PDF)</a></li>
+          <li><a href="/materials/writing-skills.pdf" download>Veštine pisanja (PDF)</a></li>
+        </ul>
+      </section>
+  </main>
+</body>
+</html>
