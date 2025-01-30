@@ -2,11 +2,21 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
+const dotenv = require("dotenv");
+require("dotenv").config();
 
-
+dotenv.config();
 const app = express();
+app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true })); // Za HTML forme
+
+app.use(cors({
+  origin: "http://127.0.0.1:5502", // Postavi frontend URL
+  credentials: true // Omogućava slanje sesija/cookies
+}));
 
 // MongoDB povezivanje
 mongoose.connect('mongodb://127.0.0.1:27017/e_Dnevnik')
@@ -19,31 +29,191 @@ const userSchema = new mongoose.Schema({
     lastName: String,
     username: String,
     password: String,
+    resetToken: String,          // Token za resetiranje lozinke
+    tokenExpiration: Date,  
 });
 
 const User = mongoose.model('User', userSchema);
+module.exports = User;
+
+const absenceData = {}; // Pohrana podataka
+
+// Ruta za dohvaćanje izostanaka
+
+
+// Ruta za ažuriranje izostanaka (samo nastavnik)
+/*app.post("/absences/update", (req, res) => {
+  const { email, data } = req.body;
+  const userEmail = req.headers["user-email"];
+
+  if (userEmail !== "anetakalabric65@gmail.com") {
+    return res.status(403).json({ message: "Nemate ovlasti za uređivanje izostanaka." });
+  }
+  if (!absenceData[email]) {
+    absenceData[email] = [];
+}
+  absenceData[email] = data;
+  res.json({ message: "Izostanci uspješno ažurirani!" });
+});*/
+// Kreiraj model za izostanke ako ne postoji
+const absenceSchema = new mongoose.Schema({
+  studentEmail: String,
+  date: String,
+  type: String,
+  note: String,
+});
+
+const Absence = mongoose.model("Absence", absenceSchema);
+const provjeriToken = (req, res, next) => {
+  const authZaglavlje = req.headers["authorization"];
+  console.log("📌 Primljeno autorizacijsko zaglavlje:", authZaglavlje); // 🛠 Debugging
+
+  if (!authZaglavlje) {
+    console.error("❌ Ne postoji autorizacijsko zaglavlje!");
+    return res.status(403).json({ message: "Niste prijavljeni!" });
+  }
+
+const token = authZaglavlje.split(" ")[1];
+  console.log("📌 Ekstrahirani token:", token); // 🛠 Debugging
+
+  if (!token) {
+      console.error("❌ Bearer token nije pronađen!");
+      return res.status(403).json({ message: "Niste prijavljeni!" });
+  }
+
+  try {
+      if (!process.env.JWT_SECRET) {
+          throw new Error("JWT_SECRET nije postavljen!");
+      }
+
+      const dekodiraniToken = jwt.verify(token, process.env.JWT_SECRET);
+      console.log("📌 Dekodirani token:", dekodiraniToken); // 🛠 Debugging
+
+      
+
+
+      req.korisnik = dekodiraniToken;
+      console.log("✅ Korisnik je prijavljen kao:", req.korisnik);
+      next();
+  } catch (err) {
+      console.error("❌ Neispravni Token:", err.message);
+      return res.status(401).json({ message: "Neispravan token" });
+  }
+};
+
+app.get("/absences",provjeriToken, async (req, res) => {
+  try {
+      const loggedInUser = req.korisnik.idUser; // 📌 JWT vraća `idUser` (email)
+      console.log("📌 Autoriziran korisnik:", loggedInUser); // 🛠 Debugging
+
+      const absences = await Absence.find({ studentEmail: loggedInUser }); // 📌 Pronađi izostanke samo za prijavljenog korisnika
+      console.log("Izostanci pronađeni u bazi:", absences); // 🛠 Debugging - provjeri što vraća MongoDB
+
+      res.json(absences.length ? absences : []);
+  } catch (error) {
+      console.error("Greška pri dohvaćanju izostanaka:", error);
+      res.status(500).json({ message: "Greška na serveru!" });
+  }
+});
+
+// ✅ Ažuriranje izostanaka (samo nastavnik)
+app.post("/absences/update", provjeriToken, async (req, res) => {
+  try {
+      const { email, data } = req.body;
+      const loggedInUser = req.korisnik.idUser; // Email iz JWT tokena
+      console.log(`📌 Korisnik ${loggedInUser} pokušava ažurirati izostanke za ${email}`);
+
+      // ✅ Samo nastavnik može uređivati izostanke
+      if (loggedInUser !== "anetakalabric65@gmail.com") {
+          return res.status(403).json({ message: "Nemate ovlasti za uređivanje izostanaka." });
+      }
+
+      // ✅ Ažuriraj izostanke učenika u bazi
+      await Absence.deleteMany({ studentEmail: email }); // Obriši stare podatke
+      await Absence.insertMany(data.map(item => ({ ...item, studentEmail: email }))); // Dodaj nove
+
+      res.json({ message: "Izostanci uspješno ažurirani!" });
+
+  } catch (error) {
+      console.error("❌ Greška pri ažuriranju izostanaka:", error);
+      res.status(500).json({ message: "Greška na serveru!" });
+  }
+});
+
+// ✅ Brisanje izostanka (samo nastavnik)
+app.delete("/absences/delete/:id", provjeriToken, async (req, res) => {
+  try {
+      const absenceId = req.params.id;
+      const loggedInUser = req.korisnik.idUser; // Email iz JWT tokena
+
+      console.log(`📌 Korisnik ${loggedInUser} pokušava obrisati izostanak ID: ${absenceId}`);
+
+      // ✅ Samo nastavnik može brisati izostanke
+      if (loggedInUser !== "anetakalabric65@gmail.com") {
+          return res.status(403).json({ message: "Nemate ovlasti za brisanje izostanaka." });
+      }
+
+      // ✅ Pronađi i obriši izostanak
+      const deletedAbsence = await Absence.findByIdAndDelete(absenceId);
+
+      if (!deletedAbsence) {
+          return res.status(404).json({ message: "Izostanak nije pronađen!" });
+      }
+
+      res.json({ message: "Izostanak uspješno obrisan!" });
+
+  } catch (error) {
+      console.error("❌ Greška pri brisanju izostanka:", error);
+      res.status(500).json({ message: "Greška na serveru!" });
+  }
+});
+
+
+
+
 
 // Ruta za registraciju
 app.post('/register', async (req, res) => {
   const { firstName, lastName, username, password } = req.body;
+  // **Provjera jačine lozinke**
+  if (!validator.isStrongPassword(password, { minLength: 8, minSymbols: 1 })) {
+    return res.status(400).send('Password is too weak! Use at least 8 characters, 1 symbol, and 1 uppercase letter.');
+}
   const user = new User({ firstName, lastName, username, password });
   await user.save();
   console.log('User saved:', user); // Logiraj korisnika
   res.send({ message: 'User registered!' });
 });
 
+
+
 // Ruta za login
 app.post('/login', async (req, res) => {
-    const { username, password } = req.body;
-    const user = await User.findOne({ username, password });
-    if (user) {
-      // Login uspješan - šaljemo potvrdu
-      res.send({ message: 'Login successful!', loggedIn: true });
-    } else {
-      res.status(400).send({ message: 'Invalid credentials!' });
-    }
+  try {
+      const user = await User.findOne({ email: req.body.email });
+            if (!user) {
+          return res.status(401).json({ message: "Neispravni podaci za prijavu" });
+      }
 
+      // ✅ Token sada sigurno sadrži korisnički email!
+      const token = jwt.sign(
+        { idUser: user.username },  // 📌 Sada sigurno spremamo email korisnika u token
+          process.env.JWT_SECRET || "tajniKljuc",
+          { expiresIn: "1h" }
+      );
+
+      console.log("📌 Generirani token:", token); // 🛠 Debugging
+
+      res.json({ token });
+  } catch (error) {
+      console.error("❌ Greška prilikom prijave:", error);
+      res.status(500).json({ message: "Greška na serveru" });
+  }
 });
+
+
+
+
   /*app.post('/update-grade', async (req, res) => {
   const { role } = req.headers; // Pretpostavljamo da je uloga prosleđena kroz zaglavlje
   const { index, grade } = req.body;
@@ -144,6 +314,274 @@ app.get('/subjects', async (req, res) => {
 app.post('/logout', (req, res) => {
     res.status(200).send({ message: 'Uspješna odjava!' });
   });
+
+
+
+  const nodemailer = require('nodemailer');
+  const crypto = require('crypto');
+  
+  // Ruta za zahtjev za resetiranje lozinke
+  app.post('/request-reset-password', async (req, res) => {
+    const { email } = req.body;
+  
+    const user = await User.findOne({ username: email });
+    if (!user) {
+      return res.status(404).send({ message: 'User not found!' });
+    }
+  
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    user.resetToken = resetToken;
+    user.tokenExpiration =  Date.now() + 86400000; // Token vrijedi 1 dan
+    await user.save();
+    console.log('User updated with resetToken:', user); // Provjera je li token spremljen
+
+    const resetLink = `https://8235-31-217-0-225.ngrok-free.app/reset-password?token=${resetToken}`;
+    console.log('Generated reset link:', resetLink);
+
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'anetakalabric65@gmail.com', // Tvoj Gmail
+        pass: 'phcx hiyn opkp ouwz', // Zamijeni s Google App Password
+      },
+    });
+  
+    const mailOptions = {
+      from: 'anetakalabric65@gmail.com',
+      to: email,
+      subject: 'Password Reset',
+      html: `<p>Click this link to reset your password: <a href="${resetLink}">${resetLink}</a></p>`,
+    };
+  
+    transporter.sendMail(mailOptions, (error) => {
+      if (error) {
+        console.error(error);
+        return res.status(500).send({ message: 'Failed to send email.' });
+      }
+      res.status(200).send({ message: 'Reset link sent!' });
+    });
+  });
+  
+  const validator = require('validator');
+
+  app.post('/reset-password', async (req, res) => {
+    const { token, newPassword, confirmPassword } = req.body;
+
+    console.log('Token received in POST request:', token); // Provjera
+
+    if (!token) {
+        return res.status(400).send('Missing token!');
+    }
+
+    // Provjeri jesu li lozinke iste
+    if (newPassword !== confirmPassword) {
+      return res.status(400).send('Passwords do not match!');
+    }
+    // **Provjera jačine lozinke**
+    if (!validator.isStrongPassword(newPassword, { minLength: 8, minSymbols: 1 })) {
+      return res.status(400).send('Password is too weak! Use at least 8 characters, 1 symbol, and 1 uppercase letter.');
+  }
+
+
+    console.log('Token received in POST request:', token);
+    console.log('Current time:', Date.now());
+    try {
+      // Pronađi korisnika s odgovarajućim tokenom
+      const user = await User.findOne({
+        resetToken: token,
+        tokenExpiration: { $gt: Date.now() }, // Provjeri je li token još važeći
+      });
+
+
+
+      if (!user) {
+        return res.status(400).send('Invalid or expired token!');
+      }
+  
+      // Ažuriraj lozinku i očisti token
+      user.password = newPassword;
+      user.resetToken = null;
+      user.tokenExpiration = null;
+      await user.save();
+  
+      res.send('Password reset successful! You can now log in.');
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('An error occurred while resetting the password.');
+    }
+  });
+  
+  const path = require('path');
+  app.use('/frontend', express.static(path.join(__dirname, 'frontend')));
+
+  app.get('/reset-password', (req, res) => {
+    const { token } = req.query; // Preuzimanje tokena iz URL-a
+    console.log('Token received in URL:', token);
+
+    // Provjeri je li token prisutan
+    if (!token) {
+      return res.status(400).send('Invalid or missing token!');
+    }
+    res.sendFile(path.join(__dirname, 'frontend', 'pages', 'reset-password.html'));
+
+    
+  });
+
+
+  
+  // Ruta za ažuriranje ocjena, bilješki i obrađenog gradiva
+  //BIOLOGIJA
+  let gradesData = [];
+  let notesData = [];
+  let curriculumData = [];
+  let finalExamData = [];
+
+  app.get('/biologija/grades', (req, res) => {
+      res.json(gradesData);
+      
+  });
+  app.get("/biologija/notes", (req, res) => {
+    res.json(notesData);
+    
+});
+app.get("/biologija/curriculum", (req, res) => {
+  res.json(curriculumData);
+    
+});
+app.get("/biologija/finalExam", (req, res) => {
+  res.json(finalExamData || []);
+  
+});
+
+
+  
+  app.post('/biologija/update', (req, res) => {
+    const { email, dataType, data } = req.body;
+  
+
+    // ❌ Ako korisnik nije nastavnik, zabrani pristup
+    if (email !== "anetakalabric65@gmail.com") {
+        return res.status(403).json({ message: 'Nemate ovlasti za uređivanje podataka.' });
+    }
+    
+
+  
+  
+     if (dataType === "grades") {
+          gradesData = data; 
+      } else if (dataType === "notes") {
+        notesData = data;
+      } else if (dataType == "curriculum") {
+        curriculumData = data;
+      } else if (dataType === "finalExam") {
+        finalExamData = data; // Ažuriraj materijale za završni ispit
+    }
+  
+      res.json({ message: `${dataType} su ažurirane!` });
+  });
+  
+  app.delete('/biologija/delete/:index', (req, res) => {  
+    const index = req.params.index;
+    const userEmail = req.headers["user-email"];
+   
+
+    // ❌ Ako korisnik nije nastavnik, zabrani brisanje
+    if (userEmail !== "anetakalabric65@gmail.com") {
+        return res.status(403).json({ message: "Nemate ovlasti za brisanje podataka." });
+    }
+    gradesData.splice(index, 1);
+    res.json({ message: "Red uspješno obrisan!" });
+    
+  });
+
+  app.delete("/biologija/delete/notes/:index", (req, res) => {
+    const index = parseInt(req.params.index, 10);
+    const userEmail = req.headers["user-email"];
+
+    // ❌ Ako korisnik nije nastavnik, zabrani brisanje
+    if (userEmail !== "anetakalabric65@gmail.com") {
+        return res.status(403).json({ message: "Nemate ovlasti za brisanje podataka." });
+    }
+    
+    if (index >= 0 && index < notesData.length) {
+        notesData.splice(index, 1); // Uklanja bilješku prema indeksu
+        res.json({ message: "Bilješka uspješno obrisana!" });
+    } else {
+        res.status(404).json({ message: "Bilješka nije pronađena!" });
+    }
+});
+
+app.delete("/biologija/delete/curriculum/:index", (req, res) => {
+  const index = parseInt(req.params.index, 10);
+  const userEmail = req.headers["user-email"];
+
+    // ❌ Ako korisnik nije nastavnik, zabrani brisanje
+    if (userEmail !== "anetakalabric65@gmail.com") {
+        return res.status(403).json({ message: "Nemate ovlasti za brisanje podataka." });
+    }
+  if (index >= 0 && index < curriculumData.length) {
+      curriculumData.splice(index, 1); // Uklanja obrađeno gradivo prema indeksu
+      res.json({ message: "Gradivo uspješno obrisano!" });
+  } else {
+      res.status(404).json({ message: "Gradivo nije pronađeno!" });
+  }
+});
+
+app.delete("/biologija/delete/finalExam/:index", (req, res) => {
+  const index = parseInt(req.params.index, 10);
+  const userEmail = req.headers["user-email"];
+
+    // ❌ Ako korisnik nije nastavnik, zabrani brisanje
+    if (userEmail !== "anetakalabric65@gmail.com") {
+        return res.status(403).json({ message: "Nemate ovlasti za brisanje podataka." });
+    }
+  if (index >= 0 && index < finalExamData.length) {
+      finalExamData.splice(index, 1); // Uklanja materijal prema indeksu
+      res.json({ message: "Materijal uspješno obrisan!" });
+  } else {
+      res.status(404).json({ message: "Materijal nije pronađen!" });
+  }
+});
+/*app.delete("/:subject/delete/:dataType/:index", (req, res) => {
+  const { subject, dataType, index } = req.params;
+  const userEmail = req.headers["user-email"];
+  const parsedIndex = parseInt(index, 10);
+
+  // ❌ Ako korisnik nije nastavnik, zabrani brisanje
+  if (userEmail !== "anetakalabric65@gmail.com") {
+      return res.status(403).json({ message: "Nemate ovlasti za brisanje podataka." });
+  }
+
+  if (!subjectData[subject] || !subjectData[subject][dataType]) {
+      return res.status(404).json({ message: `Podaci za predmet '${subject}' nisu pronađeni.` });
+  }
+
+  if (parsedIndex >= 0 && parsedIndex < subjectData[subject][dataType].length) {
+      subjectData[subject][dataType].splice(parsedIndex, 1);
+      res.json({ message: `${dataType} uspješno obrisano za predmet ${subject}!` });
+  } else {
+      res.status(404).json({ message: "Podatak nije pronađen!" });
+  }
+});
+*/
+// Ruta za dohvaćanje trenutnog korisnika
+app.get('/current-user',provjeriToken, async (req, res) => {
+  // Simulacija - preuzmi stvarnog korisnika iz sesije ili tokena
+  //res.json({ email: "anetakalabric65@gmail.com" });
+  try {
+    if (!req.korisnik || !req.korisnik.idUser) {
+        return res.status(401).json({ message: "Neispravan token ili korisnik nije prijavljen" });
+    }
+
+    res.json({ email: req.korisnik.idUser });
+} catch (error) {
+    res.status(500).json({ message: "Greška pri dohvaćanju korisnika" });
+}
+});
+
+
+
+ 
   
 mongoose.connect('mongodb://127.0.0.1:27017/e_Dnevnik')
   .then(() => {
