@@ -5,9 +5,6 @@ const registerFormElement = document.getElementById('registerFormElement');
 const successMessage = document.getElementById('successMessage');
 const formTitle = document.getElementById('formTitle');
 const toggleText = document.getElementById('toggleText');
-
-
-
 const forgotPasswordLink = document.getElementById('forgotPasswordLink');
 const forgotPasswordForm = document.getElementById('forgotPasswordForm');
 const forgotPasswordRequestForm = document.getElementById('forgotPasswordRequestForm');
@@ -32,7 +29,6 @@ forgotPasswordRequestForm.addEventListener('submit', async (e) => {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email }),
   });
-
   if (response.ok) {
     resetMessage.style.display = 'block';
     resetMessage.innerText = 'Reset link sent to your email.';
@@ -41,7 +37,6 @@ forgotPasswordRequestForm.addEventListener('submit', async (e) => {
     resetMessage.innerText = 'Failed to send reset link. Please try again.';
   }
 });
-
 // Resetiranje lozinke pomoću tokena
 resetPasswordFormElement.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -69,26 +64,20 @@ resetPasswordFormElement.addEventListener('submit', async (e) => {
     resetSuccessMessage.innerText = 'Failed to reset password. Token may be invalid or expired.';
   }
 });
-
-
-
-
-
 // Prebacivanje na registracijsku formu
 registerLink.addEventListener('click', () => {
-  loginForm.style.display = 'none';
-  registerForm.style.display = 'block';
-  formTitle.innerText = 'Register';
-  toggleText.style.display = 'none';
+    loginForm.style.display = 'none';
+    registerForm.style.display = 'block';
+    formTitle.innerText = 'Register';
+    toggleText.style.display = 'none';
 });
 
 // Login forma
 loginForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const username = document.getElementById('loginUsername').value;
-  const password = document.getElementById('loginPassword').value;
-
-  const response = await fetch('http://localhost:5000/login', {
+    e.preventDefault();
+    const username = document.getElementById('loginUsername').value;
+    const password = document.getElementById('loginPassword').value;
+    const response = await fetch('http://localhost:5000/login', {
     method: 'POST',
     headers: {  "content-Type": "application/json" },
     body: JSON.stringify({ username, password }),
@@ -96,15 +85,14 @@ loginForm.addEventListener('submit', async (e) => {
   
   if (response.ok) {
     const data = await response.json();
-    console.log("📌 Novi token:", data.token); // 🛠 Debugging
-    localStorage.setItem("token", data.token); // 📌 Sprema token u localStorage
+    console.log(" Novi token:", data.token); //Debugging
+    localStorage.setItem("token", data.token); //Sprema token u localStorage
     alert('Login successful!');
-    window.location.href = 'home.html'; // Preusmjeravanje na novu stranicu
+    window.location.href = 'home.html'; //Preusmjeravanje na novu stranicu
   } else {
     alert('Invalid credentials!');
   }
 });
-
 // Register forma
 registerFormElement.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -112,22 +100,11 @@ registerFormElement.addEventListener('submit', async (e) => {
   const lastName = document.getElementById('registerLastName').value;
   const username = document.getElementById('registerUsername').value;
   const password = document.getElementById('registerPassword').value;
-
-  // Provjera jačine lozinke
-  /*const passwordStrength = document.getElementById('registerPasswordStrength').value;
-
-  if (passwordStrength < 3) { // Ako lozinka nije "Good" ili "Strong"
-      alert('Lozinka je preslaba! Koristite 8+ znakova, 1 veliko slovo, 1 broj i 1 simbol.');
-      return; // Zaustavi daljnju obradu
-  }*/
-  //završava provjera jačine
-
   const response = await fetch('http://localhost:5000/register', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ firstName, lastName, username, password }),
   });
-
   if (response.ok) {
     registerForm.style.display = 'none';
     successMessage.style.display = 'block';
@@ -138,21 +115,17 @@ registerFormElement.addEventListener('submit', async (e) => {
   }
 });
 document.addEventListener('DOMContentLoaded', () => {
-
-const passwordInput = document.getElementById('registerPassword');
-const passwordStrength = document.getElementById('registerPasswordStrength');
-const passwordMessage = document.getElementById('registerPasswordMessage');
-
-passwordInput.addEventListener('input', () => {
-    const password = passwordInput.value;
-    let strength = 0;
-
-    if (password.length >= 8) strength++; // 8+ znakova
-    if (/[A-Z]/.test(password)) strength++; // Veliko slovo
-    if (/[0-9]/.test(password)) strength++; // Broj
-    if (/[\W]/.test(password)) strength++; // Specijalni znak (!@#$%^&*)
-
-    passwordStrength.value = strength;
+    const passwordInput = document.getElementById('registerPassword');
+    const passwordStrength = document.getElementById('registerPasswordStrength');
+    const passwordMessage = document.getElementById('registerPasswordMessage');
+    passwordInput.addEventListener('input', () => {
+        const password = passwordInput.value;
+        let strength = 0;
+        if (password.length >= 8) strength++; // 8+ znakova
+        if (/[A-Z]/.test(password)) strength++; // Veliko slovo
+        if (/[0-9]/.test(password)) strength++; // Broj
+        if (/[\W]/.test(password)) strength++; // Specijalni znak (!@#$%^&*)
+        passwordStrength.value = strength;
 
     // Poruka za korisnika
     const messages = ["Too weak ❌", "Weak ⚠️", "Good ✅", "Strong 💪"];
@@ -164,12 +137,10 @@ passwordInput.addEventListener('input', () => {
 });
 });
 async function fetchCurrentUser() {
-  const token = localStorage.getItem("token"); // 📌 Dohvati token iz localStorage-a
-  if (!token) return { email: "" }; // Ako nema tokena, korisnik nije prijavljen
-
-  const response = await fetch("http://localhost:5000/current-user", {
-      headers: { "Authorization": `Bearer ${token}` }, // 📌 Šaljemo token u zaglavlju
+    const token = localStorage.getItem("token"); //Dohvati token iz localStorage-a
+    if (!token) return { email: "" }; //Ako nema tokena, korisnik nije prijavljen
+    const response = await fetch("http://localhost:5000/current-user", {
+        headers: { "Authorization": `Bearer ${token}` }, //Šaljemo token u zaglavlju
   });
-
   return response.ok ? await response.json() : { email: "" };
 }
