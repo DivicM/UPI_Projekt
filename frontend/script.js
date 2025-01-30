@@ -18,12 +18,10 @@ forgotPasswordLink.addEventListener('click', () => {
   loginForm.style.display = 'none';
   forgotPasswordForm.style.display = 'block';
 });
-
 // Slanje zahtjeva za resetiranje lozinke
 forgotPasswordRequestForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   const email = document.getElementById('resetEmail').value;
-
   const response = await fetch('http://localhost:5000/request-reset-password', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -48,14 +46,12 @@ resetPasswordFormElement.addEventListener('submit', async (e) => {
     resetSuccessMessage.innerText = 'Passwords do not match!';
     return;
   }
-
   const token = new URLSearchParams(window.location.search).get('token'); // Preuzimanje tokena iz URL-a
   const response = await fetch('http://localhost:5000/reset-password', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ token, newPassword }),
   });
-
   if (response.ok) {
     resetSuccessMessage.style.display = 'block';
     resetSuccessMessage.innerText = 'Password reset successful! You can now log in.';
@@ -71,7 +67,6 @@ registerLink.addEventListener('click', () => {
     formTitle.innerText = 'Register';
     toggleText.style.display = 'none';
 });
-
 // Login forma
 loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -81,8 +76,7 @@ loginForm.addEventListener('submit', async (e) => {
     method: 'POST',
     headers: {  "content-Type": "application/json" },
     body: JSON.stringify({ username, password }),
-  });
-  
+  }); 
   if (response.ok) {
     const data = await response.json();
     console.log(" Novi token:", data.token); //Debugging
@@ -109,7 +103,6 @@ registerFormElement.addEventListener('submit', async (e) => {
     registerForm.style.display = 'none';
     successMessage.style.display = 'block';
     successMessage.innerText = 'Registracija uspješna!';
-
   } else {
     alert('Registration failed!');
   }
@@ -126,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (/[0-9]/.test(password)) strength++; // Broj
         if (/[\W]/.test(password)) strength++; // Specijalni znak (!@#$%^&*)
         passwordStrength.value = strength;
-
+      
     // Poruka za korisnika
     const messages = ["Too weak ❌", "Weak ⚠️", "Good ✅", "Strong 💪"];
     passwordMessage.textContent = messages[strength];
