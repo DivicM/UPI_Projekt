@@ -13,13 +13,13 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // Za HTML forme
 
-app.use(cors({
+/*app.use(cors({
   origin: "http://127.0.0.1:5502", // Postavi frontend URL
   credentials: true // Omogućava slanje sesija/cookies
-}));
+}));*/
 
 // MongoDB povezivanje
-mongoose.connect('mongodb://127.0.0.1:27017/e_Dnevnik')
+mongoose.connect('mongodb://192.168.10.153:27017/e_Dnevnik')
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('Could not connect to MongoDB:', err));
 
@@ -750,7 +750,7 @@ app.get('/current-user', provjeriToken, (req, res) => {
 
  
   
-mongoose.connect('mongodb://127.0.0.1:27017/e_Dnevnik')
+mongoose.connect('mongodb://192.168.10.153:27017/e_Dnevnik')
   .then(() => {
     console.log('Connected to MongoDB:', mongoose.connection.name); // Logiraj ime baze
   })
