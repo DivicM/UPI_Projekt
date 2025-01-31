@@ -291,7 +291,7 @@ app.delete("/absences/delete/:id", provjeriToken, async (req, res) => {
 
 
 // Ruta za registraciju
-app.post('/register', async (req, res) => {
+/*app.post('/register', async (req, res) => {
   const { firstName, lastName, username, password, role } = req.body;
   // **Provjera jačine lozinke**
   if (!validator.isStrongPassword(password, { minLength: 8, minSymbols: 1 })) {
@@ -302,37 +302,33 @@ const userRole = role || "student";
   await user.save();
   console.log('User saved:', user); // Logiraj korisnika
   res.send({ message: 'User registered!' });
-});
-/*app.post('/register', async (req, res) => {
+});*/
+app.post('/register', async (req, res) => {
   try {
-      const { firstName, lastName, email, password, role } = req.body;
+      const { firstName, lastName, username, password, role } = req.body;
 
-      // ✅ Provjeri postoji li već korisnik s istim emailom
-      const existingUser = await User.findOne({ email });
-      if (existingUser) {
-          return res.status(400).json({ message: "Korisnik s tim emailom već postoji." });
-      }
+    
 
       // ✅ Ako `role` nije postavljen, postavi ga na `"student"`
       const userRole = role || "student";
 
       // ✅ Kreiraj novog korisnika
-      const newUser = new User({
+      const user = new User({
           firstName,
           lastName,
-          email,
+          username,
           password, // 🔹 Dodaj hashiranje lozinke ako treba
           role: userRole // ✅ Sprema ulogu u bazu
       });
 
-      await newUser.save();
+      await user.save();
       res.json({ message: "Registracija uspješna!" });
 
   } catch (error) {
       console.error("❌ Greška pri registraciji:", error);
       res.status(500).json({ message: "Greška na serveru!" });
   }
-});*/
+});
 
 
 
