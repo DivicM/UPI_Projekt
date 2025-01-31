@@ -19,10 +19,19 @@ app.use(bodyParser.urlencoded({ extended: true })); // Za HTML forme
 }));*/
 
 // MongoDB povezivanje
-mongoose.connect('mongodb://192.168.10.153:27017/e_Dnevnik')
+/*mongoose.connect('mongodb://192.168.10.153:27017/e_Dnevnik')
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('Could not connect to MongoDB:', err));
+*/
 
+
+
+mongoose.connect("mongodb+srv://anetakalabric65:gnOg26vktfpBzjxx@cluster0.xsqni.mongodb.net/e_Dnevnik?retryWrites=true&w=majority&appName=Cluster0"
+).then(() => {
+  console.log("✅ Uspješno spojeno na MongoDB Atlas");
+}).catch((error) => {
+  console.error("❌ Greška pri povezivanju s MongoDB Atlasom:", error);
+});
 // Schema za korisnika
 const userSchema = new mongoose.Schema({
     firstName: String,
@@ -750,11 +759,11 @@ app.get('/current-user', provjeriToken, (req, res) => {
 
  
   
-mongoose.connect('mongodb://192.168.10.153:27017/e_Dnevnik')
+/*mongoose.connect('mongodb://192.168.10.153:27017/e_Dnevnik')
   .then(() => {
     console.log('Connected to MongoDB:', mongoose.connection.name); // Logiraj ime baze
   })
   .catch(err => console.error('Could not connect to MongoDB:', err));
-
+*/
 const PORT = 5000;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
