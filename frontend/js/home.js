@@ -61,18 +61,18 @@ sidebarLinks.forEach((link) => {
     event.preventDefault(); // Sprečava default ponašanje (ako koristiš "#" kao href)
     const sectionName = link.textContent.trim();
 
-     // Upravljanje prema imenu sekcije
-     if (sectionName === 'Home') {
-        window.location.href='./home.html'
-      } else if (sectionName === 'Predmeti') {
-        window.location.href='./pages/predmeti.html'
-      } else if (sectionName === 'Izostnci') {
-        window.location.href='./pages/izostanci.html'
-      } else if (sectionName === 'Raspored') {
-        window.location.href='./pages/raspored.html'
-      } else if (sectionName === 'Kalendar nastave') {
-        window.location.href='./pages/kalendar-nastave.html'
-      }
-    });
+    // Upravljanje prema imenu sekcije
+    if (sectionName === 'Home') {
+      window.location.href = './home.html'
+    } else if (sectionName === 'Predmeti') {
+      window.location.href = './pages/predmeti.html'
+    } else if (sectionName === 'Izostnci') {
+      window.location.href = './pages/izostanci.html'
+    } else if (sectionName === 'Raspored') {
+      window.location.href = './pages/raspored.html'
+    } else if (sectionName === 'Kalendar nastave') {
+      window.location.href = './pages/kalendar-nastave.html'
+    }
   });
+});
 

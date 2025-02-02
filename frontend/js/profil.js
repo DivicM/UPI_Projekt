@@ -13,25 +13,25 @@ if (editProfileForm) {
 
     // Provjera je li sve popunjeno
     if (!fullName || !email || !password) {
-        alert('Sva polja su obavezna!');
-        return;
+      alert('Sva polja su obavezna!');
+      return;
     }
 
     // Slanje podataka na server za spremanje promjena
     const response = await fetch('http://localhost:5000/updateProfile', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ fullName, email, password }),
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ fullName, email, password }),
     });
 
     if (response.ok) {
       alert('Podaci su uspješno ažurirani!');
       window.location.href = 'home.html'; // Vrati korisnika na početnu stranicu
     } else {
-        const errorData = await response.json();
-        alert(errorData.message || 'Došlo je do greške pri ažuriranju podataka.');
+      const errorData = await response.json();
+      alert(errorData.message || 'Došlo je do greške pri ažuriranju podataka.');
     }
   });
 }

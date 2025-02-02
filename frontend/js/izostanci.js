@@ -39,22 +39,22 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
         try {
             const response = await fetch("http://localhost:5000/absences", {
-            method: "GET",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json"
-            }
-        });
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                }
+            });
             const data = await response.json();
             if (!response.ok) {
                 throw new Error(data.message || "Greška pri dohvaćanju izostanaka.");
             }
             const absenceTable = document.getElementById("absence-table");
-   
+
             data.forEach((absence) => {
                 let row = document.createElement("tr");
-                row.innerHTML = 
-                `<td>${absence.date}</td>
+                row.innerHTML =
+                    `<td>${absence.date}</td>
                 <td>${absence.type}</td>
                 <td>${absence.note}</td>
                 <td><button class="deleteRowButton" data-id="${absence._id ? absence._id : ''}">🗑</button></td>`;
@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             alert("Greška pri dohvaćanju izostanaka.");
         }
     }
-  
+
 
     // Omogućuje uređivanje polja u tablici
     function enableEditing() {
@@ -89,8 +89,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     //Dodavanje novog reda
     addAbsenceButton.addEventListener("click", () => {
         let newRow = document.createElement("tr");
-        newRow.innerHTML = 
-        `<td contenteditable="true">Unesi datum</td>
+        newRow.innerHTML =
+            `<td contenteditable="true">Unesi datum</td>
         <td contenteditable="true">Opravdani/Neopravdani</td>
         <td contenteditable="true">Unesi napomenu</td>
         <td><button class="deleteRowButton">🗑</button></td>`;
@@ -127,11 +127,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         const response = await fetch("http://localhost:5000/absences/update", {
             method: "POST",
-            headers: { 
-                "Content-Type": "application/json", 
+            headers: {
+                "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`
             },
-            body: JSON.stringify({  username: studentEmail, data: rows }),
+            body: JSON.stringify({ username: studentEmail, data: rows }),
         });
 
         const result = await response.json();
@@ -147,37 +147,37 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     //Dohvati trenutno prijavljenog korisnika
     async function fetchCurrentUser() {
-      const token = localStorage.getItem("token");
-      
-      if (!token) {
-        console.error("Nema tokena! Korisnik nije prijavljen.");
-        return { username: "", role: "student" };
-      }
-      try {
-        const response = await fetch("http://localhost:5000/current-user", {
-            method: "GET",
-            headers: { 
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json"
-              }
-          });
-  
-          if (!response.ok) {
-              throw new Error("Neispravan token ili nije prijavljen korisnik.");
-          }
-  
-          const data = await response.json();
-          console.log("Trenutni korisnik:", data);
-           //Spremi role u localStorage za kasniju upotrebu
-          localStorage.setItem("role", data.role || "student");
+        const token = localStorage.getItem("token");
 
-          //Dodaj provjeru je li korisnik nastavnik
-          //const isTeacher = data.email === "anetakalabric65@gmail.com";
-          return { username: data.username || "", role: data.role || "student" };
-          //return data;
-          } catch (error) {
+        if (!token) {
+            console.error("Nema tokena! Korisnik nije prijavljen.");
+            return { username: "", role: "student" };
+        }
+        try {
+            const response = await fetch("http://localhost:5000/current-user", {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error("Neispravan token ili nije prijavljen korisnik.");
+            }
+
+            const data = await response.json();
+            console.log("Trenutni korisnik:", data);
+            //Spremi role u localStorage za kasniju upotrebu
+            localStorage.setItem("role", data.role || "student");
+
+            //Dodaj provjeru je li korisnik nastavnik
+            //const isTeacher = data.email === "anetakalabric65@gmail.com";
+            return { username: data.username || "", role: data.role || "student" };
+            //return data;
+        } catch (error) {
             console.error("Greška pri dohvaćanju trenutnog korisnika:", error.message);
-            return { username: "", role: ""};
+            return { username: "", role: "" };
         }
     }
     console.log("Trenutni korisnik:", currentUser);
@@ -211,7 +211,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             //Ispravan način korištenja `fetch()`
             const response = await fetch(`http://localhost:5000/absences/delete/${id}`, {
                 method: "DELETE",
-                headers: { 
+                headers: {
                     "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"
                 }

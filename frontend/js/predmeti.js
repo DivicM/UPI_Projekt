@@ -55,7 +55,7 @@ function renderSubjects(subjects) {
       <h3>${subject.name}</h3>
       <p>Profesor: ${subject.teacher}</p>
     `;
-    
+
     subjectsList.appendChild(card);
   });
 }
