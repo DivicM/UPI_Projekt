@@ -190,30 +190,30 @@ app.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
   try {
-      // Pronađi korisnika u bazi
-      const user = await User.findOne({ username });
+    // Pronađi korisnika u bazi
+    const user = await User.findOne({ username });
 
-      if (!user) {
-          return res.status(401).json({ message: " Neispravan email ili lozinka!" });
-      }
+    if (!user) {
+      return res.status(401).json({ message: " Neispravan email ili lozinka!" });
+    }
 
-      if (password !== user.password) {
-          return res.status(401).json({ message: " Neispravna lozinka!" });
-      }
+    if (password !== user.password) {
+      return res.status(401).json({ message: " Neispravna lozinka!" });
+    }
 
-      //  Generiraj token i prijavi korisnika
-      const token = jwt.sign(
-          { username: user.username, role: user.role },
-          process.env.JWT_SECRET,
-          { expiresIn: "1h" }
-      );
+    //  Generiraj token i prijavi korisnika
+    const token = jwt.sign(
+      { username: user.username, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
 
-      res.json({ message: "✅ Uspješna prijava!", token });
+    res.json({ message: "✅ Uspješna prijava!", token });
 
   } catch (error) {
-      console.error(" Greška pri prijavi:", error);
-      res.status(500).json({ message: " Greška na serveru!" });
-  }
+    console.error(" Greška pri prijavi:", error);
+    res.status(500).json({ message: " Greška na serveru!" });
+  }
 });
 
 
@@ -344,12 +344,13 @@ app.post('/request-reset-password', async (req, res) => {
 
   const resetToken = crypto.randomBytes(32).toString('hex');
   user.resetToken = resetToken;
-  user.tokenExpiration = Date.now() + 86400000; // Token vrijedi 1 dan
+  user.tokenExpiration = Date.now() + 864000000; // Token vrijedi 1 dan
   await user.save();
   console.log('User updated with resetToken:', user); // Provjera je li token spremljen
 
-  const resetLink = `https://8235-31-217-0-225.ngrok-free.app/reset-password?token=${resetToken}`;
+  const resetLink = `https://9bbd-46-188-239-39.ngrok-free.app/reset-password?token=${resetToken}`;
   console.log('Generated reset link:', resetLink);
+  
 
   const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -363,7 +364,7 @@ app.post('/request-reset-password', async (req, res) => {
     from: 'anetakalabric65@gmail.com',
     to: email,
     subject: 'Password Reset',
-    html: `<p>Click this link to reset your password: <a href="${resetLink}">${resetLink}</a></p>`,
+    html: <p>Click this link to reset your password: <a href="${resetLink}">${resetLink}</a></p>,
   };
 
   transporter.sendMail(mailOptions, (error) => {

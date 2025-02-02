@@ -24,13 +24,14 @@
 
     <!-- Link za zaboravljenu lozinku -->
     <p id="forgotPasswordText">Zaboravili ste lozinku? <a href="#" id="forgotPasswordLink">Klikni ovdje</a></p>
-
+    
     <!-- Forma za resetiranje lozinke -->
     <div id="forgotPasswordForm" style="display: none;">
       <h2>Zaboravljena lozinka</h2>
       <form id="forgotPasswordRequestForm">
         <input type="email" id="resetEmail" placeholder="Enter your email" required />
         <button type="submit">Send Reset Link</button>
+        <button onclick="location.reload()">Povratak na prijavu</button>
       </form>
       <p id="resetMessage" style="display: none;"></p>
     </div>
@@ -62,6 +63,7 @@
         <progress id="registerPasswordStrength" value="0" max="4"></progress>
         <small id="registerPasswordMessage"></small>
         <button type="submit">Registriraj se</button>
+        <button onclick="location.reload()">Povratak na prijavu</button>
       </form>
     </div>
 
