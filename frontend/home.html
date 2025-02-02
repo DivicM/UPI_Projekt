@@ -1,23 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>e-Dnevnik - Home</title>
-  <link rel="stylesheet" href="/styles/eDnevnik.css">
+  <link rel="stylesheet" href="/frontend/styles/eDnevnik.css">
   <script src="/frontend/js/home.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-
 <body>
   <div class="dashboard">
     <!-- Sidebar -->
     <aside class="sidebar">
-      <div class="profile">
-        <img src="/images/school.jpg" alt="Profile Picture">
-        <h2>John Doe</h2><br>
-        <button id="profile">Uredi profil</button>
+      <div class="picture">
+        <img id="profile-picture" src="/images/school.jpg" alt="Profile Picture">
+        <h2 id="user-name" class="user-name">John Doe</h2><br>
+        <button class="profile">Uredi profil</button>
       </div>
       <nav class="menu">
         <ul>
@@ -44,22 +42,22 @@
           <p>Predmeta</p>
         </div>
         <div class="stat">
-          <h3>4.4</h3>
-          <p>Prosjek ocjena</p>
+            <h3>4.4</h3>
+            <p>Prosjek ocjena</p>
         </div>
         <div class="stat">
           <h3>3</h3>
           <p>Izostanka</p>
         </div>
       </section>
-
+      
       <!-- Grafikon -->
       <section class="chart">
         <h2>Pregled ocjena</h2>
         <canvas id="gradesChart"></canvas>
       </section>
 
-
+    
       <!-- Podsjetnici -->
       <section class="reminders">
         <h2>Podsjetnici</h2>
@@ -71,6 +69,6 @@
       </section>
     </main>
   </div>
-</body>
 
+</body>
 </html>
