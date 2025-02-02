@@ -1,160 +1,167 @@
 body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f9f9f9;
-  color: #333;
-}
-
-.dashboard {
-  display: flex;
-}
-
-/* Sidebar */
-.sidebar {
-  width: 280px;
-  background-color: #4CAF50;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-}
-
-.sidebar .profile {
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-.sidebar .profile img {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  margin-bottom: 10px;
-}
-
-.sidebar .profile h2 {
-  font-size: 1.2rem;
-  margin-bottom: 5px;
-}
-
-.sidebar .profile p {
-  font-size: 0.9rem;
-  margin-bottom: 15px;
-}
-
-.sidebar .profile button {
-  background-color: white;
-  color: #4CAF50;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.sidebar .profile button:hover {
-  background-color: #e7e7e7;
-}
-
-.sidebar .menu ul {
-  list-style: none;
-  padding: 0;
-  width: 100%;
-}
-
-.sidebar .menu ul li {
-  margin: 15px 0;
-}
-
-.sidebar .menu ul li a {
-  text-decoration: none;
-  color: white;
-  font-size: 1rem;
-  padding: 10px 15px;
-  display: block;
-  border-radius: 10px;
-  transition: background-color 0.3s ease;
-}
-
-
-.main-content {
-  margin-left: 40px;
-  /* Ostavlja prostor za sidebar */
-  padding: 20px;
-  width: 1000px;
-}
-
-.main-content header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.main-content header h1 {
-  font-size: 2rem;
-  color: #4CAF50;
-}
-
-.main-content header button {
-  background-color: #ff5e57;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 20px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.main-content header button:hover {
-  background-color: #e8453c;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 20px;
-}
-
-table th,
-table td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
-}
-
-table th {
-  background-color: #f2f2f2;
-  color: #333;
-}
-
-.warning {
-  background-color: #fff3cd;
-  border: 1px solid #ffeeba;
-  padding: 15px;
-  margin-bottom: 20px;
-  border-radius: 5px;
-}
-
-.filter label,
-.filter input,
-.filter button {
-  margin-right: 10px;
-}
-
-ul {
-  list-style-type: disc;
-  padding-left: 20px;
-}
-
-.chart {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-  text-align: center;
-  width: 800px;
-  height: 500px;
-  align-items: center;
-}
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #333;
+  }
+  .dashboard {
+    display: flex;
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    background: linear-gradient(135deg, #4CAF50, #388E3C);
+    box-shadow: 3px 0px 10px rgba(0, 0, 0, 0.2);
+    width: 250px;
+    background-color: #4CAF50;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .sidebar .picture {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .sidebar .picture img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 4px solid #fff;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  .user-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    margin: 10px 0;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  }
+  .sidebar .profile h2 {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+  }
+  
+  .sidebar .profile p {
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+  }
+  
+  .sidebar .profile  {
+    background-color: #fff;
+    color: #388E3C;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .sidebar .profile :hover {
+    background-color: #e7e7e7;
+  }
+  
+  .sidebar .menu ul {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+    margin: 20px;
+  }
+  
+  .sidebar .menu ul li {
+    margin: 15px 0;
+  }
+  
+  .sidebar .menu ul li a {
+    text-decoration: none;
+    color: white;
+    font-size: 1rem;
+    padding: 10px 15px;
+    display: block;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+  }
+  
+  
+  .main-content {
+    margin-left: 40px; /* Ostavlja prostor za sidebar */
+    padding: 20px;
+    width: 1000px;
+  }
+  
+  .main-content header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .main-content header h1 {
+    font-size: 2rem;
+    color: #4CAF50;
+  }
+  
+  .main-content header button {
+    background-color: #ff5e57;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .main-content header button:hover {
+    background-color: #e8453c;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  table th, table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  table th {
+    background-color: #f2f2f2;
+    color: #333;
+  }
+  
+  .warning {
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+  }
+  
+  .filter label, .filter input, .filter button {
+    margin-right: 10px;
+  }
+  
+  ul {
+    list-style-type: disc;
+    padding-left: 20px;
+  }
+  
+  .chart {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    text-align: center;
+    width: 800px;
+    height: 500px;
+    align-items: center;
+  }
+  
