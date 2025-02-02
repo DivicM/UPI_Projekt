@@ -354,20 +354,20 @@ app.post('/register', async (req, res) => {
 });*/
 app.post('/login', async (req, res) => {
   try {
-    const user = await User.findOne({ username: req.body.username });
-    if (user) {
+    const user = await User.findOne({ username: req.body.username, password: req.body.password });
+    if(user) {
       const token = jwt.sign(
-        { username: user.username, role: user.role },
-        process.env.JWT_SECRET,
-        { expiresIn: '1h' }
+       { username: user.username, role: user.role},
+       process.env.JWT_SECRET,
+       { expiresIn: '1h'}
       );
-      res.json({ token });
+      res.json ({token});
     } else {
       res.status(401).send('Neispravni podaci za prijavu');
     }
   } catch (error) {
     res.status(500).send(error.message);
-  }
+  }
 });
 
 

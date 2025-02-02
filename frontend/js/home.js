@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("user-name").textContent = `${user.firstName} ${user.lastName}`;
 
     // Postavi profilnu sliku
-    document.getElementById("profile-picture").src = `http://localhost:5000/uploads/${user.profileImage}`;
+    //document.getElementById("profile-picture").src = `http://localhost:5000/uploads/${user.profileImage}`;
 
   } catch (error) {
     console.error("❌ Greška pri dohvaćanju korisnika:", error.message);

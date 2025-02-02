@@ -76,3 +76,33 @@ if (logoutButton) {
     }
   });
 }
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    console.error("❌ Nema tokena! Korisnik nije prijavljen.");
+    return;
+  }
+
+  try {
+    const response = await fetch("http://localhost:5000/current-user", {
+      method: "GET",
+      headers: { "Authorization": `Bearer ${token}` }
+    });
+
+    if (!response.ok) throw new Error("Neispravan token ili nije prijavljen korisnik.");
+
+    const user = await response.json();
+
+    // Postavi ime korisnika
+    document.getElementById("user-name").textContent = `${user.firstName} ${user.lastName}`;
+
+    // Postavi profilnu sliku
+    document.getElementById("profile-picture").src = `http://localhost:5000/uploads/${user.profileImage}`;
+
+  } catch (error) {
+    console.error("❌ Greška pri dohvaćanju korisnika:", error.message);
+  }
+});
+
