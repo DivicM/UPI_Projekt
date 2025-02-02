@@ -34,13 +34,13 @@ mongoose.connect("mongodb+srv://anetakalabric65:gnOg26vktfpBzjxx@cluster0.xsqni.
 });
 // Schema za korisnika
 const userSchema = new mongoose.Schema({
-    firstName: String,
-    lastName: String,
-    username: String,
-    password: String,
-    role: { type: String, enum: ["student", "nastavnik"], default: "student" }, // ✅ Dodano polje role
-    resetToken: String,          // Token za resetiranje lozinke
-    tokenExpiration: Date,  
+  firstName: String,
+  lastName: String,
+  username: String,
+  password: String,
+  role: { type: String, enum: ["student", "nastavnik"], default: "student" }, // ✅ Dodano polje role
+  resetToken: String,          // Token za resetiranje lozinke
+  tokenExpiration: Date,
 });
 
 const User = mongoose.model("User", userSchema);
@@ -74,37 +74,37 @@ const absenceSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 const Absence = mongoose.model("Absence", absenceSchema);
-const provjeriToken = async(req, res, next) => {
+const provjeriToken = async (req, res, next) => {
   const authZaglavlje = req.headers["authorization"];
 
   if (!authZaglavlje) {
-      console.error("❌ Ne postoji autorizacijsko zaglavlje!");
-      return res.status(403).json({ message: "Niste prijavljeni!" });
+    console.error("❌ Ne postoji autorizacijsko zaglavlje!");
+    return res.status(403).json({ message: "Niste prijavljeni!" });
   }
 
   const token = authZaglavlje.split(' ')[1];
 
   if (!token) {
-      console.error("❌ Bearer token nije pronađen!");
-      return res.status(403).json({ message: "Niste prijavljeni!" });
+    console.error("❌ Bearer token nije pronađen!");
+    return res.status(403).json({ message: "Niste prijavljeni!" });
   }
 
   try {
-      const dekodiraniToken = jwt.verify(token, process.env.JWT_SECRET);
-      // 📌 Dohvati korisnika iz baze pomoću emaila iz tokena
-      const user = await User.findOne({ username: dekodiraniToken.username });
+    const dekodiraniToken = jwt.verify(token, process.env.JWT_SECRET);
+    // 📌 Dohvati korisnika iz baze pomoću emaila iz tokena
+    const user = await User.findOne({ username: dekodiraniToken.username });
 
-      if (!user) {
-        return res.status(404).json({ message: "Korisnik nije pronađen!" });
+    if (!user) {
+      return res.status(404).json({ message: "Korisnik nije pronađen!" });
     }
     // 📌 Postavi korisnika u req objekt da se može koristiti dalje u rutama
     req.korisnik = { username: user.username, role: user.role };
 
-      ///req.korisnik = dekodiraniToken;
-      console.log("✅ Korisnik je prijavljen kao:", req.korisnik);
+    ///req.korisnik = dekodiraniToken;
+    console.log("✅ Korisnik je prijavljen kao:", req.korisnik);
   } catch (err) {
-      console.error("❌ Neispravan token:", err.message);
-      return res.status(401).json({ message: "Neispravan token" });
+    console.error("❌ Neispravan token:", err.message);
+    return res.status(401).json({ message: "Neispravan token" });
   }
   return next();
 };
@@ -130,19 +130,19 @@ app.get('/debug-token', provjeriToken, (req, res) => {
 });*/
 app.get("/absences", provjeriToken, async (req, res) => {
   try {
-      const loggedInUser = req.korisnik.username;
-      const role = req.korisnik.role;
+    const loggedInUser = req.korisnik.username;
+    const role = req.korisnik.role;
 
-      let absences;
-      if (role === "nastavnik") {
-          absences = await Absence.find(); // Nastavnici vide sve
-      } else {
-          absences = await Absence.find({ username: loggedInUser }); // Učenici vide samo svoje
-      }
+    let absences;
+    if (role === "nastavnik") {
+      absences = await Absence.find(); // Nastavnici vide sve
+    } else {
+      absences = await Absence.find({ username: loggedInUser }); // Učenici vide samo svoje
+    }
 
-      res.json(absences);
+    res.json(absences);
   } catch (error) {
-      res.status(500).json({ message: "Greška na serveru!" });
+    res.status(500).json({ message: "Greška na serveru!" });
   }
 });
 
@@ -173,7 +173,7 @@ app.get("/absences", provjeriToken, async (req, res) => {
 });*/
 app.post("/absences/update", provjeriToken, async (req, res) => {
   if (req.korisnik.role !== "nastavnik") {
-      return res.status(403).json({ message: "Nemate ovlasti za uređivanje izostanaka." });
+    return res.status(403).json({ message: "Nemate ovlasti za uređivanje izostanaka." });
   }
 
   const { username, data } = req.body;
@@ -254,33 +254,33 @@ app.post("/absences/update", provjeriToken, async (req, res) => {
 
 app.delete("/absences/delete/:id", provjeriToken, async (req, res) => {
   try {
-      // ✅ Samo nastavnik može brisati izostanke
-      if (req.korisnik.role !== "nastavnik") {
-          return res.status(403).json({ message: "Nemate ovlasti za brisanje izostanaka." });
-      }
+    // ✅ Samo nastavnik može brisati izostanke
+    if (req.korisnik.role !== "nastavnik") {
+      return res.status(403).json({ message: "Nemate ovlasti za brisanje izostanaka." });
+    }
 
-      const absenceId = req.params.id;
+    const absenceId = req.params.id;
 
-      // ✅ Provjeri je li `id` ispravan MongoDB ObjectId
-      if (!mongoose.Types.ObjectId.isValid(absenceId)) {
-          return res.status(400).json({ message: "Neispravan ID izostanka!" });
-      }
+    // ✅ Provjeri je li `id` ispravan MongoDB ObjectId
+    if (!mongoose.Types.ObjectId.isValid(absenceId)) {
+      return res.status(400).json({ message: "Neispravan ID izostanka!" });
+    }
 
-      console.log(`📌 Nastavnik ${req.korisnik.username} briše izostanak s ID: ${absenceId}`);
+    console.log(`📌 Nastavnik ${req.korisnik.username} briše izostanak s ID: ${absenceId}`);
 
-      // ✅ Pronađi i obriši izostanak
-      const deletedAbsence = await Absence.findByIdAndDelete(absenceId);
+    // ✅ Pronađi i obriši izostanak
+    const deletedAbsence = await Absence.findByIdAndDelete(absenceId);
 
-      if (!deletedAbsence) {
-          return res.status(404).json({ message: "Izostanak nije pronađen!" });
-      }
+    if (!deletedAbsence) {
+      return res.status(404).json({ message: "Izostanak nije pronađen!" });
+    }
 
-      console.log(`✅ Izostanak s ID ${absenceId} uspješno obrisan.`);
-      res.json({ message: "Izostanak uspješno obrisan!" });
+    console.log(`✅ Izostanak s ID ${absenceId} uspješno obrisan.`);
+    res.json({ message: "Izostanak uspješno obrisan!" });
 
   } catch (error) {
-      console.error("❌ Greška pri brisanju izostanka:", error);
-      res.status(500).json({ message: "Greška na serveru!" });
+    console.error("❌ Greška pri brisanju izostanka:", error);
+    res.status(500).json({ message: "Greška na serveru!" });
   }
 });
 
@@ -305,32 +305,32 @@ const userRole = role || "student";
 });*/
 app.post('/register', async (req, res) => {
   try {
-      const { firstName, lastName, username, password, role } = req.body;
+    const { firstName, lastName, username, password, role } = req.body;
 
-      // ✅ Provjeri postoji li korisnik s istim emailom
-      const existingUser = await User.findOne({ username });
-      if (existingUser) {
-          return res.status(400).json({ message: "Korisnik s tim emailom već postoji." });
-      }
+    // ✅ Provjeri postoji li korisnik s istim emailom
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+      return res.status(400).json({ message: "Korisnik s tim emailom već postoji." });
+    }
 
-      // ✅ Ako `role` nije postavljen, postavi ga na `"student"`
-      const userRole = role || "student";
+    // ✅ Ako `role` nije postavljen, postavi ga na `"student"`
+    const userRole = role || "student";
 
-      // ✅ Kreiraj novog korisnika
-      const user = new User({
-          firstName,
-          lastName,
-          username,
-          password, // 🔹 Dodaj hashiranje lozinke ako treba
-          role: userRole // ✅ Sprema ulogu u bazu
-      });
+    // ✅ Kreiraj novog korisnika
+    const user = new User({
+      firstName,
+      lastName,
+      username,
+      password, // 🔹 Dodaj hashiranje lozinke ako treba
+      role: userRole // ✅ Sprema ulogu u bazu
+    });
 
-      await user.save();
-      res.json({ message: "Registracija uspješna!" });
+    await user.save();
+    res.json({ message: "Registracija uspješna!" });
 
   } catch (error) {
-      console.error("❌ Greška pri registraciji:", error);
-      res.status(500).json({ message: "Greška na serveru!" });
+    console.error("❌ Greška pri registraciji:", error);
+    res.status(500).json({ message: "Greška na serveru!" });
   }
 });
 
@@ -355,13 +355,13 @@ app.post('/register', async (req, res) => {
 app.post('/login', async (req, res) => {
   try {
     const user = await User.findOne({ username: req.body.username });
-    if(user) {
+    if (user) {
       const token = jwt.sign(
-       { username: user.username, role: user.role},
-       process.env.JWT_SECRET,
-       { expiresIn: '1h'}
+        { username: user.username, role: user.role },
+        process.env.JWT_SECRET,
+        { expiresIn: '1h' }
       );
-      res.json ({token});
+      res.json({ token });
     } else {
       res.status(401).send('Neispravni podaci za prijavu');
     }
@@ -376,65 +376,65 @@ app.post('/login', async (req, res) => {
 
 
 
-  /*app.post('/update-grade', async (req, res) => {
-  const { role } = req.headers; // Pretpostavljamo da je uloga prosleđena kroz zaglavlje
-  const { index, grade } = req.body;
+/*app.post('/update-grade', async (req, res) => {
+const { role } = req.headers; // Pretpostavljamo da je uloga prosleđena kroz zaglavlje
+const { index, grade } = req.body;
 
-  if (role !== 'teacher') {
-    return res.status(403).json({ message: 'Nemate dozvolu za ovu akciju' });
-  }
+if (role !== 'teacher') {
+  return res.status(403).json({ message: 'Nemate dozvolu za ovu akciju' });
+}
 
-  // Ažuriraj ocenu samo ako je korisnik nastavnik
-  grades[index].grade = grade;
-  res.status(200).json({ message: 'Ocjena uspešno ažurirana!' });
+// Ažuriraj ocenu samo ako je korisnik nastavnik
+grades[index].grade = grade;
+res.status(200).json({ message: 'Ocjena uspešno ažurirana!' });
 });*/
-  
 
-  app.get('/isLoggedIn', (req, res) => {
-    // Ovo je samo test, ovdje bi išao pravi token check
-    res.status(200).send({ loggedIn: true });
-  });
 
-  const multer = require("multer");
+app.get('/isLoggedIn', (req, res) => {
+  // Ovo je samo test, ovdje bi išao pravi token check
+  res.status(200).send({ loggedIn: true });
+});
+
+const multer = require("multer");
 
 // Konfiguracija gdje se spremaju slike
 const storage = multer.diskStorage({
-    destination: "./uploads/",
-    filename: (req, file, cb) => {
-        cb(null, req.korisnik.username + "-" + Date.now() + ".jpg");
-    }
+  destination: "./uploads/",
+  filename: (req, file, cb) => {
+    cb(null, req.korisnik.username + "-" + Date.now() + ".jpg");
+  }
 });
 
 const upload = multer({ storage: storage });
-  app.post('/updateProfile', async (req, res) => {
-    const { fullName, username, password } = req.body;
+app.post('/updateProfile', async (req, res) => {
+  const { fullName, username, password } = req.body;
 
-     // Provjeri jesu li svi podaci poslani
-    if (!fullName || !username || !password) {
-        return res.status(400).send({ message: 'Svi podaci su obavezni!' });
-    }
+  // Provjeri jesu li svi podaci poslani
+  if (!fullName || !username || !password) {
+    return res.status(400).send({ message: 'Svi podaci su obavezni!' });
+  }
 
-    try {
-      // Primjer ažuriranja u MongoDB
-      const updatedUser = await User.updateOne(
-        { username }, // Pretražuje korisnika po emailu
-        { $set: { fullName, username, password } } // Ažurira korisničke podatke
-      );
-  
-      if (updatedUser.modifiedCount > 0) {
-        res.status(200).send({ message: 'Podaci su uspješno ažurirani!' });
-      } else {
-        res.status(400).send({ message: 'Nema promjena.' });
-      }
-    } catch (error) {
-      console.error(error);
-      res.status(500).send({ message: 'Greška na serveru.' });
+  try {
+    // Primjer ažuriranja u MongoDB
+    const updatedUser = await User.updateOne(
+      { username }, // Pretražuje korisnika po emailu
+      { $set: { fullName, username, password } } // Ažurira korisničke podatke
+    );
+
+    if (updatedUser.modifiedCount > 0) {
+      res.status(200).send({ message: 'Podaci su uspješno ažurirani!' });
+    } else {
+      res.status(400).send({ message: 'Nema promjena.' });
     }
-  });
-  // Ruta za ažuriranje profilne slike
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: 'Greška na serveru.' });
+  }
+});
+// Ruta za ažuriranje profilne slike
 app.post("/update-profile", provjeriToken, upload.single("profileImage"), (req, res) => {
   if (!req.file) {
-      return res.status(400).json({ message: "Nema odabrane slike!" });
+    return res.status(400).json({ message: "Nema odabrane slike!" });
   }
 
   const profileImage = req.file.filename;
@@ -447,176 +447,176 @@ app.post("/update-profile", provjeriToken, upload.single("profileImage"), (req, 
 
 // Ruta za dohvaćanje predmeta
 app.get('/subjects', async (req, res) => {
-    try {
-      const subjects = [
-        { name: 'Matematika', teacher: 'Prof. Perić',icon:"🔢"},
-        { name: 'Hrvatski jezik', teacher: 'Prof. Horvat', icon: "📚" },
-        { name: 'Engleski jezik', teacher: 'Prof. Matić', icon:"🗣️" },
-        { name: 'Informatika', teacher: 'Prof. Novak', icon: "🖥️" },
-        { name: 'Biologija', teacher: 'Prof. Babić', icon: "🌱" },
-        { name: 'Kemija', teacher: 'Prof. Lovrić' , icon: "🔬"},
-        { name: 'Fizika', teacher: 'Prof. Šarić' , icon: "🌌"},
-        { name: 'Povijest', teacher: 'Prof. Tomić', icon: "📜" },
-        { name: 'Geografija', teacher: 'Prof. Jurić', icon: "🌎"},
-        { name: 'Tehnička kultura', teacher: 'Prof. Maričić', icon:"🛠️"},
-        { name: 'Njemački jezik', teacher: 'Prof. Kovač', icon: "🍺"},
-        { name: 'Vjeronauk', teacher: 'Prof. Zorić', icon: "🙏"},
-        { name: 'TZK', teacher: 'Prof. Vuković', icon: "⚽" },
-        { name: 'Likovna kultura', teacher: 'Prof. Đukić', icon: "🎨" },
-        { name: 'Glazbena kultura', teacher: 'Prof. Pavlović', icon: "🎼" },
-      ];
-      res.status(200).json(subjects);
-    } catch (error) {
-      console.error(error);
-      res.status(500).send({ message: 'Greška na serveru.' });
-    }
-  });
+  try {
+    const subjects = [
+      { name: 'Matematika', teacher: 'Prof. Perić', icon: "🔢" },
+      { name: 'Hrvatski jezik', teacher: 'Prof. Horvat', icon: "📚" },
+      { name: 'Engleski jezik', teacher: 'Prof. Matić', icon: "🗣️" },
+      { name: 'Informatika', teacher: 'Prof. Novak', icon: "🖥️" },
+      { name: 'Biologija', teacher: 'Prof. Babić', icon: "🌱" },
+      { name: 'Kemija', teacher: 'Prof. Lovrić', icon: "🔬" },
+      { name: 'Fizika', teacher: 'Prof. Šarić', icon: "🌌" },
+      { name: 'Povijest', teacher: 'Prof. Tomić', icon: "📜" },
+      { name: 'Geografija', teacher: 'Prof. Jurić', icon: "🌎" },
+      { name: 'Tehnička kultura', teacher: 'Prof. Maričić', icon: "🛠️" },
+      { name: 'Njemački jezik', teacher: 'Prof. Kovač', icon: "🍺" },
+      { name: 'Vjeronauk', teacher: 'Prof. Zorić', icon: "🙏" },
+      { name: 'TZK', teacher: 'Prof. Vuković', icon: "⚽" },
+      { name: 'Likovna kultura', teacher: 'Prof. Đukić', icon: "🎨" },
+      { name: 'Glazbena kultura', teacher: 'Prof. Pavlović', icon: "🎼" },
+    ];
+    res.status(200).json(subjects);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: 'Greška na serveru.' });
+  }
+});
 
-  app.get('/subjects/matematika', (req, res) => {
-    const subjectsData = {
-      matematika: {
-        grades: [
-          { date: "2023-09-15", grade: 5, note: "Odličan rezultat na testu" },
-          { date: "2023-10-05", grade: 4, note: "Domaća zadaća" },
-        ],
-        notes: ["Priprema za test iz trigonometrije", "Ponoviti funkcije"],
-      },
-      hrvatski: {
-        grades: [
-          { date: "2023-09-10", grade: 4, note: "Esej na temu domovine" },
-          { date: "2023-10-01", grade: 5, note: "Usmeni odgovor" },
-        ],
-        notes: ["Pročitati lektiru 'Zlatarovo zlato'", "Ponoviti padeže"],
-      },
-    };
-  
-    const subjectName = req.params.name.toLowerCase();
-    res.json(subjectsData[subjectName] || { grades: [], notes: [] });
-  });
-  
-  
+app.get('/subjects/matematika', (req, res) => {
+  const subjectsData = {
+    matematika: {
+      grades: [
+        { date: "2023-09-15", grade: 5, note: "Odličan rezultat na testu" },
+        { date: "2023-10-05", grade: 4, note: "Domaća zadaća" },
+      ],
+      notes: ["Priprema za test iz trigonometrije", "Ponoviti funkcije"],
+    },
+    hrvatski: {
+      grades: [
+        { date: "2023-09-10", grade: 4, note: "Esej na temu domovine" },
+        { date: "2023-10-01", grade: 5, note: "Usmeni odgovor" },
+      ],
+      notes: ["Pročitati lektiru 'Zlatarovo zlato'", "Ponoviti padeže"],
+    },
+  };
+
+  const subjectName = req.params.name.toLowerCase();
+  res.json(subjectsData[subjectName] || { grades: [], notes: [] });
+});
+
+
 
 // Ruta za logout
 app.post('/logout', (req, res) => {
-    res.status(200).send({ message: 'Uspješna odjava!' });
+  res.status(200).send({ message: 'Uspješna odjava!' });
+});
+
+
+
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
+
+// Ruta za zahtjev za resetiranje lozinke
+app.post('/request-reset-password', async (req, res) => {
+  const { email } = req.body;
+
+  const user = await User.findOne({ username: email });
+  if (!user) {
+    return res.status(404).send({ message: 'User not found!' });
+  }
+
+  const resetToken = crypto.randomBytes(32).toString('hex');
+  user.resetToken = resetToken;
+  user.tokenExpiration = Date.now() + 86400000; // Token vrijedi 1 dan
+  await user.save();
+  console.log('User updated with resetToken:', user); // Provjera je li token spremljen
+
+  const resetLink = `https://8235-31-217-0-225.ngrok-free.app/reset-password?token=${resetToken}`;
+  console.log('Generated reset link:', resetLink);
+
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'anetakalabric65@gmail.com', // Tvoj Gmail
+      pass: 'phcx hiyn opkp ouwz', // Zamijeni s Google App Password
+    },
   });
 
+  const mailOptions = {
+    from: 'anetakalabric65@gmail.com',
+    to: email,
+    subject: 'Password Reset',
+    html: `<p>Click this link to reset your password: <a href="${resetLink}">${resetLink}</a></p>`,
+  };
 
-
-  const nodemailer = require('nodemailer');
-  const crypto = require('crypto');
-  
-  // Ruta za zahtjev za resetiranje lozinke
-  app.post('/request-reset-password', async (req, res) => {
-    const { email } = req.body;
-  
-    const user = await User.findOne({ username: email });
-    if (!user) {
-      return res.status(404).send({ message: 'User not found!' });
+  transporter.sendMail(mailOptions, (error) => {
+    if (error) {
+      console.error(error);
+      return res.status(500).send({ message: 'Failed to send email.' });
     }
-  
-    const resetToken = crypto.randomBytes(32).toString('hex');
-    user.resetToken = resetToken;
-    user.tokenExpiration =  Date.now() + 86400000; // Token vrijedi 1 dan
-    await user.save();
-    console.log('User updated with resetToken:', user); // Provjera je li token spremljen
-
-    const resetLink = `https://8235-31-217-0-225.ngrok-free.app/reset-password?token=${resetToken}`;
-    console.log('Generated reset link:', resetLink);
-
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: 'anetakalabric65@gmail.com', // Tvoj Gmail
-        pass: 'phcx hiyn opkp ouwz', // Zamijeni s Google App Password
-      },
-    });
-  
-    const mailOptions = {
-      from: 'anetakalabric65@gmail.com',
-      to: email,
-      subject: 'Password Reset',
-      html: `<p>Click this link to reset your password: <a href="${resetLink}">${resetLink}</a></p>`,
-    };
-  
-    transporter.sendMail(mailOptions, (error) => {
-      if (error) {
-        console.error(error);
-        return res.status(500).send({ message: 'Failed to send email.' });
-      }
-      res.status(200).send({ message: 'Reset link sent!' });
-    });
+    res.status(200).send({ message: 'Reset link sent!' });
   });
-  
-  const validator = require('validator');
+});
 
-  app.post('/reset-password', async (req, res) => {
-    const { token, newPassword, confirmPassword } = req.body;
+const validator = require('validator');
 
-    console.log('Token received in POST request:', token); // Provjera
+app.post('/reset-password', async (req, res) => {
+  const { token, newPassword, confirmPassword } = req.body;
 
-    if (!token) {
-        return res.status(400).send('Missing token!');
-    }
+  console.log('Token received in POST request:', token); // Provjera
 
-    // Provjeri jesu li lozinke iste
-    if (newPassword !== confirmPassword) {
-      return res.status(400).send('Passwords do not match!');
-    }
-    // **Provjera jačine lozinke**
-    if (!validator.isStrongPassword(newPassword, { minLength: 8, minSymbols: 1 })) {
-      return res.status(400).send('Password is too weak! Use at least 8 characters, 1 symbol, and 1 uppercase letter.');
+  if (!token) {
+    return res.status(400).send('Missing token!');
+  }
+
+  // Provjeri jesu li lozinke iste
+  if (newPassword !== confirmPassword) {
+    return res.status(400).send('Passwords do not match!');
+  }
+  // **Provjera jačine lozinke**
+  if (!validator.isStrongPassword(newPassword, { minLength: 8, minSymbols: 1 })) {
+    return res.status(400).send('Password is too weak! Use at least 8 characters, 1 symbol, and 1 uppercase letter.');
   }
 
 
-    console.log('Token received in POST request:', token);
-    console.log('Current time:', Date.now());
-    try {
-      // Pronađi korisnika s odgovarajućim tokenom
-      const user = await User.findOne({
-        resetToken: token,
-        tokenExpiration: { $gt: Date.now() }, // Provjeri je li token još važeći
-      });
+  console.log('Token received in POST request:', token);
+  console.log('Current time:', Date.now());
+  try {
+    // Pronađi korisnika s odgovarajućim tokenom
+    const user = await User.findOne({
+      resetToken: token,
+      tokenExpiration: { $gt: Date.now() }, // Provjeri je li token još važeći
+    });
 
 
 
-      if (!user) {
-        return res.status(400).send('Invalid or expired token!');
-      }
-  
-      // Ažuriraj lozinku i očisti token
-      user.password = newPassword;
-      user.resetToken = null;
-      user.tokenExpiration = null;
-      await user.save();
-  
-      res.send('Password reset successful! You can now log in.');
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('An error occurred while resetting the password.');
+    if (!user) {
+      return res.status(400).send('Invalid or expired token!');
     }
-  });
-  
-  const path = require('path');
-  app.use('/frontend', express.static(path.join(__dirname, 'frontend')));
 
-  app.get('/reset-password', (req, res) => {
-    const { token } = req.query; // Preuzimanje tokena iz URL-a
-    console.log('Token received in URL:', token);
+    // Ažuriraj lozinku i očisti token
+    user.password = newPassword;
+    user.resetToken = null;
+    user.tokenExpiration = null;
+    await user.save();
 
-    // Provjeri je li token prisutan
-    if (!token) {
-      return res.status(400).send('Invalid or missing token!');
-    }
-    res.sendFile(path.join(__dirname, 'frontend', 'pages', 'reset-password.html'));
+    res.send('Password reset successful! You can now log in.');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('An error occurred while resetting the password.');
+  }
+});
 
-    
-  });
+const path = require('path');
+app.use('/frontend', express.static(path.join(__dirname, 'frontend')));
+
+app.get('/reset-password', (req, res) => {
+  const { token } = req.query; // Preuzimanje tokena iz URL-a
+  console.log('Token received in URL:', token);
+
+  // Provjeri je li token prisutan
+  if (!token) {
+    return res.status(400).send('Invalid or missing token!');
+  }
+  res.sendFile(path.join(__dirname, 'frontend', 'pages', 'reset-password.html'));
 
 
-  // Ruta za ažuriranje ocjena, bilješki i obrađenog gradiva
+});
 
-  // 🔹 Definicija sheme za ocjene
+
+// Ruta za ažuriranje ocjena, bilješki i obrađenog gradiva
+
+// 🔹 Definicija sheme za ocjene
 const gradeSchema = new mongoose.Schema({
   studentEmail: { type: String, required: true }, // Svaka ocjena je vezana za učenikov email
   subject: { type: String, required: true },
@@ -627,10 +627,10 @@ const gradeSchema = new mongoose.Schema({
 
 const Grade = mongoose.model("Grade", gradeSchema);
 
-  // Middleware za provjeru uloge nastavnika
+// Middleware za provjeru uloge nastavnika
 function provjeriNastavnika(req, res, next) {
   if (req.korisnik.role !== "nastavnik") {
-      return res.status(403).json({ message: "Nemate ovlasti za ovu radnju!" });
+    return res.status(403).json({ message: "Nemate ovlasti za ovu radnju!" });
   }
   next(); // Ako je nastavnik, nastavi s izvršenjem rute
 }
@@ -899,12 +899,12 @@ app.get("/:subject/:dataType", (req, res) => {
   const { subject, dataType } = req.params;
 
   if (!subjectsData[subject] || !subjectsData[subject][dataType]) {
-      return res.status(404).json({ message: "Predmet ili tip podataka nije pronađen!" });
+    return res.status(404).json({ message: "Predmet ili tip podataka nije pronađen!" });
   }
   const studentData = subjectsData[subject][dataType];
 
   if (!studentData) {
-      return res.status(404).json({ message: "Podaci za ovog učenika nisu pronađeni!" });
+    return res.status(404).json({ message: "Podaci za ovog učenika nisu pronađeni!" });
   }
 
   res.json(studentData);
@@ -916,9 +916,9 @@ app.get("/:subject/:dataType", (req, res) => {
 app.post("/:subject/update", provjeriToken, provjeriNastavnika, (req, res) => {
   const { subject } = req.params;
   const { dataType, data } = req.body;
-  
+
   if (!subjectsData[subject] || !subjectsData[subject][dataType]) {
-      return res.status(404).json({ message: "Predmet ili tip podataka nije pronađen!" });
+    return res.status(404).json({ message: "Predmet ili tip podataka nije pronađen!" });
   }
 
   subjectsData[subject][dataType] = data; // Ažuriraj podatke
@@ -930,20 +930,20 @@ app.delete("/:subject/delete/:dataType/:index", (req, res) => {
   const { subject, dataType, index } = req.params;
 
   if (!subjectsData[subject] || !subjectsData[subject][dataType]) {
-      return res.status(404).json({ message: "Predmet ili tip podataka nije pronađen!" });
+    return res.status(404).json({ message: "Predmet ili tip podataka nije pronađen!" });
   }
 
   const studentData = subjectsData[subject][dataType];
   if (!studentData) {
     return res.status(404).json({ message: "Podaci za ovog učenika nisu pronađeni!" });
-}
+  }
   const itemIndex = parseInt(index, 10);
 
   if (itemIndex >= 0 && itemIndex < studentData.length) {
-      studentData.splice(itemIndex, 1);
-      res.json({ message: `${dataType} uspješno obrisano iz ${subject}!` });
+    studentData.splice(itemIndex, 1);
+    res.json({ message: `${dataType} uspješno obrisano iz ${subject}!` });
   } else {
-      res.status(404).json({ message: "Podatak nije pronađen!" });
+    res.status(404).json({ message: "Podatak nije pronađen!" });
   }
 });
 
@@ -951,31 +951,31 @@ app.delete("/:subject/delete/:dataType/:index", (req, res) => {
 
 app.get('/current-user', provjeriToken, async (req, res) => {
   try {
-      console.log("📌 Trenutni korisnik iz tokena:", req.korisnik);
+    console.log("📌 Trenutni korisnik iz tokena:", req.korisnik);
 
-      // ✅ Pronađi korisnika u bazi prema emailu iz tokena
-      const user = await User.findOne({ username: req.korisnik.username });
+    // ✅ Pronađi korisnika u bazi prema emailu iz tokena
+    const user = await User.findOne({ username: req.korisnik.username });
 
-      if (!user) {
-          return res.status(404).json({ message: "Korisnik nije pronađen!" });
-      }
+    if (!user) {
+      return res.status(404).json({ message: "Korisnik nije pronađen!" });
+    }
 
-      console.log("✅ Pronađen korisnik u bazi:", user);
+    console.log("✅ Pronađen korisnik u bazi:", user);
 
-      // ✅ Pošalji ispravan `role` natrag klijentu
-      res.json({ firstName: user.firstName, lastName: user.lastName,username: user.username, role: user.role, profileImage: req.korisnik.profileImage || "school.jpg" });
+    // ✅ Pošalji ispravan `role` natrag klijentu
+    res.json({ firstName: user.firstName, lastName: user.lastName, username: user.username, role: user.role, profileImage: req.korisnik.profileImage || "school.jpg" });
 
   } catch (error) {
-      console.error("❌ Greška pri dohvaćanju korisnika:", error);
-      res.status(500).json({ message: "Greška na serveru!" });
+    console.error("❌ Greška pri dohvaćanju korisnika:", error);
+    res.status(500).json({ message: "Greška na serveru!" });
   }
 });
 
 
 
 
- 
-  
+
+
 /*mongoose.connect('mongodb://192.168.10.153:27017/e_Dnevnik')
   .then(() => {
     console.log('Connected to MongoDB:', mongoose.connection.name); // Logiraj ime baze

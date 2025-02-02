@@ -13,25 +13,25 @@ if (editProfileForm) {
 
     // Provjera je li sve popunjeno
     if (!fullName || !username || !password) {
-        alert('Sva polja su obavezna!');
-        return;
+      alert('Sva polja su obavezna!');
+      return;
     }
 
     // Slanje podataka na server za spremanje promjena
     const response = await fetch('http://localhost:5000/updateProfile', {
-        method: 'POST',
-        headers: {
-            "Content-Type": 'application/json',
-        },
-        body: JSON.stringify({ fullName, username, password }),
+      method: 'POST',
+      headers: {
+        "Content-Type": 'application/json',
+      },
+      body: JSON.stringify({ fullName, username, password }),
     });
 
     if (response.ok) {
       alert('Podaci su uspješno ažurirani!');
       window.location.href = "/frontend/home.html"; // Vrati korisnika na početnu stranicu
     } else {
-        const errorData = await response.json();
-        alert(errorData.message || 'Došlo je do greške pri ažuriranju podataka.');
+      const errorData = await response.json();
+      alert(errorData.message || 'Došlo je do greške pri ažuriranju podataka.');
     }
   });
 }
@@ -70,8 +70,8 @@ async function uploadProfilePicture() {
   const file = fileInput.files[0];
 
   if (!file) {
-      alert("Odaberite sliku!");
-      return;
+    alert("Odaberite sliku!");
+    return;
   }
 
   const formData = new FormData();
@@ -80,29 +80,29 @@ async function uploadProfilePicture() {
   const token = localStorage.getItem("token");
 
   try {
-      const response = await fetch("http://localhost:5000/update-profile", {
-          method: "POST",
-          headers: { "Authorization": `Bearer ${token}` },
-          body: formData
-      });
+    const response = await fetch("http://localhost:5000/update-profile", {
+      method: "POST",
+      headers: { "Authorization": `Bearer ${token}` },
+      body: formData
+    });
 
-      const result = await response.json();
-      
-      if (response.ok) {
-          alert(result.message);
-          
-          // ✅ Ažuriraj prikazanu profilnu sliku
-          document.getElementById("profile-picture").src = `http://localhost:5000/uploads/${result.profileImage}`;
+    const result = await response.json();
 
-          // ✅ Zatvori modal
-          closeProfileEdit();
-      } else {
-          throw new Error(result.message);
-      }
+    if (response.ok) {
+      alert(result.message);
+
+      // ✅ Ažuriraj prikazanu profilnu sliku
+      document.getElementById("profile-picture").src = `http://localhost:5000/uploads/${result.profileImage}`;
+
+      // ✅ Zatvori modal
+      closeProfileEdit();
+    } else {
+      throw new Error(result.message);
+    }
 
   } catch (error) {
-      console.error("❌ Greška pri uploadu slike:", error.message);
-      alert("Greška pri učitavanju slike.");
+    console.error("❌ Greška pri uploadu slike:", error.message);
+    alert("Greška pri učitavanju slike.");
   }
 }
 
@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const editProfileButton = document.getElementById("edit-profile-button");
 
   if (editProfileButton) {
-      editProfileButton.addEventListener("click", openProfileEdit);
+    editProfileButton.addEventListener("click", openProfileEdit);
   }
 });
 
