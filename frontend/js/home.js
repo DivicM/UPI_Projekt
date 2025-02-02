@@ -32,8 +32,9 @@ if (logoutButton) {
       });
 
       if (response.ok) {
+        localStorage.removeItem("token"); // 📌 Briše token iz localStorage-a
         alert('Odjavili ste se!');
-        window.location.href = '/frontend/index.html'; // Preusmjeri na login stranicu
+        window.location.href = 'index.html'; // Preusmjeri na login stranicu
       } else {
         alert('Došlo je do greške pri odjavi.');
       }
@@ -61,18 +62,47 @@ sidebarLinks.forEach((link) => {
     event.preventDefault(); // Sprečava default ponašanje (ako koristiš "#" kao href)
     const sectionName = link.textContent.trim();
 
-    // Upravljanje prema imenu sekcije
-    if (sectionName === 'Home') {
-      window.location.href = './home.html'
-    } else if (sectionName === 'Predmeti') {
-      window.location.href = './pages/predmeti.html'
-    } else if (sectionName === 'Izostnci') {
-      window.location.href = './pages/izostanci.html'
-    } else if (sectionName === 'Raspored') {
-      window.location.href = './pages/raspored.html'
-    } else if (sectionName === 'Kalendar nastave') {
-      window.location.href = './pages/kalendar-nastave.html'
-    }
+     // Upravljanje prema imenu sekcije
+     if (sectionName === 'Home') {
+        window.location.href='/frontend/home.html'
+      } else if (sectionName === 'Predmeti') {
+        window.location.href='/frontend/pages/predmeti.html'
+      } else if (sectionName === 'Izostanci') {
+        window.location.href='/frontend/pages/izostanci.html'
+      } else if (sectionName === 'Raspored') {
+        window.location.href='/frontend/pages/raspored.html'
+      } else if (sectionName === 'Kalendar nastave') {
+        window.location.href='/frontend/pages/kalendar-nastave.html'
+      }
+    });
   });
+
+  document.addEventListener("DOMContentLoaded", async () => {
+    const token = localStorage.getItem("token");
+  
+    if (!token) {
+        console.error("❌ Nema tokena! Korisnik nije prijavljen.");
+        return;
+    }
+
+    try {
+        const response = await fetch("http://localhost:5000/current-user", {
+            method: "GET",
+            headers: { "Authorization": `Bearer ${token}` }
+        });
+
+        if (!response.ok) throw new Error("Neispravan token ili nije prijavljen korisnik.");
+        
+        const user = await response.json();
+
+        // Postavi ime korisnika
+        document.getElementById("user-name").textContent = `${user.firstName} ${user.lastName}`;
+
+        // Postavi profilnu sliku
+        document.getElementById("profile-picture").src = `http://localhost:5000/uploads/${user.profileImage}`;
+
+    } catch (error) {
+        console.error("❌ Greška pri dohvaćanju korisnika:", error.message);
+    }
 });
 
