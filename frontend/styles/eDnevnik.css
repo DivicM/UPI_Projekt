@@ -241,28 +241,7 @@ body {
     margin-bottom: 20px;
   }
   
-  /* Podsjetnici */
-  .reminders {
-    margin-bottom: 30px;
-  }
   
-  .reminders h2 {
-    font-size: 1.5rem;
-    margin-bottom: 20px;
-  }
-  
-  .reminders ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .reminders ul li {
-    background: #f9f9f9;
-    margin-bottom: 10px;
-    padding: 10px 15px;
-    border-radius: 5px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-  }
   .hidden {
     display: none;
 }
