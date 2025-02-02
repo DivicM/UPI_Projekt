@@ -32,7 +32,7 @@ if (logoutButton) {
       });
 
       if (response.ok) {
-        localStorage.removeItem("token"); // 📌 Briše token iz localStorage-a
+        localStorage.removeItem("token"); //Briše token iz localStorage-a
         alert('Odjavili ste se!');
         window.location.href = 'index.html'; // Preusmjeri na login stranicu
       } else {

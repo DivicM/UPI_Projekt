@@ -109,17 +109,17 @@ document.addEventListener("DOMContentLoaded", async () => {
   const addAbsenceButton = document.getElementById("addAbsenceButton");
   const saveAbsencesButton = document.getElementById("saveAbsencesButton");
 
-  // 📌 Dohvati trenutno prijavljenog korisnika
+  // Dohvati trenutno prijavljenog korisnika
   let currentUser = await fetchCurrentUser();
 
-  // ✅ Sakrij gumbe ako korisnik NIJE nastavnik
+  // Sakrij gumbe ako korisnik NIJE nastavnik
   //if (currentUser.email !== "anetakalabric65@gmail.com") {
   /*if (currentUser.isTeacher) {  
     editAbsencesButton.classList.remove("hidden");
     addAbsenceButton.classList.remove("hidden");
     saveAbsencesButton.classList.remove("hidden");
 }*/
-  // ✅ Sakrij gumbe ako korisnik NIJE nastavnik
+  //  Sakrij gumbe ako korisnik NIJE nastavnik
   const userRole = localStorage.getItem("role");
 
   //if (currentUser.role === "nastavnik") {
@@ -135,13 +135,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     saveAbsencesButton.style.display = "none";
   }
 
-  // 📌 Dohvati i prikaži izostanke
+  // Dohvati i prikaži izostanke
   await fetchAndRenderAbsences();
 
-  // 📌 Dugme za uređivanje omogućava promjene u tablici
+  // Dugme za uređivanje omogućava promjene u tablici
   editAbsencesButton.addEventListener("click", () => enableEditing());
 
-  // 📌 Dohvaćanje i prikaz izostanaka
+  // Dohvaćanje i prikaz izostanaka
   async function fetchAndRenderAbsences() {
     const token = localStorage.getItem("token");
 
@@ -182,7 +182,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         absenceTable.appendChild(row);
       });
 
-      // 📌 Dodaj event listenere za brisanje samo ako postoji ispravan ID
+      // Dodaj event listenere za brisanje samo ako postoji ispravan ID
       document.querySelectorAll(".deleteRowButton").forEach((button) => {
         const absenceId = button.getAttribute("data-id");
         if (absenceId) {
@@ -207,7 +207,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
 
-  // 📌 Omogućuje uređivanje polja u tablici
+  // Omogućuje uređivanje polja u tablici
   function enableEditing() {
     document.querySelectorAll("#absence-table td").forEach((cell) => {
       cell.contentEditable = true;
@@ -217,7 +217,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     addAbsenceButton.style.display = "inline-block";
   }
 
-  // 📌 Dodavanje novog reda
+  // Dodavanje novog reda
   addAbsenceButton.addEventListener("click", () => {
     let newRow = document.createElement("tr");
     newRow.innerHTML = `
@@ -228,13 +228,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         `;
     absenceTable.appendChild(newRow);
 
-    // ✅ Dodaj event listener za brisanje samo za nove redove
+    // Dodaj event listener za brisanje samo za nove redove
     newRow.querySelector(".deleteRowButton").addEventListener("click", () => {
       newRow.remove(); // Ukloni novi red ako nije spremljen u bazu
     });
   });
 
-  // 📌 Spremanje izostanaka
+  // Spremanje izostanaka
   saveAbsencesButton.addEventListener("click", async () => {
     const token = localStorage.getItem("token");
     const studentEmail = document.getElementById("studentEmail").value; // 📌 Email učenika
@@ -278,7 +278,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  // 📌 Dohvati trenutno prijavljenog korisnika
+  // Dohvati trenutno prijavljenog korisnika
   async function fetchCurrentUser() {
     const token = localStorage.getItem("token");
 
@@ -302,10 +302,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const data = await response.json();
       console.log("📌 Trenutni korisnik:", data);
-      // ✅ Spremi role u localStorage za kasniju upotrebu
+      // Spremi role u localStorage za kasniju upotrebu
       localStorage.setItem("role", data.role || "student");
 
-      // ✅ Dodaj provjeru je li korisnik nastavnik
+      // Dodaj provjeru je li korisnik nastavnik
       //const isTeacher = data.email === "anetakalabric65@gmail.com";
       return { username: data.username || "", role: data.role || "student" };
       //return data;
@@ -319,7 +319,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
 
-  // 📌 Brisanje izostanka
+  // Brisanje izostanka
   async function deleteAbsence(event) {
     const token = localStorage.getItem("token");
 
@@ -353,7 +353,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.log(`📌 Brišem izostanak s ID: ${id}`); // Debugging
 
     try {
-      // ✅ Ispravan način korištenja `fetch()`
+      // Ispravan način korištenja `fetch()`
       const response = await fetch(`http://localhost:5000/absences/delete/${id}`, {
         method: "DELETE",
         headers: {

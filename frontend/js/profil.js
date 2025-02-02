@@ -91,10 +91,10 @@ async function uploadProfilePicture() {
     if (response.ok) {
       alert(result.message);
 
-      // ✅ Ažuriraj prikazanu profilnu sliku
+      // Ažuriraj prikazanu profilnu sliku
       document.getElementById("profile-picture").src = `http://localhost:5000/uploads/${result.profileImage}`;
 
-      // ✅ Zatvori modal
+      // Zatvori modal
       closeProfileEdit();
     } else {
       throw new Error(result.message);
@@ -106,7 +106,7 @@ async function uploadProfilePicture() {
   }
 }
 
-// 📌 EVENT LISTENER ZA OTVARANJE MODALA
+// EVENT LISTENER ZA OTVARANJE MODALA
 document.addEventListener("DOMContentLoaded", () => {
   const editProfileButton = document.getElementById("edit-profile-button");
 

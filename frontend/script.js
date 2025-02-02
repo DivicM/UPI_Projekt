@@ -97,9 +97,9 @@ loginForm.addEventListener('submit', async (e) => {
 
   if (response.ok) {
     const data = await response.json();
-    console.log("📌 Novi token:", data.token); // 🛠 Debugging
-    localStorage.setItem("token", data.token); // 📌 Sprema token u localStorage
-    localStorage.setItem("role", data.role); // ✅ Spremi ulogu korisnika
+    console.log("📌 Novi token:", data.token); // Debugging
+    localStorage.setItem("token", data.token); // Sprema token u localStorage
+    localStorage.setItem("role", data.role); // Spremi ulogu korisnika
 
     alert('Login successful!');
     window.location.href = 'home.html'; // Preusmjeravanje na novu stranicu
@@ -115,9 +115,9 @@ loginForm.addEventListener('submit', async (e) => {
   const lastName = document.getElementById('registerLastName').value;
   const username = document.getElementById('registerUsername').value;
   const password = document.getElementById('registerPassword').value;
-  const role = document.getElementById("role").value; // ✅ Dodaj dohvaćanje uloge iz selecta
+  const role = document.getElementById("role").value; //  Dodaj dohvaćanje uloge iz selecta
 
-  console.log("📌 Podaci koji se šalju na backend:", { firstName, lastName, username, role }); // Debugging
+  console.log(" Podaci koji se šalju na backend:", { firstName, lastName, username, role }); // Debugging
 */
 // Provjera jačine lozinke
 /*const passwordStrength = document.getElementById('registerPasswordStrength').value;
@@ -152,12 +152,12 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
   const lastName = document.getElementById("registerLastName").value;
   const username = document.getElementById("registerUsername").value;
   const password = document.getElementById("registerPassword").value;
-  const role = document.getElementById("role").value; // ✅ Uzima rolu iz selekta
+  const role = document.getElementById("role").value; //  Uzima rolu iz selekta
 
   const response = await fetch("http://localhost:5000/register", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ firstName, lastName, username, password, role }) // ✅ Role se šalje na backend
+    body: JSON.stringify({ firstName, lastName, username, password, role }) //  Role se šalje na backend
   });
 
   const data = await response.json();
@@ -198,11 +198,11 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 async function fetchCurrentUser() {
-  const token = localStorage.getItem("token"); // 📌 Dohvati token iz localStorage-a
+  const token = localStorage.getItem("token"); //  Dohvati token iz localStorage-a
   if (!token) return { email: "" }; // Ako nema tokena, korisnik nije prijavljen
 
   const response = await fetch("http://localhost:5000/current-user", {
-    headers: { "Authorization": `Bearer ${token}` }, // 📌 Šaljemo token u zaglavlju
+    headers: { "Authorization": `Bearer ${token}` }, //  Šaljemo token u zaglavlju
   });
 
   return response.ok ? await response.json() : { email: "" };

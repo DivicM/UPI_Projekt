@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 gradesTable.appendChild(row);
             });
             // Dodaj funkcionalnost za brisanje bilješki
-            // 🛠 Omogući brisanje redova
+            //  Omogući brisanje redova
             document.querySelectorAll(".deleteRowButton").forEach((button) => {
                 button.addEventListener("click", async (event) => {
                     const index = event.target.dataset.index;
@@ -144,7 +144,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     saveGradesButton.addEventListener("click", async () => {
         const token = localStorage.getItem("token");
-        const studentEmail = document.getElementById("studentEmail").value; // 📌 Email učenika
+        const studentEmail = document.getElementById("studentEmail").value; //  Email učenika
 
         if (!studentEmail) {
             alert("Unesite email učenika!");
@@ -231,7 +231,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             alert("Red uspješno obrisan!");
 
-            // ✅ Obriši red iz DOM-a
+            // Obriši red iz DOM-a
             document.querySelector(`.deleteRowButton[data-index="${index}"]`).closest("tr").remove();
 
         } catch (error) {
@@ -278,7 +278,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     saveNotesButton.addEventListener("click", async () => {
-        const studentEmail = document.getElementById("studentEmail").value; // 📌 Email učenika
+        const studentEmail = document.getElementById("studentEmail").value; // Email učenika
         if (!studentEmail) {
             alert("Unesite email učenika!");
             return;

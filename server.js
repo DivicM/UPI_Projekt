@@ -38,7 +38,7 @@ const userSchema = new mongoose.Schema({
   lastName: String,
   username: String,
   password: String,
-  role: { type: String, enum: ["student", "nastavnik"], default: "student" }, // ✅ Dodano polje role
+  role: { type: String, enum: ["student", "nastavnik"], default: "student" }, // Dodano polje role
   resetToken: String,          // Token za resetiranje lozinke
   tokenExpiration: Date,
 });
@@ -91,13 +91,13 @@ const provjeriToken = async (req, res, next) => {
 
   try {
     const dekodiraniToken = jwt.verify(token, process.env.JWT_SECRET);
-    // 📌 Dohvati korisnika iz baze pomoću emaila iz tokena
+    //  Dohvati korisnika iz baze pomoću emaila iz tokena
     const user = await User.findOne({ username: dekodiraniToken.username });
 
     if (!user) {
       return res.status(404).json({ message: "Korisnik nije pronađen!" });
     }
-    // 📌 Postavi korisnika u req objekt da se može koristiti dalje u rutama
+    //  Postavi korisnika u req objekt da se može koristiti dalje u rutama
     req.korisnik = { username: user.username, role: user.role };
 
     ///req.korisnik = dekodiraniToken;
@@ -116,11 +116,11 @@ app.get('/debug-token', provjeriToken, (req, res) => {
 
 /*app.get("/absences",provjeriToken, async (req, res) => {
   try {
-      const loggedInUser = req.korisnik.idUser; // 📌 JWT vraća idUser (email)
-      console.log("📌 Autoriziran korisnik:", loggedInUser); // 🛠 Debugging
+      const loggedInUser = req.korisnik.idUser; //  JWT vraća idUser (email)
+      console.log(" Autoriziran korisnik:", loggedInUser); // Debugging
 
-      const absences = await Absence.find({ studentEmail: loggedInUser }); // 📌 Pronađi izostanke samo za prijavljenog korisnika
-      console.log("Izostanci pronađeni u bazi:", absences); // 🛠 Debugging - provjeri što vraća MongoDB
+      const absences = await Absence.find({ studentEmail: loggedInUser }); // Pronađi izostanke samo za prijavljenog korisnika
+      console.log("Izostanci pronađeni u bazi:", absences); //  Debugging - provjeri što vraća MongoDB
 
       res.json(absences.length ? absences : []);
   } catch (error) {
@@ -148,26 +148,26 @@ app.get("/absences", provjeriToken, async (req, res) => {
 
 
 
-// ✅ Ažuriranje izostanaka (samo nastavnik)
+//  Ažuriranje izostanaka (samo nastavnik)
 /*app.post("/absences/update", provjeriToken, async (req, res) => {
   try {
       const loggedInUser = req.korisnik.idUser; // Email iz JWT tokena
       const { email, data } = req.body;
-      console.log(`📌 Korisnik ${loggedInUser} pokušava ažurirati izostanke za ${email}`);
+      console.log(` Korisnik ${loggedInUser} pokušava ažurirati izostanke za ${email}`);
 
-      // ✅ Samo nastavnik može uređivati izostanke
+      //  Samo nastavnik može uređivati izostanke
       if (loggedInUser !== "anetakalabric65@gmail.com") {
           return res.status(403).json({ message: "Nemate ovlasti za uređivanje izostanaka." });
       }
 
-      // ✅ Ažuriraj izostanke učenika u bazi
+      // Ažuriraj izostanke učenika u bazi
       await Absence.deleteMany({ studentEmail: email }); // Obriši stare podatke
       await Absence.insertMany(data.map(item => ({ ...item, studentEmail: email }))); // Dodaj nove
 
       res.json({ message: "Izostanci uspješno ažurirani!" });
 
   } catch (error) {
-      console.error("❌ Greška pri ažuriranju izostanaka:", error);
+      console.error(" Greška pri ažuriranju izostanaka:", error);
       res.status(500).json({ message: "Greška na serveru!" });
   }
 });*/
@@ -185,20 +185,20 @@ app.post("/absences/update", provjeriToken, async (req, res) => {
 
 
 
-// ✅ Brisanje izostanka (samo nastavnik)
+//  Brisanje izostanka (samo nastavnik)
 /*app.delete("/absences/delete/:id", provjeriToken, async (req, res) => {
   try {
       const absenceId = req.params.id;
       const loggedInUser = req.korisnik.idUser; // Email iz JWT tokena
 
-      console.log(`📌 Korisnik ${loggedInUser} pokušava obrisati izostanak ID: ${absenceId}`);
+      console.log(` Korisnik ${loggedInUser} pokušava obrisati izostanak ID: ${absenceId}`);
 
-      // ✅ Samo nastavnik može brisati izostanke
+      //  Samo nastavnik može brisati izostanke
       if (loggedInUser !== "anetakalabric65@gmail.com") {
           return res.status(403).json({ message: "Nemate ovlasti za brisanje izostanaka." });
       }
 
-      // ✅ Pronađi i obriši izostanak
+      //  Pronađi i obriši izostanak
       const deletedAbsence = await Absence.findByIdAndDelete(absenceId);
 
       if (!deletedAbsence) {
@@ -208,23 +208,23 @@ app.post("/absences/update", provjeriToken, async (req, res) => {
       res.json({ message: "Izostanak uspješno obrisan!" });
 
   } catch (error) {
-      console.error("❌ Greška pri brisanju izostanka:", error);
+      console.error(" Greška pri brisanju izostanka:", error);
       res.status(500).json({ message: "Greška na serveru!" });
   }
 });*/
 /*app.delete("/absences/delete/:id", provjeriToken, async (req, res) => {
   try {
       const absenceId = req.params.id;
-      const { email, role } = req.korisnik; // 🔹 Dohvaćamo `role` iz tokena
+      const { email, role } = req.korisnik; //  Dohvaćamo `role` iz tokena
 
-      console.log(`📌 Korisnik (${role}) ${email} pokušava obrisati izostanak ID: ${absenceId}`);
+      console.log(` Korisnik (${role}) ${email} pokušava obrisati izostanak ID: ${absenceId}`);
 
-      // ✅ Samo nastavnik može brisati izostanke
+      //  Samo nastavnik može brisati izostanke
       if (role !== "nastavnik") {
           return res.status(403).json({ message: "Nemate ovlasti za brisanje izostanaka." });
       }
 
-      // ✅ Pronađi i obriši izostanak
+      // Pronađi i obriši izostanak
       const deletedAbsence = await Absence.findByIdAndDelete(absenceId);
 
       if (!deletedAbsence) {
@@ -234,7 +234,7 @@ app.post("/absences/update", provjeriToken, async (req, res) => {
       res.json({ message: "Izostanak uspješno obrisan!" });
 
   } catch (error) {
-      console.error("❌ Greška pri brisanju izostanka:", error);
+      console.error( Greška pri brisanju izostanka:", error);
       res.status(500).json({ message: "Greška na serveru!" });
   }
 });*/
@@ -254,21 +254,21 @@ app.post("/absences/update", provjeriToken, async (req, res) => {
 
 app.delete("/absences/delete/:id", provjeriToken, async (req, res) => {
   try {
-    // ✅ Samo nastavnik može brisati izostanke
+    //  Samo nastavnik može brisati izostanke
     if (req.korisnik.role !== "nastavnik") {
       return res.status(403).json({ message: "Nemate ovlasti za brisanje izostanaka." });
     }
 
     const absenceId = req.params.id;
 
-    // ✅ Provjeri je li `id` ispravan MongoDB ObjectId
+    //  Provjeri je li `id` ispravan MongoDB ObjectId
     if (!mongoose.Types.ObjectId.isValid(absenceId)) {
       return res.status(400).json({ message: "Neispravan ID izostanka!" });
     }
 
     console.log(`📌 Nastavnik ${req.korisnik.username} briše izostanak s ID: ${absenceId}`);
 
-    // ✅ Pronađi i obriši izostanak
+    //  Pronađi i obriši izostanak
     const deletedAbsence = await Absence.findByIdAndDelete(absenceId);
 
     if (!deletedAbsence) {
@@ -307,22 +307,22 @@ app.post('/register', async (req, res) => {
   try {
     const { firstName, lastName, username, password, role } = req.body;
 
-    // ✅ Provjeri postoji li korisnik s istim emailom
+    //  Provjeri postoji li korisnik s istim emailom
     const existingUser = await User.findOne({ username });
     if (existingUser) {
       return res.status(400).json({ message: "Korisnik s tim emailom već postoji." });
     }
 
-    // ✅ Ako `role` nije postavljen, postavi ga na `"student"`
+    //  Ako `role` nije postavljen, postavi ga na `"student"`
     const userRole = role || "student";
 
-    // ✅ Kreiraj novog korisnika
+    //  Kreiraj novog korisnika
     const user = new User({
       firstName,
       lastName,
       username,
-      password, // 🔹 Dodaj hashiranje lozinke ako treba
-      role: userRole // ✅ Sprema ulogu u bazu
+      password, //  Dodaj hashiranje lozinke ako treba
+      role: userRole //  Sprema ulogu u bazu
     });
 
     await user.save();
@@ -658,7 +658,7 @@ app.get("/biologija/finalExam", (req, res) => {
   
 });
 
-// ✅ Ažuriranje ocjena (samo nastavnik)
+//  Ažuriranje ocjena (samo nastavnik)
 app.post('/biologija/update', provjeriToken, provjeriNastavnika, async (req, res) => {
     const { dataType, data } = req.body;
 
@@ -721,7 +721,7 @@ app.delete("/biologija/delete/finalExam/:index", (req, res) => {
   }
 });*/
 
-// ✅ Brisanje ocjena/bilješki/gradiva (samo nastavnik)
+//  Brisanje ocjena/bilješki/gradiva (samo nastavnik)
 /*app.delete('/biologija/delete/:dataType/:index', provjeriToken, provjeriNastavnika, async (req, res) => {
   const { dataType, index } = req.params;
 
@@ -769,7 +769,7 @@ app.get("/biologija/finalExam", (req, res) => {
     const { username, dataType, data } = req.body;
   
 
-    // ❌ Ako korisnik nije nastavnik, zabrani pristup
+    //  Ako korisnik nije nastavnik, zabrani pristup
     if (username !== "anetakalabric65@gmail.com") {
         return res.status(403).json({ message: 'Nemate ovlasti za uređivanje podataka.' });
     }  
@@ -791,7 +791,7 @@ app.get("/biologija/finalExam", (req, res) => {
     const username = req.headers["username"];
    
 
-    // ❌ Ako korisnik nije nastavnik, zabrani brisanje
+    //  Ako korisnik nije nastavnik, zabrani brisanje
     if (username !== "anetakalabric65@gmail.com") {
         return res.status(403).json({ message: "Nemate ovlasti za brisanje podataka." });
     }
@@ -804,7 +804,7 @@ app.get("/biologija/finalExam", (req, res) => {
     const index = parseInt(req.params.index, 10);
     const username = req.headers["username"];
 
-    // ❌ Ako korisnik nije nastavnik, zabrani brisanje
+    //  Ako korisnik nije nastavnik, zabrani brisanje
     if (username !== "anetakalabric65@gmail.com") {
         return res.status(403).json({ message: "Nemate ovlasti za brisanje podataka." });
     }
@@ -821,7 +821,7 @@ app.delete("/biologija/delete/curriculum/:index", (req, res) => {
   const index = parseInt(req.params.index, 10);
   const username = req.headers["username"];
 
-    // ❌ Ako korisnik nije nastavnik, zabrani brisanje
+    //  Ako korisnik nije nastavnik, zabrani brisanje
     if (username !== "anetakalabric65@gmail.com") {
         return res.status(403).json({ message: "Nemate ovlasti za brisanje podataka." });
     }
@@ -837,7 +837,7 @@ app.delete("/biologija/delete/finalExam/:index", (req, res) => {
   const index = parseInt(req.params.index, 10);
   const username = req.headers["username"];
 
-    // ❌ Ako korisnik nije nastavnik, zabrani brisanje
+    //  Ako korisnik nije nastavnik, zabrani brisanje
     if (username !== "anetakalabric65@gmail.com") {
         return res.status(403).json({ message: "Nemate ovlasti za brisanje podataka." });
     }
@@ -853,7 +853,7 @@ app.delete("/biologija/delete/finalExam/:index", (req, res) => {
   const userEmail = req.headers["user-email"];
   const parsedIndex = parseInt(index, 10);
 
-  // ❌ Ako korisnik nije nastavnik, zabrani brisanje
+  //  Ako korisnik nije nastavnik, zabrani brisanje
   if (userEmail !== "anetakalabric65@gmail.com") {
       return res.status(403).json({ message: "Nemate ovlasti za brisanje podataka." });
   }
@@ -872,11 +872,11 @@ app.delete("/biologija/delete/finalExam/:index", (req, res) => {
 */
 // Ruta za dohvaćanje trenutnog korisnika
 /*app.get('/current-user', provjeriToken, (req, res) => {
-  console.log("📌 Trenutni korisnik iz tokena:", req.korisnik); // Debugging
+  console.log(" Trenutni korisnik iz tokena:", req.korisnik); // Debugging
   res.json({ username: req.korisnik.username, role: req.korisnik.role || "student" });
 });*/
 
-// 📌 Struktura podataka za sve predmete
+//  Struktura podataka za sve predmete
 const subjectsData = {
   biologija: { grades: [], notes: [], curriculum: [], finalExam: [] },
   engleskijezik: { grades: [], notes: [], curriculum: [], finalExam: [] },
@@ -894,7 +894,7 @@ const subjectsData = {
   tzk: { grades: [], notes: [], curriculum: [], finalExam: [] },
   vjeronauk: { grades: [], notes: [], curriculum: [], finalExam: [] }
 };
-// 📌 Dinamička ruta za dohvaćanje podataka bilo kojeg predmeta
+//  Dinamička ruta za dohvaćanje podataka bilo kojeg predmeta
 app.get("/:subject/:dataType", (req, res) => {
   const { subject, dataType } = req.params;
 
@@ -912,7 +912,7 @@ app.get("/:subject/:dataType", (req, res) => {
 });
 
 
-// 📌 Ažuriranje podataka bilo kojeg predmeta
+// Ažuriranje podataka bilo kojeg predmeta
 app.post("/:subject/update", provjeriToken, provjeriNastavnika, (req, res) => {
   const { subject } = req.params;
   const { dataType, data } = req.body;
@@ -925,7 +925,7 @@ app.post("/:subject/update", provjeriToken, provjeriNastavnika, (req, res) => {
   res.json({ message: `${dataType} za ${subject} su ažurirane!` });
 });
 
-// 📌 Brisanje podataka za bilo koji predmet
+//  Brisanje podataka za bilo koji predmet
 app.delete("/:subject/delete/:dataType/:index", (req, res) => {
   const { subject, dataType, index } = req.params;
 
@@ -953,7 +953,7 @@ app.get('/current-user', provjeriToken, async (req, res) => {
   try {
     console.log("📌 Trenutni korisnik iz tokena:", req.korisnik);
 
-    // ✅ Pronađi korisnika u bazi prema emailu iz tokena
+    //  Pronađi korisnika u bazi prema emailu iz tokena
     const user = await User.findOne({ username: req.korisnik.username });
 
     if (!user) {
@@ -962,7 +962,7 @@ app.get('/current-user', provjeriToken, async (req, res) => {
 
     console.log("✅ Pronađen korisnik u bazi:", user);
 
-    // ✅ Pošalji ispravan `role` natrag klijentu
+    //  Pošalji ispravan `role` natrag klijentu
     res.json({ firstName: user.firstName, lastName: user.lastName, username: user.username, role: user.role, profileImage: req.korisnik.profileImage || "school.jpg" });
 
   } catch (error) {
