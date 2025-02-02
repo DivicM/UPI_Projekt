@@ -1,25 +1,3 @@
-// Dohvaćanje liste predmeta sa servera
-/*const subjectsList = document.getElementById('subjects');
-const searchInput = document.getElementById('searchInput');
-
-async function loadSubjects() {
-  try {
-    const response = await fetch('http://localhost:5000/subjects');
-    const subjects = await response.json();
-
-    renderSubjects(subjects); // Prikaz svih predmeta
-
-    subjects.forEach((subject) => {
-      const li = document.createElement('li');
-      li.textContent = `${subject.name} - ${subject.teacher}`;
-      subjectsList.appendChild(li);
-    });
-  } catch (error) {
-    console.error('Greška pri dohvaćanju predmeta:', error);
-  }
-}
-
-loadSubjects();*/
 const subjectsList = document.getElementById('subjects');
 const searchInput = document.getElementById('searchInput');
 
@@ -76,3 +54,33 @@ if (logoutButton) {
     }
   });
 }
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    console.error("❌ Nema tokena! Korisnik nije prijavljen.");
+    return;
+  }
+
+  try {
+    const response = await fetch("http://localhost:5000/current-user", {
+      method: "GET",
+      headers: { "Authorization": `Bearer ${token}` }
+    });
+
+    if (!response.ok) throw new Error("Neispravan token ili nije prijavljen korisnik.");
+
+    const user = await response.json();
+
+    // Postavi ime korisnika
+    document.getElementById("user-name").textContent = `${user.firstName} ${user.lastName}`;
+
+    // Postavi profilnu sliku
+    document.getElementById("profile-picture").src = `http://localhost:5000/uploads/${user.profileImage}`;
+
+  } catch (error) {
+    console.error("❌ Greška pri dohvaćanju korisnika:", error.message);
+  }
+});
+

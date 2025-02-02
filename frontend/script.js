@@ -5,9 +5,6 @@ const registerFormElement = document.getElementById('registerFormElement');
 const successMessage = document.getElementById('successMessage');
 const formTitle = document.getElementById('formTitle');
 const toggleText = document.getElementById('toggleText');
-
-
-
 const forgotPasswordLink = document.getElementById('forgotPasswordLink');
 const forgotPasswordForm = document.getElementById('forgotPasswordForm');
 const forgotPasswordRequestForm = document.getElementById('forgotPasswordRequestForm');
@@ -70,10 +67,6 @@ resetPasswordFormElement.addEventListener('submit', async (e) => {
   }
 });
 
-
-
-
-
 // Prebacivanje na registracijsku formu
 registerLink.addEventListener('click', () => {
   loginForm.style.display = 'none';
@@ -108,43 +101,6 @@ loginForm.addEventListener('submit', async (e) => {
   }
 });
 
-// Register forma
-/*registerFormElement.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const firstName = document.getElementById('registerFirstName').value;
-  const lastName = document.getElementById('registerLastName').value;
-  const username = document.getElementById('registerUsername').value;
-  const password = document.getElementById('registerPassword').value;
-  const role = document.getElementById("role").value; //  Dodaj dohvaćanje uloge iz selecta
-
-  console.log(" Podaci koji se šalju na backend:", { firstName, lastName, username, role }); // Debugging
-*/
-// Provjera jačine lozinke
-/*const passwordStrength = document.getElementById('registerPasswordStrength').value;
-
-if (passwordStrength < 3) { // Ako lozinka nije "Good" ili "Strong"
-    alert('Lozinka je preslaba! Koristite 8+ znakova, 1 veliko slovo, 1 broj i 1 simbol.');
-    return; // Zaustavi daljnju obradu
-}*/
-//završava provjera jačine
-
-/*const response = await fetch('http://localhost:5000/register', {
-  method: "POST",
-  headers: { "Content-Type": 'application/json' },
-  body: JSON.stringify({ firstName, lastName, username, password, role }),
-});
-
-if (response.ok) {
-  alert("Registracija uspješna!");
-  window.location.href = "/frontend/index.html"; 
-  //registerForm.style.display = 'none';
-  //successMessage.style.display = 'block';
-  //successMessage.innerText = 'Registracija uspješna!';
-
-} else {
-  alert('Registration failed!');
-}
-});*/
 document.getElementById("registerForm").addEventListener("submit", async (e) => {
   e.preventDefault();
 
