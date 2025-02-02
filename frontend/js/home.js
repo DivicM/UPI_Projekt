@@ -62,47 +62,95 @@ sidebarLinks.forEach((link) => {
     event.preventDefault(); // Sprečava default ponašanje (ako koristiš "#" kao href)
     const sectionName = link.textContent.trim();
 
-    // Upravljanje prema imenu sekcije
-    if (sectionName === 'Home') {
-      window.location.href = '/frontend/home.html'
-    } else if (sectionName === 'Predmeti') {
-      window.location.href = '/frontend/pages/predmeti.html'
-    } else if (sectionName === 'Izostanci') {
-      window.location.href = '/frontend/pages/izostanci.html'
-    } else if (sectionName === 'Raspored') {
-      window.location.href = '/frontend/pages/raspored.html'
-    } else if (sectionName === 'Kalendar nastave') {
-      window.location.href = '/frontend/pages/kalendar-nastave.html'
-    }
+     // Upravljanje prema imenu sekcije
+     if (sectionName === 'Home') {
+        window.location.href='/frontend/home.html'
+      } else if (sectionName === 'Predmeti') {
+        window.location.href='/frontend/pages/predmeti.html'
+      } else if (sectionName === 'Izostanci') {
+        window.location.href='/frontend/pages/izostanci.html'
+      } else if (sectionName === 'Raspored') {
+        window.location.href='/frontend/pages/raspored.html'
+      } else if (sectionName === 'Kalendar nastave') {
+        window.location.href='/frontend/pages/kalendar-nastave.html'
+      }
+    });
   });
-});
 
+  document.addEventListener("DOMContentLoaded", async () => {
+    const token = localStorage.getItem("token");
+  
+    if (!token) {
+        console.error("❌ Nema tokena! Korisnik nije prijavljen.");
+        return;
+    }
+
+    try {
+        const response = await fetch("http://localhost:5000/current-user", {
+            method: "GET",
+            headers: { "Authorization": `Bearer ${token}` }
+        });
+
+        if (!response.ok) throw new Error("Neispravan token ili nije prijavljen korisnik.");
+        
+        const user = await response.json();
+
+        // Postavi ime korisnika
+        document.getElementById("user-name").textContent = `${user.firstName} ${user.lastName}`;
+
+        // Postavi profilnu sliku
+        document.getElementById("profile-picture").src = `http://localhost:5000/uploads/${user.profileImage}`;
+
+    } catch (error) {
+        console.error("❌ Greška pri dohvaćanju korisnika:", error.message);
+    }
+});
 document.addEventListener("DOMContentLoaded", async () => {
   const token = localStorage.getItem("token");
 
   if (!token) {
-    console.error("❌ Nema tokena! Korisnik nije prijavljen.");
-    return;
+      console.error("❌ Nema tokena! Korisnik nije prijavljen.");
+      return;
   }
 
   try {
-    const response = await fetch("http://localhost:5000/current-user", {
-      method: "GET",
-      headers: { "Authorization": `Bearer ${token}` }
-    });
+      // 🛠 Dohvati podatke o trenutnom korisniku
+      const userResponse = await fetch("http://localhost:5000/current-user", {
+          method: "GET",
+          headers: { "Authorization": `Bearer ${token}` }
+      });
 
-    if (!response.ok) throw new Error("Neispravan token ili nije prijavljen korisnik.");
+      if (!userResponse.ok) throw new Error("Neispravan token ili nije prijavljen korisnik.");
+      const user = await userResponse.json();
 
-    const user = await response.json();
+      // ✅ Ako je korisnik nastavnik, prikaži sekciju za nasumični odabir
+      if (user.role === "nastavnik") {
+          document.getElementById("random-student-section").classList.remove("hidden");
+      }
 
-    // Postavi ime korisnika
-    document.getElementById("user-name").textContent = `${user.firstName} ${user.lastName}`;
+      // 🛠 Dodaj event listener za dugme
+      document.getElementById("randomStudentButton").addEventListener("click", async () => {
+ 
+        try {
+              const response = await fetch("http://localhost:5000/random-student", {
+                  method: "GET",
+                  headers: { "Authorization": `Bearer ${token}` }
+              });
 
-    // Postavi profilnu sliku
-    document.getElementById("profile-picture").src = `http://localhost:5000/uploads/${user.profileImage}`;
+              if (!response.ok) throw new Error("Greška pri dohvaćanju učenika.");
+
+              const student = await response.json();
+              document.getElementById("randomStudentDisplay").textContent = `🎉 Odabran učenik: ${student.firstName} ${student.lastName}`;
+
+          } catch (error) {
+              console.error("❌ Greška pri odabiru učenika:", error.message);
+              document.getElementById("randomStudentDisplay").textContent = "⚠️ Nije moguće dohvatiti učenika.";
+          }
+      });
 
   } catch (error) {
-    console.error("❌ Greška pri dohvaćanju korisnika:", error.message);
+      console.error("❌ Greška pri dohvaćanju korisnika:", error.message);
   }
 });
+
 
