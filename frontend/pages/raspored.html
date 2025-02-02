@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Raspored</title>
+  <link rel="stylesheet" href="/frontend/styles/raspored.css">
+  <script src="/frontend/js/raspored.js" defer></script>
+</head>
+
+<body>
+  <header>
+    <h1>Raspored sati</h1>
+    <a href="/frontend/home.html">← Povratak na početnu stranicu</a>
+  </header>
+  <main>
+    <!-- Upozorenje na preklapanje -->
+    <section class="warning">
+      <h2>Upozorenje</h2>
+      <p id="warning-text">Nema preklapanja termina.</p>
+    </section>
+
+    <!-- Pregled rasporeda -->
+    <section class="schedule">
+      <table>
+        <thead>
+          <tr>
+            <th>Vrijeme</th>
+            <th>Ponedjeljak</th>
+            <th>Utorak</th>
+            <th>Srijeda</th>
+            <th>Četvrtak</th>
+            <th>Petak</th>
+          </tr>
+        </thead>
+        <tbody id="schedule-table">
+          <!-- Dinamički generisani redovi -->
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Dodavanje termina -->
+  </main>
+</body>
+
+</html>

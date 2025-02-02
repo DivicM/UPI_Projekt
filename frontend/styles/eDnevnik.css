@@ -1,0 +1,290 @@
+/* Općeniti stilovi */
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f7f7f7;
+}
+
+.dashboard {
+  display: flex;
+}
+
+/* Sidebar */
+.sidebar {
+  background: linear-gradient(135deg, #4CAF50, #388E3C);
+  /* Blagi gradient zelene */
+  box-shadow: 3px 0px 10px rgba(0, 0, 0, 0.2);
+  /* Blaga sjena */
+  width: 250px;
+  background-color: #4CAF50;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.sidebar .picture {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.sidebar .picture img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 4px solid #fff;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+
+}
+
+/* Ime korisnika */
+.user-name {
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff;
+  margin: 10px 0;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar .profile h2 {
+  font-size: 1.2rem;
+  margin-bottom: 5px;
+}
+
+.sidebar .profile p {
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+}
+
+.sidebar .profile {
+  background-color: #fff;
+  color: #388E3C;
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.sidebar .profile:hover {
+  background-color: #e7e7e7;
+}
+
+.sidebar .menu ul {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+  margin: 20px;
+}
+
+.sidebar .menu ul li {
+  margin: 15px 0;
+}
+
+.sidebar .menu ul li a {
+  text-decoration: none;
+  color: white;
+  font-size: 1rem;
+  padding: 10px 15px;
+  display: block;
+  border-radius: 10px;
+  transition: background-color 0.3s ease;
+}
+
+
+
+.modal {
+  display: none;
+  /* Skriveno dok se ne otvori */
+  position: fixed;
+  z-index: 1000;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+.modal input {
+  display: block;
+  margin: 10px auto;
+}
+
+.modal button {
+  margin: 5px;
+}
+
+
+/* Glavni sadržaj */
+.main-content {
+  flex-grow: 1;
+  padding: 20px;
+  background-color: #f7f7f7;
+}
+
+.main-content header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.main-content header h1 {
+  font-size: 3rem;
+  color: #4CAF50;
+  margin-left: 300px;
+  text-decoration: underline;
+}
+
+.main-content header button {
+  background-color: #ff5e57;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.main-content header button:hover {
+  background-color: #e8453c;
+}
+
+/* Kartice */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.card h3 {
+  font-size: 1.4rem;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.card p {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+.card button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.card button:hover {
+  background-color: #388E3C;
+}
+
+/* Sidebar */
+.sidebar .menu ul li a i {
+  margin-right: 10px;
+}
+
+/* Statistike */
+.statistics {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 30px;
+}
+
+.stat {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 150px;
+}
+
+.stat h3 {
+  font-size: 2rem;
+  color: #4CAF50;
+}
+
+.stat p {
+  font-size: 1rem;
+  color: #666;
+}
+
+/* Grafikon */
+.chart {
+  margin-bottom: 30px;
+}
+
+.chart h2 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+/* Podsjetnici */
+.reminders {
+  margin-bottom: 30px;
+}
+
+.reminders h2 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.reminders ul {
+  list-style: none;
+  padding: 0;
+}
+
+.reminders ul li {
+  background: #f9f9f9;
+  margin-bottom: 10px;
+  padding: 10px 15px;
+  border-radius: 5px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.hidden {
+  display: none;
+}
+
+progress {
+  width: 100%;
+  height: 10px;
+  border-radius: 5px;
+  appearance: none;
+}
+
+progress[value]::-webkit-progress-bar {
+  background-color: #ccc;
+  border-radius: 5px;
+}
+
+progress[value]::-webkit-progress-value {
+  border-radius: 5px;
+}

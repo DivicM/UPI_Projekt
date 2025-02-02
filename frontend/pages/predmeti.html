@@ -1,17 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pregled Predmeta</title>
-  <link rel="stylesheet" href="../css/style.css"> <!-- Koristi isti CSS -->
+  <title>Pregled predmeta</title>
+  <link rel="stylesheet" href="/frontend/styles/predmeti.css">
+  <script src="/frontend/js/predmeti.js" defer></script>
 </head>
+
 <body>
-  <div class="container">
-    <h1>Pregled Predmeta</h1>
-    <p>Ovdje će biti informacije o predmetima.</p>
-    <button onclick="window.location.href='../dashboard.html'">Vrati se na dashboard</button>
+  <div class="dashboard">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="profile">
+        <img src="/images/school.jpg" alt="Profile Picture">
+        <h2>John Doe</h2><br>
+        <button id="profile">Uredi profil</button>
+      </div>
+      <nav class="menu">
+        <ul>
+          <li><a href="/frontend/home.html">Home</a></li>
+          <li><a href="predmeti.html">Predmeti</a></li>
+          <li><a href="izostanci.html">Izostanci</a></li>
+          <li><a href="raspored.html">Raspored</a></li>
+          <li><a href="kalendar-nastave.html">Kalendar nastave</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Glavni sadržaj -->
+    <main class="main-content">
+      <header>
+        <h1>Pregled predmeta</h1>
+        <button id="logoutButton">Logout</button>
+      </header>
+      <section class="search-bar">
+        <input type="text" id="searchInput" placeholder="Pretraži predmete..." />
+      </section>
+      <section class="subject-list">
+        <div id="subjects">
+
+        </div>
+      </section>
+    </main>
   </div>
 </body>
+
 </html>
-Za svaku novu stranicu samo promijeni sadržaj h1 i p

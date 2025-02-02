@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matematika</title>
+  <link rel="stylesheet" href="/frontend/styles/predmet.css">
+</head>
+
+<body>
+  <header>
+    <h1VJERONAUK< /h1>
+      <a href="/frontend/pages/predmeti.html">← Povratak na predmete</a>
+  </header>
+  <main>
+    <section class="grades">
+      <h2>Ocjene <button id="editGradesButton" class="hidden">✏️</button>
+        <input type="email" id="studentEmail" placeholder="Unesi email učenika">
+
+      </h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Datum</th>
+            <th>Ocjena</th>
+            <th>Bilješka</th>
+            <th>Akcije</th> <!-- Dodaj kolonu za uređivanje -->
+          </tr>
+        </thead>
+        <tbody id="grades-table">
+          <!-- Dinamički popunjeno u biologija.js -->
+        </tbody>
+      </table>
+      <button id="addRowButton" class="hidden">➕ Dodaj novi red</button>
+      <button id="saveGradesButton" class="hidden">💾 Spremi promjene</button>
+    </section>
+
+    <section class="notes">
+      <h2>Bilješke <button id="editNotesButton" class="hidden">✏️</button></h2>
+      <ul id="notes-list">
+        <!-- Dinamički popunjeno u predmet-matematika.js -->
+      </ul>
+      <button id="addNoteButton" class="hidden">➕ Dodaj bilješku</button>
+      <button id="saveNotesButton" class="hidden">💾 Spremi bilješke</button>
+    </section>
+
+    <!-- Sekcija za gradivo -->
+    <section class="curriculum">
+      <h2>Obrađeno gradivo <button id="editCurriculumButton" class="hidden">✏️</button></h2>
+      <ul id="curriculum-list">
+        <!-- Dinamički se popunjava preko biologija.js -->
+      </ul>
+      <button id="addCurriculumButton" class="hidden">➕ Dodaj gradivo</button>
+      <button id="saveCurriculumButton" class="hidden">💾 Spremi gradivo</button>
+    </section>
+
+    <!-- Sekcija za pripremu za završni ispit -->
+    <section class="final-exam">
+      <h2>Priprema za završni ispit <button id="editFinalExamButton" class="hidden">✏️</button></h2>
+      <p>Preuzmi materijale za vežbanje:</p>
+      <ul id="final-exam-list">
+      </ul>
+      <button id="addFinalExamButton" class="hidden">➕ Dodaj materijal</button>
+      <button id="saveFinalExamButton" class="hidden">💾 Spremi materijale</button>
+    </section>
+  </main>
+  <script src="/frontend/js/predmet.js" defer></script>
+</body>
+
+</html>
