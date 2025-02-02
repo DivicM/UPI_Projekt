@@ -1,25 +1,3 @@
-// Dohvaćanje liste predmeta sa servera
-/*const subjectsList = document.getElementById('subjects');
-const searchInput = document.getElementById('searchInput');
-
-async function loadSubjects() {
-  try {
-    const response = await fetch('http://localhost:5000/subjects');
-    const subjects = await response.json();
-
-    renderSubjects(subjects); // Prikaz svih predmeta
-
-    subjects.forEach((subject) => {
-      const li = document.createElement('li');
-      li.textContent = `${subject.name} - ${subject.teacher}`;
-      subjectsList.appendChild(li);
-    });
-  } catch (error) {
-    console.error('Greška pri dohvaćanju predmeta:', error);
-  }
-}
-
-loadSubjects();*/
 const subjectsList = document.getElementById('subjects');
 const searchInput = document.getElementById('searchInput');
 
