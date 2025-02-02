@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Raspored</title>
-  <link rel="stylesheet" href="/styles/raspored.css">
+  <link rel="stylesheet" href="/frontend/styles/raspored.css">
   <script src="/frontend/js/raspored.js" defer></script>
 </head>
-
 <body>
   <header>
     <h1>Raspored sati</h1>
@@ -23,48 +21,24 @@
 
     <!-- Pregled rasporeda -->
     <section class="schedule">
-      <h2>Pregled rasporeda</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Dan</th>
-            <th>Predmet</th>
-            <th>Početak</th>
-            <th>Kraj</th>
-          </tr>
-        </thead>
-        <tbody id="schedule-table">
-          <!-- Dinamički popunjava raspored -->
-        </tbody>
-      </table>
+        <table>
+          <thead>
+            <tr>
+              <th>Vrijeme</th>
+              <th>Ponedjeljak</th>
+              <th>Utorak</th>
+              <th>Srijeda</th>
+              <th>Četvrtak</th>
+              <th>Petak</th>
+            </tr>
+          </thead>
+          <tbody id="schedule-table">
+            <!-- Dinamički generisani redovi -->
+          </tbody>
+        </table>
     </section>
 
     <!-- Dodavanje termina -->
-    <section class="add-schedule">
-      <h2>Dodaj novi termin</h2>
-      <form id="add-schedule-form">
-        <label for="day">Dan:</label>
-        <select id="day">
-          <option value="Ponedjeljak">Ponedjeljak</option>
-          <option value="Utorak">Utorak</option>
-          <option value="Srijeda">Srijeda</option>
-          <option value="Četvrtak">Četvrtak</option>
-          <option value="Petak">Petak</option>
-        </select>
-
-        <label for="subject">Predmet:</label>
-        <input type="text" id="subject" placeholder="Naziv predmeta" required>
-
-        <label for="startTime">Početak:</label>
-        <input type="time" id="startTime" required>
-
-        <label for="endTime">Kraj:</label>
-        <input type="time" id="endTime" required>
-
-        <button type="submit">Dodaj</button>
-      </form>
-    </section>
   </main>
 </body>
-
 </html>
