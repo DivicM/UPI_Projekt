@@ -1,4 +1,3 @@
-
 //Upravljanje formom za uređivanje profila
 const editProfileForm = document.getElementById('editProfileForm');
 
@@ -101,7 +100,7 @@ async function uploadProfilePicture() {
     }
 
   } catch (error) {
-    console.error("❌ Greška pri uploadu slike:", error.message);
+    console.error("Greška pri uploadu slike:", error.message);
     alert("Greška pri učitavanju slike.");
   }
 }
