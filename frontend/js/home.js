@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const token = localStorage.getItem("token");
 
   if (!token) {
-    console.error("❌ Nema tokena! Korisnik nije prijavljen.");
+    console.error("Nema tokena! Korisnik nije prijavljen.");
     return;
   }
 
@@ -102,7 +102,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     //document.getElementById("profile-picture").src = `http://localhost:5000/uploads/${user.profileImage}`;
 
   } catch (error) {
-    console.error("❌ Greška pri dohvaćanju korisnika:", error.message);
+    console.error("Greška pri dohvaćanju korisnika:", error.message);
   }
 });
 
