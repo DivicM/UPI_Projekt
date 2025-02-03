@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.warn("⛔ Korisnik NIJE nastavnik – skrivam gumbe!");
     }
 
-    await fetchAndRenderGrades();
+    await fetchAndRenderGrades("grades");
 
     editGradesButton.addEventListener("click", () => enableEditing());
 

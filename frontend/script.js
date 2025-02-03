@@ -101,7 +101,7 @@ loginForm.addEventListener('submit', async (e) => {
     alert('Login successful!');
     window.location.href = 'home.html'; // Preusmjeravanje na novu stranicu
   } else {
-    alert('Invalid credentials!');
+    alert('Netočna prijava!');
   }
 });
 
