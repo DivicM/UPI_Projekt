@@ -1,25 +1,3 @@
-// Dohvaćanje liste predmeta sa servera
-/*const subjectsList = document.getElementById('subjects');
-const searchInput = document.getElementById('searchInput');
-
-async function loadSubjects() {
-  try {
-    const response = await fetch('http://localhost:5000/subjects');
-    const subjects = await response.json();
-
-    renderSubjects(subjects); // Prikaz svih predmeta
-
-    subjects.forEach((subject) => {
-      const li = document.createElement('li');
-      li.textContent = `${subject.name} - ${subject.teacher}`;
-      subjectsList.appendChild(li);
-    });
-  } catch (error) {
-    console.error('Greška pri dohvaćanju predmeta:', error);
-  }
-}
-
-loadSubjects();*/
 const subjectsList = document.getElementById('subjects');
 const searchInput = document.getElementById('searchInput');
 
@@ -55,7 +33,7 @@ function renderSubjects(subjects) {
       <h3>${subject.name}</h3>
       <p>Profesor: ${subject.teacher}</p>
     `;
-    
+
     subjectsList.appendChild(card);
   });
 }
@@ -80,28 +58,28 @@ document.addEventListener("DOMContentLoaded", async () => {
   const token = localStorage.getItem("token");
 
   if (!token) {
-      console.error("❌ Nema tokena! Korisnik nije prijavljen.");
-      return;
+    console.error("❌ Nema tokena! Korisnik nije prijavljen.");
+    return;
   }
 
   try {
-      const response = await fetch("http://localhost:5000/current-user", {
-          method: "GET",
-          headers: { "Authorization": `Bearer ${token}` }
-      });
+    const response = await fetch("http://localhost:5000/current-user", {
+      method: "GET",
+      headers: { "Authorization": `Bearer ${token}` }
+    });
 
-      if (!response.ok) throw new Error("Neispravan token ili nije prijavljen korisnik.");
-      
-      const user = await response.json();
+    if (!response.ok) throw new Error("Neispravan token ili nije prijavljen korisnik.");
 
-      // Postavi ime korisnika
-      document.getElementById("user-name").textContent = `${user.firstName} ${user.lastName}`;
+    const user = await response.json();
 
-      // Postavi profilnu sliku
-      if (user.profileImage) {
-        document.getElementById("profile-picture").src = `http://localhost:5000/uploads/${user.profileImage}`;
+    // Postavi ime korisnika
+    document.getElementById("user-name").textContent = `${user.firstName} ${user.lastName}`;
+
+    // Postavi profilnu sliku
+    if (user.profileImage) {
+      document.getElementById("profile-picture").src = `http://localhost:5000/uploads/${user.profileImage}`;
     }
   } catch (error) {
-      console.error("❌ Greška pri dohvaćanju korisnika:", error.message);
+    console.error("❌ Greška pri dohvaćanju korisnika:", error.message);
   }
 });

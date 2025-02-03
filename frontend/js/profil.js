@@ -13,26 +13,26 @@ if (editProfileForm) {
     const token = localStorage.getItem("token");
     // Provjera je li sve popunjeno
     if (!fullName || !username || !password) {
-        alert('Sva polja su obavezna!');
-        return;
+      alert('Sva polja su obavezna!');
+      return;
     }
 
     // Slanje podataka na server za spremanje promjena
     const response = await fetch('http://localhost:5000/updateProfile', {
-        method: 'POST',
-        headers: {
-          "Authorization": `Bearer ${token}`,
-            "Content-Type": 'application/json',
-        },
-        body: JSON.stringify({ fullName, username, password }),
+      method: 'POST',
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": 'application/json',
+      },
+      body: JSON.stringify({ fullName, username, password }),
     });
 
     if (response.ok) {
       alert('Podaci su uspješno ažurirani!');
       window.location.href = "/frontend/home.html"; // Vrati korisnika na početnu stranicu
     } else {
-        const errorData = await response.json();
-        alert(errorData.message || 'Došlo je do greške pri ažuriranju podataka.');
+      const errorData = await response.json();
+      alert(errorData.message || 'Došlo je do greške pri ažuriranju podataka.');
     }
   });
 }
@@ -62,28 +62,28 @@ document.addEventListener("DOMContentLoaded", async () => {
   const token = localStorage.getItem("token");
 
   if (!token) {
-      console.error("❌ Nema tokena! Korisnik nije prijavljen.");
-      return;
+    console.error("❌ Nema tokena! Korisnik nije prijavljen.");
+    return;
   }
 
   try {
-      const response = await fetch("http://localhost:5000/current-user", {
-          method: "GET",
-          headers: { "Authorization": `Bearer ${token}` }
-      });
+    const response = await fetch("http://localhost:5000/current-user", {
+      method: "GET",
+      headers: { "Authorization": `Bearer ${token}` }
+    });
 
-      if (!response.ok) throw new Error("Neispravan token ili nije prijavljen korisnik.");
-      
-      const user = await response.json();
+    if (!response.ok) throw new Error("Neispravan token ili nije prijavljen korisnik.");
 
-      // Postavi ime korisnika
-      document.getElementById("user-name").textContent = `${user.firstName} ${user.lastName}`;
+    const user = await response.json();
 
-      // Postavi profilnu sliku
-      if (user.profileImage) {
-        document.getElementById("profile-picture").src = `http://localhost:5000/uploads/${user.profileImage}`;
+    // Postavi ime korisnika
+    document.getElementById("user-name").textContent = `${user.firstName} ${user.lastName}`;
+
+    // Postavi profilnu sliku
+    if (user.profileImage) {
+      document.getElementById("profile-picture").src = `http://localhost:5000/uploads/${user.profileImage}`;
     }
   } catch (error) {
-      console.error("❌ Greška pri dohvaćanju korisnika:", error.message);
+    console.error("❌ Greška pri dohvaćanju korisnika:", error.message);
   }
 });

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
   <script src="/frontend/js/home.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
   <div class="dashboard">
     <!-- Sidebar -->
@@ -38,8 +40,8 @@
         <h3>🎲 Nasumični odabir učenika</h3>
         <button id="randomStudentButton">🎲 Odaberi učenika</button>
         <p id="randomStudentDisplay">Odabrani učenik će se prikazati ovdje...</p>
-    </section>
-    
+      </section>
+
       <!-- Statistike -->
       <section class="statistics">
         <div class="stat">
@@ -47,17 +49,17 @@
           <p>Predmeta</p>
         </div>
         <div class="stat">
-            <h3 id="averageGrade">--</h3>
-            <p>Prosjek ocjena</p>
+          <h3 id="averageGrade">--</h3>
+          <p>Prosjek ocjena</p>
         </div>
         <div class="stat">
           <h3 id="absence-count">--</h3>
           <p>Izostanka</p>
         </div>
       </section>
-      
+
       <!-- Grafikon -->
-       <section>
+      <section>
         <h3>📊 Pregled ocjena učenika</h3>
         <div class="chart-container">
           <input type="email" id="studentEmail" placeholder="Unesite email učenika:">
@@ -65,19 +67,20 @@
           <canvas id="gradesChart"></canvas>
         </div>
       </section>
-    
 
-  
+
+
     </main>
   </div>
   <div id="profile-edit-modal" class="modal">
     <div class="modal-content">
-        <h3>Uredi profilnu sliku</h3>
-        <input type="file" id="profile-upload" accept="image/*">
-        <button onclick="uploadProfilePicture()">Spremi promjene</button>
-        <button onclick="closeProfileEdit()">Zatvori</button>
+      <h3>Uredi profilnu sliku</h3>
+      <input type="file" id="profile-upload" accept="image/*">
+      <button onclick="uploadProfilePicture()">Spremi promjene</button>
+      <button onclick="closeProfileEdit()">Zatvori</button>
     </div>
-</div>
+  </div>
 
 </body>
+
 </html>
