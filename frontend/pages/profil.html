@@ -4,24 +4,24 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Uredi Profil</title>
-  <link rel="stylesheet" href="/styles/profil.css">
+  <link rel="stylesheet" href="/frontend/styles/profil.css">
 </head>
 <body>
   <div class="dashboard">
     <!-- Sidebar -->
     <aside class="sidebar">
-      <div class="profile">
-        <img src="/images/default-profile-png" alt="Profile Picture">
-        <h2>John Doe</h2><br>
+      <div class="picture">
+        <img id="profile-picture" src="/uploads/school.jpg" alt="Profile Picture" onclick="openProfileEdit()">
+        <h2 id="user-name" class="user-name">Učenik</h2><br>
         <button id="profile">Uredi profil</button>
       </div>
       <nav class="menu">
         <ul>
-          <br><li><a href="home.html">Home</a></li>
-          <li><a href="#">Predmeti</a></li>
-          <li><a href="#">Ocjene</a></li>
-          <li><a href="#">Izostanci</a></li>
-          <li><a href="#">Kalendar nastave</a></li>
+          <br><li><a href="/frontend/home.html">Home</a></li>
+          <li><a href="/frontend/pages/predmeti.html">Predmeti</a></li>
+          <li><a href="/frontend/pages/ocjene.html">Ocjene</a></li>
+          <li><a href="/frontend/pages/izostanci.html">Izostanci</a></li>
+          <li><a href="/frontend/pages/kalendar-nastave.html">Kalendar nastave</a></li>
         </ul>
       </nav>
     </aside>
@@ -48,5 +48,7 @@
     </main>
   </div>
   <script src="/frontend/js/profil.js"></script>
+    <!-- 🔹 Modalni prozor za uređivanje profila -->
+
 </body>
 </html>

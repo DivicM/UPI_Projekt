@@ -1,0 +1,102 @@
+/* Osnovni stilovi */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+  }
+  
+  header {
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+  }
+  
+  main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 20px;
+  }
+  
+  /* Stilovi za svaki mjesec */
+  .month {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin: 10px;
+    width: 300px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  
+  .month-header {
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+  
+  .days {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .day {
+    width: 14.28%;
+    padding: 10px 0;
+    text-align: center;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+    position: relative;
+  }
+  
+  .day.event {
+    background-color: #ffeb3b;
+  }
+  
+  .day.holiday {
+    background-color: #ff5722;
+    color: white;
+  }
+  .day.empty {
+    background: transparent;
+    border: none;
+    pointer-events: none; /* Onemogući klik na prazne ćelije */
+  }
+  .day:hover::after {
+    content: attr(data-tooltip); /* Prikaži tekst iz data-tooltip atributa */
+    position: absolute;
+    top: -10px; /* Iznad datuma */
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8); /* Tamna pozadina */
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    white-space: nowrap; /* Sprečava prelamanje teksta */
+    z-index: 10;
+    opacity: 0; /* Skriveno u početku */
+    pointer-events: none; /* Onemogući interakciju */
+    transition: opacity 0.3s ease;
+  }
+  
+  .day:hover::after {
+    opacity: 1; /* Prikaži tooltip pri hoveru */
+  }
+  header a {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 1rem;
+    color: #ffeb3b; /* Zlatna boja za link */
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  header a:hover {
+    color: #ff9800; /* Svetlija zlatna na hover */
+  }

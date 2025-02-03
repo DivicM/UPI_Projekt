@@ -1,0 +1,194 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #333;
+  }
+  .dashboard {
+    display: flex;
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    background: linear-gradient(135deg, #4CAF50, #388E3C);
+    box-shadow: 3px 0px 10px rgba(0, 0, 0, 0.2);
+    width: 250px;
+    background-color: #4CAF50;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  /* Stilizacija sekcije s profilnom slikom */
+.picture {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #4CAF50; /* ZELENA POZADINA */
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Stilizacija profilne slike */
+#profile-picture {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%; /* Zaokružena slika */
+  border: 3px solid #fff; /* Bijeli rub */
+  cursor: pointer;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Efekt pri prelasku mišem preko slike */
+#profile-picture:hover {
+  transform: scale(1.1);
+  opacity: 0.8;
+}
+
+/* Stilizacija imena korisnika */
+#user-name {
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff; /* Bijeli tekst */
+  margin-top: 10px;
+}
+
+/* Stilizacija gumba "Uredi profil" */
+#profile {
+  background-color: #ffffff;
+  color: #4CAF50;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 15px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Efekt na hover */
+#profile:hover {
+  background-color: #2E7D32; /* Tamnija zelena */
+  color: #ffffff;
+  transform: scale(1.05);
+}
+
+/* Stilizacija gumba pri kliku */
+#profile:active {
+  transform: scale(0.95);
+}
+
+  .sidebar .menu ul {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+    margin: 20px;
+  }
+  
+  .sidebar .menu ul li {
+    margin: 15px 0;
+  }
+  
+  .sidebar .menu ul li a {
+    text-decoration: none;
+    color: white;
+    font-size: 1rem;
+    padding: 10px 15px;
+    display: block;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .user-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    margin: 10px 0;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  }
+  .main-content {
+    margin-left: 40px; /* Ostavlja prostor za sidebar */
+    padding: 20px;
+    width: 1000px;
+  }
+  
+  .main-content header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .main-content header h1 {
+    font-size: 2rem;
+    color: #4CAF50;
+  }
+  
+  .main-content header button {
+    background-color: #ff5e57;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .main-content header button:hover {
+    background-color: #e8453c;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  table th, table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  table th {
+    background-color: #f2f2f2;
+    color: #333;
+  }
+  
+  .warning {
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    color: #333;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  .filter label, .filter input, .filter button {
+    margin-right: 10px;
+  }
+  
+  ul {
+    list-style-type: disc;
+    padding-left: 20px;
+  }
+  
+  .chart {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    text-align: center;
+    width: 800px;
+    height: 500px;
+    align-items: center;
+  }
+  

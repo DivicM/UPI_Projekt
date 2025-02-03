@@ -1,0 +1,342 @@
+/* Općeniti stilovi */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f7f7f7;
+  }
+  
+  .dashboard {
+    display: flex;
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    background: linear-gradient(135deg, #4CAF50, #388E3C); /* Blagi gradient zelene */
+    box-shadow: 3px 0px 10px rgba(0, 0, 0, 0.2); /* Blaga sjena */
+    width: 250px;
+    background-color: #4CAF50;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  /* Stilizacija sekcije s profilnom slikom */
+.picture {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #4CAF50; /* ZELENA POZADINA */
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Stilizacija profilne slike */
+#profile-picture {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%; /* Zaokružena slika */
+  border: 3px solid #fff; /* Bijeli rub */
+  cursor: pointer;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Efekt pri prelasku mišem preko slike */
+#profile-picture:hover {
+  transform: scale(1.1);
+  opacity: 0.8;
+}
+
+/* Stilizacija imena korisnika */
+#user-name {
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff; /* Bijeli tekst */
+  margin-top: 10px;
+}
+
+/* Stilizacija gumba "Uredi profil" */
+#profile {
+  background-color: #ffffff;
+  color: #4CAF50;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 15px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Efekt na hover */
+#profile:hover {
+  background-color: #2E7D32; /* Tamnija zelena */
+  color: #ffffff;
+  transform: scale(1.05);
+}
+
+/* Stilizacija gumba pri kliku */
+#profile:active {
+  transform: scale(0.95);
+}
+
+  
+  .sidebar .menu ul {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+    margin: 20px;
+  }
+  
+  .sidebar .menu ul li {
+    margin: 15px 0;
+  }
+  
+  .sidebar .menu ul li a {
+    text-decoration: none;
+    color: white;
+    font-size: 1rem;
+    padding: 10px 15px;
+    display: block;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+  }
+  
+  
+  
+  .modal {
+    display: none; /* Skriveno dok se ne otvori */
+    position: fixed;
+    z-index: 1000;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+.modal input {
+    display: block;
+    margin: 10px auto;
+}
+
+.modal button {
+    margin: 5px;
+}
+
+  
+  /* Glavni sadržaj */
+  .main-content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #f7f7f7;
+  }
+  
+  .main-content header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .main-content header h1 {
+    font-size: 3rem;
+    color: #4CAF50;
+    margin-left: 300px;
+    text-decoration: underline;
+  }
+  
+  .main-content header button {
+    background-color: #ff5e57;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .main-content header button:hover {
+    background-color: #e8453c;
+  }
+  
+  /* Kartice */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  
+  .card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  .card h3 {
+    font-size: 1.4rem;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .card p {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 15px;
+  }
+  
+  .card button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .card button:hover {
+    background-color: #388E3C;
+  }
+
+  /* Sidebar */
+.sidebar .menu ul li a i {
+    margin-right: 10px;
+  }
+  
+  /* Statistike */
+  .statistics {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 30px;
+  }
+  
+  .stat {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 150px;
+  }
+  
+  .stat h3 {
+    font-size: 2rem;
+    color: #4CAF50;
+  }
+  
+  .stat p {
+    font-size: 1rem;
+    color: #666;
+  }
+  
+  /* Grafikon */
+  .chart {
+    margin-bottom: 30px;
+  }
+  
+  .chart h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+  
+  
+  .hidden {
+    display: none;
+}
+progress {
+  width: 100%;
+  height: 10px;
+  border-radius: 5px;
+  appearance: none;
+}
+
+progress[value]::-webkit-progress-bar {
+  background-color: #ccc;
+  border-radius: 5px;
+}
+
+progress[value]::-webkit-progress-value {
+  border-radius: 5px;
+}
+#randomStudentButton {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+#randomStudentButton:hover {
+  background-color: #45a049;
+}
+
+#randomStudentDisplay {
+  font-size: 18px;
+  font-weight: bold;
+  
+}
+.chart-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.chart-container label {
+  font-size: 16px;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.chart-container input {
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 250px;
+  margin-right: 10px;
+}
+
+.chart-container button {
+  padding: 8px 12px;
+  font-size: 14px;
+  background-color: #4CAF50; /* Zelena boja */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.chart-container button:hover {
+  background-color: #45a049; /* Tamnija zelena prilikom hovera */
+}
+
+#gradesChart {
+  margin-top: 20px;
+  max-width: 100%;
+  height: auto;
+}
+
+

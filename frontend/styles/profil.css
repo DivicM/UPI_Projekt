@@ -1,0 +1,208 @@
+body {
+    background-color: #b9e1bc;
+}
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background-color: #4CAF50;
+    color: white;
+    height: 100vh;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  /* Stilizacija sekcije s profilnom slikom */
+.picture {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #4CAF50; /* ZELENA POZADINA */
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Stilizacija profilne slike */
+#profile-picture {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%; /* Zaokružena slika */
+  border: 3px solid #fff; /* Bijeli rub */
+  cursor: pointer;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Efekt pri prelasku mišem preko slike */
+#profile-picture:hover {
+  transform: scale(1.1);
+  opacity: 0.8;
+}
+
+/* Stilizacija imena korisnika */
+#user-name {
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff; /* Bijeli tekst */
+  margin-top: 10px;
+}
+
+/* Stilizacija gumba "Uredi profil" */
+#profile {
+  background-color: #ffffff;
+  color: #4CAF50;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 15px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Efekt na hover */
+#profile:hover {
+  background-color: #2E7D32; /* Tamnija zelena */
+  color: #ffffff;
+  transform: scale(1.05);
+}
+
+/* Stilizacija gumba pri kliku */
+#profile:active {
+  transform: scale(0.95);
+}
+
+.sidebar .menu ul {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+  margin: 20px;
+}
+
+.sidebar .menu ul li {
+  margin: 15px 0;
+}
+
+.sidebar .menu ul li a {
+  text-decoration: none;
+  color: white;
+  font-size: 1rem;
+  padding: 10px 15px;
+  display: block;
+  border-radius: 10px;
+  transition: background-color 0.3s ease;
+}
+  /* Sidebar */
+  .sidebar .menu ul li a i {
+    margin-right: 10px;
+  }
+
+  /* Glavni sadržaj */
+.main-content {
+    margin-left: 280px; /* Za sidebar */
+    padding: 20px;
+    background-color: #b9e1bc;
+  }
+  
+  .main-content header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .main-content header h1 {
+    font-size: 2rem;
+    color: #000000;
+  }
+  
+  .main-content header button {
+    background-color: #ff5e57;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .main-content header button:hover {
+    background-color: #e8453c;
+  }
+
+/* Forma za uređivanje profila */
+form#editProfileForm {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  form#editProfileForm label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  form#editProfileForm input {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  
+  form#editProfileForm input:focus {
+    border-color: #4CAF50;
+    outline: none;
+  }
+  
+  form#editProfileForm button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  form#editProfileForm button:hover {
+    background-color: #388E3C;
+  }
+/* Responzivnost */
+@media (max-width: 768px) {
+    .sidebar {
+      width: 200px;
+    }
+  
+    .main-content {
+      margin-left: 210px;
+      padding: 15px;
+    }
+  
+    form#editProfileForm {
+      max-width: 100%;
+      padding: 15px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .sidebar {
+      display: none;
+    }
+  
+    .main-content {
+      margin-left: 0;
+    }
+  }
+  
