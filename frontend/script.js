@@ -90,7 +90,7 @@ loginForm.addEventListener('submit', async (e) => {
 
   if (response.ok) {
     const data = await response.json();
-    console.log("📌 Novi token:", data.token); // Debugging
+    console.log("Novi token:", data.token); // Debugging
     localStorage.setItem("token", data.token); // Sprema token u localStorage
     localStorage.setItem("role", data.role); // Spremi ulogu korisnika
 
@@ -117,13 +117,13 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
   });
 
   const data = await response.json();
-  console.log("📌 Odgovor servera:", data);
+  console.log("Odgovor servera:", data);
 
   if (response.ok) {
     alert("Registracija uspješna!");
     window.location.href = "index.html";
   } else {
-    alert(`❌ Greška: ${data.message}`);
+    alert(`Greška: ${data.message}`);
   }
 });
 
@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
     passwordStrength.value = strength;
 
     // Poruka za korisnika
-    const messages = ["Too weak ❌", "Weak ⚠️", "Good ✅", "Strong 💪"];
+    const messages = ["Too weak", "Weak ", "Good", "Strong"];
     passwordMessage.textContent = messages[strength];
 
     // Boja progress bara
