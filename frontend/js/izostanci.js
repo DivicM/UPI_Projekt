@@ -13,12 +13,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   //if (currentUser.role === "nastavnik") {
   if (userRole === "nastavnik") {
-    console.log("✅ Korisnik je nastavnik – prikazujem gumbe!");
+    console.log("Korisnik je nastavnik – prikazujem gumbe!");
     editAbsencesButton.classList.remove("hidden");
     addAbsenceButton.classList.remove("hidden");
     saveAbsencesButton.classList.remove("hidden");
   } else {
-    console.log("⛔ Korisnik NIJE nastavnik – skrivam gumbe!");
+    console.log("Korisnik NIJE nastavnik – skrivam gumbe!");
     editAbsencesButton.style.display = "none";
     addAbsenceButton.style.display = "none";
     saveAbsencesButton.style.display = "none";
@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      console.error("❌ Nema tokena! Korisnik nije prijavljen.");
+      console.error("Nema tokena! Korisnik nije prijavljen.");
       alert("Morate se prijaviti!");
       window.location.href = "/frontend/index.html";
       return;
@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                   <td>${absence.note}</td>
                   <td><button class="deleteRowButton" data-id="${absence._id ? absence._id : ''}">🗑</button></td>
               `;
-        console.log("📌 Generisan red sa ID-om:", absence._id || "Novi red bez ID-a"); // 🛠 Debugging
+        console.log("Generisan red sa ID-om:", absence._id || "Novi red bez ID-a"); // Debugging
         absenceTable.appendChild(row);
       });
 
@@ -78,12 +78,12 @@ document.addEventListener("DOMContentLoaded", async () => {
           console.log("🔹 Dugme postavljeno s ID-om:", absenceId);
           button.addEventListener("click", deleteAbsence);
         } else {
-          console.log("⚠️ Dugme bez ID-a, ne dodajem event listener.");
+          console.log("Dugme bez ID-a, ne dodajem event listener.");
         }
       });
 
     } catch (error) {
-      console.error("❌ Greška:", error.message);
+      console.error("Greška:", error.message);
       alert("Greška pri dohvaćanju izostanaka.");
     }
   }
@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Spremanje izostanaka
   saveAbsencesButton.addEventListener("click", async () => {
     const token = localStorage.getItem("token");
-    const studentEmail = document.getElementById("studentEmail").value; // 📌 Email učenika
+    const studentEmail = document.getElementById("studentEmail").value; // Email učenika
 
     if (!studentEmail) {
       alert("Unesite email učenika!");
@@ -138,7 +138,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     });
 
-    console.log("📌 Podaci koji se šalju na server:", rows); // Debugging
+    console.log("Podaci koji se šalju na server:", rows); // Debugging
 
     const response = await fetch("http://localhost:5000/absences/update", {
       method: "POST",
@@ -150,13 +150,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     const result = await response.json();
-    console.log("📌 Odgovor servera:", result); // Debugging
+    console.log("Odgovor servera:", result); // Debugging
 
     if (response.ok) {
       alert("Izostanci uspješno spremljeni!");
       await fetchAndRenderAbsences();
     } else {
-      alert(`❌ Greška: ${result.message}`);
+      alert(`Greška: ${result.message}`);
     }
   });
 
@@ -165,7 +165,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      console.error("❌ Nema tokena! Korisnik nije prijavljen.");
+      console.error("Nema tokena! Korisnik nije prijavljen.");
       return { username: "", role: "student" };
     }
 
@@ -183,7 +183,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
 
       const data = await response.json();
-      console.log("📌 Trenutni korisnik:", data);
+      console.log("Trenutni korisnik:", data);
       // Spremi role u localStorage za kasniju upotrebu
       localStorage.setItem("role", data.role || "student");
 
@@ -193,11 +193,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       //return data;
 
     } catch (error) {
-      console.error("❌ Greška pri dohvaćanju trenutnog korisnika:", error.message);
+      console.error("Greška pri dohvaćanju trenutnog korisnika:", error.message);
       return { username: "", role: "" };
     }
   }
-  console.log("📌 Trenutni korisnik:", currentUser);
+  console.log("Trenutni korisnik:", currentUser);
 
 
 
@@ -206,33 +206,33 @@ document.addEventListener("DOMContentLoaded", async () => {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      console.error("❌ Nema tokena! Korisnik nije prijavljen.");
+      console.error("Nema tokena! Korisnik nije prijavljen.");
       alert("Morate se prijaviti!");
       window.location.href = "/frontend/index.html";
       return;
     }
 
     if (!event) {
-      console.error("❌ Greška: Event nije proslijeđen!");
+      console.error("Greška: Event nije proslijeđen!");
       return;
     }
 
     const button = event.target ? event.target.closest("button") : null;
 
     if (!button) {
-      console.error("❌ Kliknuti element nije dugme!");
+      console.error("Kliknuti element nije dugme!");
       return;
     }
 
     const id = button.getAttribute("data-id");
 
     if (!id || id === "null" || id.trim() === "") {
-      console.error("❌ Greška: ID izostanka nije ispravno postavljen!", id);
+      console.error("Greška: ID izostanka nije ispravno postavljen!", id);
       alert("Greška pri brisanju izostanka! ID nije ispravan.");
       return;
     }
 
-    console.log(`📌 Brišem izostanak s ID: ${id}`); // Debugging
+    console.log(`Brišem izostanak s ID: ${id}`); // Debugging
 
     try {
       // Ispravan način korištenja `fetch()`
@@ -245,17 +245,17 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
 
       if (!response.ok) {
-        const errorData = await response.json(); // 📌 Dohvati poruku greške sa servera
+        const errorData = await response.json(); //  Dohvati poruku greške sa servera
         throw new Error(errorData.message || "Brisanje neuspješno! Provjeri server.");
       }
 
       const result = await response.json();
-      console.log("📌 Odgovor servera:", result);
+      console.log("Odgovor servera:", result);
       alert("Izostanak uspješno obrisan!");
 
       await fetchAndRenderAbsences();
     } catch (error) {
-      console.error("❌ Greška pri brisanju:", error.message);
+      console.error("Greška pri brisanju:", error.message);
       alert(`Greška pri brisanju: ${error.message}`);
     }
   }
@@ -264,7 +264,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const token = localStorage.getItem("token");
 
   if (!token) {
-    console.error("❌ Nema tokena! Korisnik nije prijavljen.");
+    console.error("Nema tokena! Korisnik nije prijavljen.");
     return;
   }
 
@@ -283,7 +283,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
   } catch (error) {
-    console.error("❌ Greška pri dohvaćanju korisnika:", error.message);
+    console.error("Greška pri dohvaćanju korisnika:", error.message);
   }
 
 });
