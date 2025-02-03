@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Uredi Profil</title>
+  <link rel="stylesheet" href="/frontend/styles/profil.css">
+</head>
+<body>
+  <div class="dashboard">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="profile">
+        <img src="/images/school.jpg" alt="Profile Picture">
+        <h2>John Doe</h2><br>
+        <button id="profile">Uredi profil</button>
+      </div>
+      <nav class="menu">
+        <ul>
+          <br><li><a href="home.html">Home</a></li>
+          <li><a href="predmeti.html">Predmeti</a></li>
+          <li><a href="ocjene.html">Ocjene</a></li>
+          <li><a href="izostanci.html">Izostanci</a></li>
+          <li><a href="kalendar-nastave.html">Kalendar nastave</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Glavni sadržaj -->
+    <main class="main-content">
+      <header>
+        <h1>Uredi Profil</h1>
+        <button id="logoutButton">Logout</button>
+      </header>
+
+      <form id="editProfileForm">
+        <label for="fullName">Ime i prezime:</label>
+        <input type="text" id="fullName" placeholder="Unesite svoje ime i prezime" required>
+
+        <label for="email">Email adresa:</label>
+        <input type="email" id="email" placeholder="Unesite svoj email" required>
+
+        <label for="password">Lozinka:</label>
+        <input type="password" id="password" placeholder="Unesite novu lozinku" required>
+
+        <button type="submit">Spremi promjene</button>
+      </form>
+    </main>
+  </div>
+  <script src="/frontend/js/profil.js"></script>
+</body>
+</html>
