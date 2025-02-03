@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
         passwordStrength.value = strength;
 
         // Poruka za korisnika
-        const messages = ["Too weak ❌", "Weak ⚠️", "Good ✅", "Strong 💪"];
+        const messages = ["Too weak", "Weak", "Good", "Strong"];
         passwordMessage.textContent = messages[strength];
 
         // Boja progress bara
