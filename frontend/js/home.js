@@ -142,8 +142,6 @@ async function uploadProfilePicture() {
   }
 }
 
-
-
 document.addEventListener("DOMContentLoaded", async () => {
   const token = localStorage.getItem("token");
 
@@ -237,7 +235,6 @@ async function fetchAndUpdateAverageGrade(studentEmail) {
       console.error("❌ Greška: Nema tokena! Korisnik nije prijavljen.");
       return;
     }
-
     const response = await fetch(`http://localhost:5000/grades/average/${studentEmail}`, {
       method: "GET",
       headers: {
@@ -250,7 +247,6 @@ async function fetchAndUpdateAverageGrade(studentEmail) {
       const errorText = await response.text();
       throw new Error(`Greška ${response.status}: ${errorText}`);
     }
-
     const gradeData = await response.json();
 
     // Računa ukupni prosjek svih predmeta
@@ -265,17 +261,15 @@ async function fetchAndUpdateAverageGrade(studentEmail) {
   }
 }
 
-
 //IZOSTANCI CARD
 document.addEventListener("DOMContentLoaded", async () => {
   const absenceCounter = document.getElementById("absence-count"); // Element za prikaz izostanaka
   const studentEmailInput = document.getElementById("studentEmail"); // Input za unos emaila
   const fetchAbsencesButton = document.getElementById("fetchGrades"); // Gumb za prikaz izostanaka
-
   const currentUser = await fetchCurrentUser(); // Dohvati prijavljenog korisnika
 
   if (!currentUser) {
-    console.error("❌ Greška: Nema prijavljenog korisnika!");
+    console.error("❌ Greška: Nema prijavljenog korisnika!"); 
     return;
   }
 
@@ -390,8 +384,6 @@ async function fetchAndRenderChart(studentEmail) {
       console.error("❌ Greška: Nema tokena! Korisnik nije prijavljen.");
       return;
     }
-
-
     const response = await fetch(`http://localhost:5000/grades/average/${studentEmail}`, {
       method: "GET",
       headers: {

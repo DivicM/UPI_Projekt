@@ -107,7 +107,7 @@ loginForm.addEventListener('submit', async (e) => {
 
 
 document.getElementById("registerForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
+  e.preventDefault(); // Sprječava zadano ponašanje obrasca (sprečava ponovno učitavanje stranice)
 
   const firstName = document.getElementById("registerFirstName").value;
   const lastName = document.getElementById("registerLastName").value;

@@ -56,9 +56,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 throw new Error("Podaci nisu u JSON formatu!");
             }
 
-
             gradesTable.innerHTML = ""; // Očisti tablicu
-
             grades.forEach((entry, index) => {
                 let row = document.createElement("tr");
                 row.innerHTML = `
@@ -199,10 +197,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const emailInput = document.getElementById("studentEmail");
         return emailInput ? emailInput.value.trim() : "";
     }
-
 });
-
-
 
 // Ažuriranje bilješki
 document.addEventListener("DOMContentLoaded", async () => {
@@ -210,8 +205,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const editNotesButton = document.getElementById("editNotesButton");
     const addNoteButton = document.getElementById("addNoteButton");
     const saveNotesButton = document.getElementById("saveNotesButton");
-
-
     const currentUser = await fetchCurrentUser();
 
     // Ako je korisnik nastavnik, prikaži gumbe
@@ -222,9 +215,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     } else {
         console.warn("⛔ Korisnik NIJE nastavnik – skrivam gumbe!");
     }
-
     await fetchAndRenderNotes("notes");
-
 
     editNotesButton.addEventListener("click", () => enableEditingNotes());
 
@@ -266,7 +257,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     async function fetchAndRenderNotes(dataType) {
         const response = await fetch(`http://localhost:5000/${subjectName}/${dataType}`);
         const notes = await response.json();
-
         const notesList = document.getElementById("notes-list");
         notesList.innerHTML = ""; // Očisti listu prije punjenja
 
@@ -274,8 +264,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             let li = document.createElement("li");
             li.innerHTML = `
               <span contenteditable="true">${note}</span>
-              <button class="deleteRowButton" data-index="${index}">🗑</button>
-          `;
+              <button class="deleteRowButton" data-index="${index}">🗑</button>`;
             notesList.appendChild(li);
         });
 
@@ -405,7 +394,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             li.innerHTML = `
             <span contenteditable="true">${topic}</span>
             <button class="deleteRowButton" data-index="${index}">🗑</button>
-        `;
+            `;
             curriculumList.appendChild(li);
         });
 
@@ -469,7 +458,6 @@ async function fetchCurrentUser() {
         return { username: "", role: "student" };
     }
 }
-
 
 document.addEventListener("DOMContentLoaded", async () => {
     const finalExamList = document.getElementById("final-exam-list");

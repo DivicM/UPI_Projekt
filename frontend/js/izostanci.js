@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const fetchAbsencesButton = document.getElementById("fetchAbsences");
     const chartCanvas = document.getElementById("absenceChart").getContext("2d");
 
-
     let absencesData = [];
     let currentUser = await fetchCurrentUser();
 

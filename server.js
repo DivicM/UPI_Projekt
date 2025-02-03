@@ -612,7 +612,8 @@ app.delete("/grades/:subject/:studentEmail/:index", provjeriToken, provjeriNasta
     }
 
     const itemIndex = parseInt(index, 10);
-
+    
+    // Provjera je li indeks unutar granica niza ocjena
     if (itemIndex >= 0 && itemIndex < studentGrades.grades.length) {
       studentGrades.grades.splice(itemIndex, 1);
       await studentGrades.save();
