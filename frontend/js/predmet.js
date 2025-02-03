@@ -1,5 +1,5 @@
 const subjectName = window.location.pathname.split("/").pop().replace(".html", "").replaceAll("-", "");
-console.log("📌 Trenutno odabrani predmet:", subjectName);
+console.log("Trenutno odabrani predmet:", subjectName);
 
 //ažuriranje ocjena, bilješki i gradiva
 document.addEventListener("DOMContentLoaded", async () => {
@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         addRowButton.classList.remove("hidden");
         saveGradesButton.classList.remove("hidden");
     } else {
-        console.warn("⛔ Korisnik NIJE nastavnik – skrivam gumbe!");
+        console.warn("Korisnik NIJE nastavnik – skrivam gumbe!");
     }
 
     await fetchAndRenderGrades("grades");
@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
 
             const grades = await response.json();
-            console.log("📌 Dohvaćene ocjene:", grades);
+            console.log("Dohvaćene ocjene:", grades);
 
             if (!Array.isArray(grades)) {
                 throw new Error("Podaci nisu u JSON formatu!");
@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 });
             });
         } catch (error) {
-            console.error("❌ Greška pri dohvaćanju ocjena:", error.message);
+            console.error("Greška pri dohvaćanju ocjena:", error.message);
         }
     }
 
@@ -127,7 +127,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const token = localStorage.getItem("token");
 
         if (!token) {
-            console.error("❌ Nema tokena! Korisnik nije prijavljen.");
+            console.error("Nema tokena! Korisnik nije prijavljen.");
             return { username: "", role: "student" }; // Student je default
         }
 
@@ -139,11 +139,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             if (!response.ok) throw new Error("Neispravan token ili nije prijavljen korisnik.");
             const data = await response.json();
-            console.log("📌 Trenutni korisnik:", data);
+            console.log("Trenutni korisnik:", data);
             return { username: data.username, role: data.role || "student" };
 
         } catch (error) {
-            console.error("❌ Greška pri dohvaćanju korisnika:", error.message);
+            console.error("Greška pri dohvaćanju korisnika:", error.message);
             return { username: "", role: "student" };
         }
     }
@@ -177,13 +177,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             document.querySelector(`.deleteRowButton[data-index="${index}"]`).closest("tr").remove();
 
         } catch (error) {
-            console.error("❌ Greška pri brisanju:", error.message);
+            console.error("Greška pri brisanju:", error.message);
             alert(error.message);
         }
     }
-
-
-
 });
 
 // Ažuriranje bilješki
@@ -202,7 +199,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         addNoteButton.classList.remove("hidden");
         saveNotesButton.classList.remove("hidden");
     } else {
-        console.warn("⛔ Korisnik NIJE nastavnik – skrivam gumbe!");
+        console.warn("Korisnik NIJE nastavnik – skrivam gumbe!");
     }
 
     await fetchAndRenderNotes("notes");
@@ -301,7 +298,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const token = localStorage.getItem("token");
 
         if (!token) {
-            console.error("❌ Nema tokena! Korisnik nije prijavljen.");
+            console.error("Nema tokena! Korisnik nije prijavljen.");
             return { username: "", role: "student" }; // Student je default
         }
 
@@ -313,11 +310,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             if (!response.ok) throw new Error("Neispravan token ili nije prijavljen korisnik.");
             const data = await response.json();
-            console.log("📌 Trenutni korisnik:", data);
+            console.log("Trenutni korisnik:", data);
             return { username: data.username, role: data.role || "student" };
 
         } catch (error) {
-            console.error("❌ Greška pri dohvaćanju korisnika:", error.message);
+            console.error("Greška pri dohvaćanju korisnika:", error.message);
             return { username: "", role: "student" };
         }
     }
@@ -337,7 +334,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         addCurriculumButton.classList.remove("hidden");
         saveCurriculumButton.classList.remove("hidden");
     } else {
-        console.warn("⛔ Korisnik NIJE nastavnik – skrivam gumbe!");
+        console.warn("Korisnik NIJE nastavnik – skrivam gumbe!");
     }
 
     await fetchAndRenderCurriculum("curriculum");
@@ -432,7 +429,7 @@ async function fetchCurrentUser() {
     const token = localStorage.getItem("token");
 
     if (!token) {
-        console.error("❌ Nema tokena! Korisnik nije prijavljen.");
+        console.error("Nema tokena! Korisnik nije prijavljen.");
         return { username: "", role: "student" }; // Student je default
     }
 
@@ -444,11 +441,11 @@ async function fetchCurrentUser() {
 
         if (!response.ok) throw new Error("Neispravan token ili nije prijavljen korisnik.");
         const data = await response.json();
-        console.log("📌 Trenutni korisnik:", data);
+        console.log("Trenutni korisnik:", data);
         return { username: data.usernamer, role: data.role || "student" };
 
     } catch (error) {
-        console.error("❌ Greška pri dohvaćanju korisnika:", error.message);
+        console.error("Greška pri dohvaćanju korisnika:", error.message);
         return { username: "", role: "student" };
     }
 }
@@ -469,7 +466,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         addFinalExamButton.classList.remove("hidden");
         saveFinalExamButton.classList.remove("hidden");
     } else {
-        console.warn("⛔ Korisnik NIJE nastavnik – skrivam gumbe!");
+        console.warn("Korisnik NIJE nastavnik – skrivam gumbe!");
     }
 
     await fetchAndRenderFinalExam("finalExam");
@@ -486,7 +483,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       `;
         finalExamList.appendChild(newMaterial);
     });
-
 
     // Omogući spremanje materijala
     saveFinalExamButton.addEventListener("click", async () => {
@@ -563,7 +559,7 @@ async function fetchCurrentUser() {
     const token = localStorage.getItem("token");
 
     if (!token) {
-        console.error("❌ Nema tokena! Korisnik nije prijavljen.");
+        console.error("Nema tokena! Korisnik nije prijavljen.");
         return { username: "", role: "student" }; // Student je default
     }
 
@@ -575,11 +571,11 @@ async function fetchCurrentUser() {
 
         if (!response.ok) throw new Error("Neispravan token ili nije prijavljen korisnik.");
         const data = await response.json();
-        console.log("📌 Trenutni korisnik:", data);
+        console.log("Trenutni korisnik:", data);
         return { username: data.username, role: data.role || "student" };
 
     } catch (error) {
-        console.error("❌ Greška pri dohvaćanju korisnika:", error.message);
+        console.error("Greška pri dohvaćanju korisnika:", error.message);
         return { username: "", role: "student" };
     }
 }
