@@ -5,6 +5,9 @@ const registerFormElement = document.getElementById('registerFormElement');
 const successMessage = document.getElementById('successMessage');
 const formTitle = document.getElementById('formTitle');
 const toggleText = document.getElementById('toggleText');
+
+
+
 const forgotPasswordLink = document.getElementById('forgotPasswordLink');
 const forgotPasswordForm = document.getElementById('forgotPasswordForm');
 const forgotPasswordRequestForm = document.getElementById('forgotPasswordRequestForm');
@@ -67,6 +70,10 @@ resetPasswordFormElement.addEventListener('submit', async (e) => {
   }
 });
 
+
+
+
+
 // Prebacivanje na registracijsku formu
 registerLink.addEventListener('click', () => {
   loginForm.style.display = 'none';
@@ -87,12 +94,12 @@ loginForm.addEventListener('submit', async (e) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username, password }),
   });
-
+  
   if (response.ok) {
     const data = await response.json();
-    console.log("Novi token:", data.token); // Debugging
-    localStorage.setItem("token", data.token); // Sprema token u localStorage
-    localStorage.setItem("role", data.role); // Spremi ulogu korisnika
+    console.log("📌 Novi token:", data.token); // 🛠 Debugging
+    localStorage.setItem("token", data.token); // 📌 Sprema token u localStorage
+    localStorage.setItem("role", data.role); // ✅ Spremi ulogu korisnika
 
     alert('Login successful!');
     window.location.href = 'home.html'; // Preusmjeravanje na novu stranicu
@@ -101,6 +108,43 @@ loginForm.addEventListener('submit', async (e) => {
   }
 });
 
+// Register forma
+/*registerFormElement.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const firstName = document.getElementById('registerFirstName').value;
+  const lastName = document.getElementById('registerLastName').value;
+  const username = document.getElementById('registerUsername').value;
+  const password = document.getElementById('registerPassword').value;
+  const role = document.getElementById("role").value; // ✅ Dodaj dohvaćanje uloge iz selecta
+
+  console.log("📌 Podaci koji se šalju na backend:", { firstName, lastName, username, role }); // Debugging
+*/
+  // Provjera jačine lozinke
+  /*const passwordStrength = document.getElementById('registerPasswordStrength').value;
+
+  if (passwordStrength < 3) { // Ako lozinka nije "Good" ili "Strong"
+      alert('Lozinka je preslaba! Koristite 8+ znakova, 1 veliko slovo, 1 broj i 1 simbol.');
+      return; // Zaustavi daljnju obradu
+  }*/
+  //završava provjera jačine
+
+  /*const response = await fetch('http://localhost:5000/register', {
+    method: "POST",
+    headers: { "Content-Type": 'application/json' },
+    body: JSON.stringify({ firstName, lastName, username, password, role }),
+  });
+
+  if (response.ok) {
+    alert("Registracija uspješna!");
+    window.location.href = "/frontend/index.html"; 
+    //registerForm.style.display = 'none';
+    //successMessage.style.display = 'block';
+    //successMessage.innerText = 'Registracija uspješna!';
+
+  } else {
+    alert('Registration failed!');
+  }
+});*/
 document.getElementById("registerForm").addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -108,32 +152,32 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
   const lastName = document.getElementById("registerLastName").value;
   const username = document.getElementById("registerUsername").value;
   const password = document.getElementById("registerPassword").value;
-  const role = document.getElementById("role").value; //  Uzima rolu iz selekta
+  const role = document.getElementById("role").value; // ✅ Uzima rolu iz selekta
 
   const response = await fetch("http://localhost:5000/register", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ firstName, lastName, username, password, role }) //  Role se šalje na backend
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ firstName, lastName, username, password, role }) // ✅ Role se šalje na backend
   });
 
   const data = await response.json();
-  console.log("Odgovor servera:", data);
+  console.log("📌 Odgovor servera:", data);
 
   if (response.ok) {
-    alert("Registracija uspješna!");
-    window.location.href = "index.html";
+      alert("Registracija uspješna!");
+      window.location.href = "index.html";
   } else {
-    alert(`Greška: ${data.message}`);
+      alert(`❌ Greška: ${data.message}`);
   }
 });
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  const passwordInput = document.getElementById('registerPassword');
-  const passwordStrength = document.getElementById('registerPasswordStrength');
-  const passwordMessage = document.getElementById('registerPasswordMessage');
+const passwordInput = document.getElementById('registerPassword');
+const passwordStrength = document.getElementById('registerPasswordStrength');
+const passwordMessage = document.getElementById('registerPasswordMessage');
 
-  passwordInput.addEventListener('input', () => {
+passwordInput.addEventListener('input', () => {
     const password = passwordInput.value;
     let strength = 0;
 
@@ -145,20 +189,20 @@ document.addEventListener('DOMContentLoaded', () => {
     passwordStrength.value = strength;
 
     // Poruka za korisnika
-    const messages = ["Too weak", "Weak ", "Good", "Strong"];
+    const messages = ["Too weak ❌", "Weak ⚠️", "Good ✅", "Strong 💪"];
     passwordMessage.textContent = messages[strength];
 
     // Boja progress bara
     const colors = ["red", "orange", "yellow", "green"];
     passwordStrength.style.backgroundColor = colors[strength];
-  });
+});
 });
 async function fetchCurrentUser() {
-  const token = localStorage.getItem("token"); //  Dohvati token iz localStorage-a
+  const token = localStorage.getItem("token"); // 📌 Dohvati token iz localStorage-a
   if (!token) return { email: "" }; // Ako nema tokena, korisnik nije prijavljen
 
   const response = await fetch("http://localhost:5000/current-user", {
-    headers: { "Authorization": `Bearer ${token}` }, //  Šaljemo token u zaglavlju
+      headers: { "Authorization": `Bearer ${token}` }, // 📌 Šaljemo token u zaglavlju
   });
 
   return response.ok ? await response.json() : { email: "" };
