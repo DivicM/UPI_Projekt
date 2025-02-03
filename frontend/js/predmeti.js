@@ -20,6 +20,13 @@ async function loadSubjects() {
     console.error('Greška pri dohvaćanju predmeta:', error);
   }
 }
+const profile = document.getElementById('profile');
+
+if (profile) {
+  profile.addEventListener('click', () => {
+    window.location.href = "/frontend/pages/profil.html"; // Preusmjeravanje na profil.html
+  });
+}
 
 function renderSubjects(subjects) {
   subjectsList.innerHTML = ''; // Očisti trenutnu listu

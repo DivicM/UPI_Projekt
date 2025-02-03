@@ -40,6 +40,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         saveAbsencesButton.style.display = "none";
 
     }
+    const profile = document.getElementById('profile');
+
+    if (profile) {
+        profile.addEventListener('click', () => {
+            window.location.href = "/frontend/pages/profil.html"; // Preusmjeravanje na profil.html
+        });
+    }
 
     addAbsenceButton.addEventListener("click", () => {
         let newRow = document.createElement("tr");
