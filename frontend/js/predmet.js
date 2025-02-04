@@ -267,7 +267,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   async function fetchAndRenderGrades() {
     try {
         const token = localStorage.getItem("token"); // ✅ Dohvati JWT token
-        const studentEmail = getCurrentStudentEmail();
+        const studentEmail = await getCurrentStudentEmail();
         
         if (!token) {
             console.error("❌ Nema tokena! Korisnik nije prijavljen.");
@@ -437,7 +437,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  function getCurrentStudentEmail() {
+async function getCurrentStudentEmail() {
+    const currentUser = await fetchCurrentUser();
+    if (currentUser.role === "student") {
+        return currentUser.username; // Automatski dohvaća email prijavljenog učenika
+    }
     const emailInput = document.getElementById("studentEmail");
     return emailInput ? emailInput.value.trim() : "";
   }
