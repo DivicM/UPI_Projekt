@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const token = localStorage.getItem("token");
 
   if (!token) {
-    console.error("❌ Nema tokena! Korisnik nije prijavljen.");
+    console.error("Nema tokena! Korisnik nije prijavljen.");
     return;
   }
 
@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!response.ok) throw new Error("Neispravan token ili nije prijavljen korisnik.");
 
     const user = await response.json();
-    console.log("📌 Trenutni korisnik:", user);
+    console.log("Trenutni korisnik:", user);
 
     // Postavi ime korisnika
     document.getElementById("user-name").textContent = `${user.firstName} ${user.lastName}`;
@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
   } catch (error) {
-    console.error("❌ Greška pri dohvaćanju korisnika:", error.message);
+    console.error("Greška pri dohvaćanju korisnika:", error.message);
   }
 });
 
@@ -137,7 +137,7 @@ async function uploadProfilePicture() {
     }
 
   } catch (error) {
-    console.error("❌ Greška pri uploadu slike:", error.message);
+    console.error("Greška pri uploadu slike:", error.message);
     alert("Greška pri učitavanju slike.");
   }
 }
@@ -146,7 +146,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const token = localStorage.getItem("token");
 
   if (!token) {
-    console.error("❌ Nema tokena! Korisnik nije prijavljen.");
+    console.error("Nema tokena! Korisnik nije prijavljen.");
     return;
   }
 
@@ -180,13 +180,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("randomStudentDisplay").textContent = `🎉 Odabran učenik: ${student.firstName} ${student.lastName}`;
 
       } catch (error) {
-        console.error("❌ Greška pri odabiru učenika:", error.message);
-        document.getElementById("randomStudentDisplay").textContent = "⚠️ Nije moguće dohvatiti učenika.";
+        console.error("Greška pri odabiru učenika:", error.message);
+        document.getElementById("randomStudentDisplay").textContent = "Nije moguće dohvatiti učenika.";
       }
     });
 
   } catch (error) {
-    console.error("❌ Greška pri dohvaćanju korisnika:", error.message);
+    console.error("Greška pri dohvaćanju korisnika:", error.message);
   }
 });
 
@@ -199,7 +199,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const currentUser = await fetchCurrentUser();
 
   if (!currentUser) {
-    console.error("❌ Greška: Nema prijavljenog korisnika!");
+    console.error("Greška: Nema prijavljenog korisnika!");
     return;
   }
 
@@ -232,7 +232,7 @@ async function fetchAndUpdateAverageGrade(studentEmail) {
   try {
     const token = localStorage.getItem("token");
     if (!token) {
-      console.error("❌ Greška: Nema tokena! Korisnik nije prijavljen.");
+      console.error("Greška: Nema tokena! Korisnik nije prijavljen.");
       return;
     }
     const response = await fetch(`http://localhost:5000/grades/average/${studentEmail}`, {
@@ -257,7 +257,7 @@ async function fetchAndUpdateAverageGrade(studentEmail) {
     document.getElementById("averageGrade").textContent = overallAverage;
 
   } catch (error) {
-    console.error("❌ Greška pri dohvaćanju prosjeka ocjena:", error.message);
+    console.error("Greška pri dohvaćanju prosjeka ocjena:", error.message);
   }
 }
 
@@ -269,7 +269,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const currentUser = await fetchCurrentUser(); // Dohvati prijavljenog korisnika
 
   if (!currentUser) {
-    console.error("❌ Greška: Nema prijavljenog korisnika!"); 
+    console.error("Greška: Nema prijavljenog korisnika!"); 
     return;
   }
 
@@ -301,7 +301,7 @@ async function fetchAndDisplayAbsences(username) {
     const token = localStorage.getItem("token"); // Dohvati JWT token
 
     if (!token) {
-      console.error("❌ Greška: Nema tokena! Korisnik nije prijavljen.");
+      console.error("Greška: Nema tokena! Korisnik nije prijavljen.");
       return;
     }
 
@@ -319,11 +319,11 @@ async function fetchAndDisplayAbsences(username) {
     }
 
     const { totalHours } = await response.json();
-    console.log("📌 Ukupni izostanci:", totalHours);
+    console.log("Ukupni izostanci:", totalHours);
 
     document.getElementById("absence-count").innerText = totalHours; // Postavi ukupan broj sati
   } catch (error) {
-    console.error("❌ Greška pri dohvaćanju izostanaka:", error.message);
+    console.error("Greška pri dohvaćanju izostanaka:", error.message);
     alert("Neuspjelo dohvaćanje podataka za izostanke!");
   }
 }
@@ -349,7 +349,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const currentUser = await fetchCurrentUser(); // Dohvati prijavljenog korisnika
 
   if (!currentUser) {
-    console.error("❌ Greška: Nema prijavljenog korisnika!");
+    console.error("Greška: Nema prijavljenog korisnika!");
     return;
   }
 
@@ -381,7 +381,7 @@ async function fetchAndRenderChart(studentEmail) {
     const token = localStorage.getItem("token"); // Dohvati JWT token
 
     if (!token) {
-      console.error("❌ Greška: Nema tokena! Korisnik nije prijavljen.");
+      console.error("Greška: Nema tokena! Korisnik nije prijavljen.");
       return;
     }
     const response = await fetch(`http://localhost:5000/grades/average/${studentEmail}`, {
@@ -398,11 +398,11 @@ async function fetchAndRenderChart(studentEmail) {
     }
 
     const gradeData = await response.json();
-    console.log("📌 Dohvaćeni podaci za chart:", gradeData);
+    console.log("Dohvaćeni podaci za chart:", gradeData);
 
     renderChart(gradeData);
   } catch (error) {
-    console.error("❌ Greška pri dohvaćanju ocjena:", error.message);
+    console.error("Greška pri dohvaćanju ocjena:", error.message);
     alert("Neuspjelo dohvaćanje podataka za graf!");
   }
 }
@@ -413,7 +413,7 @@ async function fetchAndRenderChart(studentEmail) {
 function renderChart(gradeData) {
   const chartCanvas = document.getElementById("gradesChart");
   if (!chartCanvas) {
-    console.error("⛔ Element #gradesChart nije pronađen!");
+    console.error("Element #gradesChart nije pronađen!");
     return;
   }
   const ctx = chartCanvas.getContext("2d");
@@ -471,7 +471,7 @@ async function fetchCurrentUser() {
   const token = localStorage.getItem("token");
 
   if (!token) {
-    console.error("❌ Nema tokena! Korisnik nije prijavljen.");
+    console.error("Nema tokena! Korisnik nije prijavljen.");
     return null;
   }
 
@@ -484,7 +484,7 @@ async function fetchCurrentUser() {
     if (!response.ok) throw new Error("Neispravan token ili nije prijavljen korisnik.");
     return await response.json();
   } catch (error) {
-    console.error("❌ Greška pri dohvaćanju korisnika:", error.message);
+    console.error("Greška pri dohvaćanju korisnika:", error.message);
     return null;
   }
 }
