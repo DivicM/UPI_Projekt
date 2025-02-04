@@ -1,186 +1,266 @@
-process.env.NODE_ENV = 'test';
-
-jest.mock('mongoose', () => {
-  const actualMongoose = jest.requireActual('mongoose');
-  return {
-    ...actualMongoose,
-    connect: jest.fn().mockResolvedValue(),  // umjesto stvarne konekcije
-    connection: { db: {} }
-  };
-});
-
-
-jest.spyOn(console, 'log').mockImplementation(() => {});
-
-const { app } = require('./server'); // prilagodi putanju po potrebi
-
+// app.test.js
 const request = require('supertest');
+const { app } = require('./server'); // pretpostavljamo da je glavni fajl nazvan app.js i da exporta { app }
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 
-// Dohvatamo User model (koji se kreira u server.js)
 const User = mongoose.model('User');
+jest.mock('jsonwebtoken', () => ({
+  sign: jest.fn(() => 'fakeSignedToken'),
+  verify: jest.fn((token, secret) => {
+    if (token === 'validStudentToken') {
+      return { username: 'student1', role: 'student' };
+    }
+    if (token === 'validTeacherToken') {
+      return { username: 'nastavnik1', role: 'nastavnik' };
+    }
+    throw new Error('Invalid token');
+  }),
+}));
 
-// Za testove postavi tajnu za JWT
-process.env.JWT_SECRET = 'testsecret';
-
+// Resetiraj sve mockove između testova
 afterEach(() => {
-  jest.restoreAllMocks();
+  jest.clearAllMocks();
 });
 
-// Pomoćna funkcija za generiranje JWT tokena
-const generateToken = (payload) =>
-  jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+// ------------------ TESTOVI ZA RUTE KOJE NE KORISTE absence.js I grade.js ------------------
 
-
-const Absence = require('./models/Absence');
-Absence.find = jest.fn();
-Absence.deleteMany = jest.fn();
-Absence.insertMany = jest.fn();
-Absence.findByIdAndDelete = jest.fn();
-
-const Grade = require('./models/Grade');
-Grade.find = jest.fn();
-Grade.findOne = jest.fn();
-
-describe('Unprotected Endpoints', () => {
-  test('GET /isLoggedIn returns loggedIn true', async () => {
+describe('Public endpoints', () => {
+  it('GET /isLoggedIn should return { loggedIn: true }', async () => {
     const res = await request(app).get('/isLoggedIn');
     expect(res.statusCode).toBe(200);
-    expect(res.body.loggedIn).toBe(true);
+    expect(res.body).toEqual({ loggedIn: true });
   });
 
-  test('GET /subjects returns an array of subjects', async () => {
+  it('GET /subjects should return array of subjects', async () => {
     const res = await request(app).get('/subjects');
     expect(res.statusCode).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
-    expect(res.body.length).toBeGreaterThan(0);
+    // Primjer provjere – očekujemo 14 predmeta
+    expect(res.body.length).toBe(14);
+  });
+
+  it('POST /logout should return logout message', async () => {
+    const res = await request(app).post('/logout');
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toHaveProperty('message', 'Uspješna odjava!');
   });
 });
 
-describe('Protected Endpoints', () => {
+// ------------------ TESTOVI ZA RUTE KOJE ZAHTJEVAJU TOKEN ------------------
+
+describe('Protected endpoints', () => {
+  // Za potrebe testiranja, “mockat ćemo” metode baze (User.findOne, save, findOneAndUpdate itd.)
+  // Kako bismo spriječili stvarne pozive na bazu, koristimo jest.spyOn
+
   describe('GET /debug-token', () => {
-    test('returns current user info when token is valid', async () => {
-      const payload = { username: 'student@example.com', role: 'student' };
-      const token = generateToken(payload);
-      // Mockiraj User.findOne da vrati objekt s role-om
-      jest.spyOn(User, 'findOne').mockResolvedValue({ username: payload.username, role: payload.role });
-      
-      const res = await request(app)
-        .get('/debug-token')
-        .set('Authorization', `Bearer ${token}`);
-      
-      expect(res.statusCode).toBe(200);
-      expect(res.body.idUser).toEqual({ username: payload.username, role: payload.role });
-    });
-    
-    test('returns 403 if token not provided', async () => {
+    it('bez Authorization zaglavlja vraća 403', async () => {
       const res = await request(app).get('/debug-token');
       expect(res.statusCode).toBe(403);
-      expect(res.body.message).toMatch(/Niste prijavljeni/);
+      expect(res.body).toHaveProperty('message', 'Niste prijavljeni!');
+    });
+
+    it('s neispravnim tokenom vraća 401', async () => {
+      const res = await request(app)
+        .get('/debug-token')
+        .set('Authorization', 'Bearer invalidToken');
+      expect(res.statusCode).toBe(401);
+      expect(res.body).toHaveProperty('message', 'Neispravan token');
+    });
+
+    it('s valjanim tokenom vraća podatke korisnika', async () => {
+      // Mokiraj User.findOne da vrati fiktivnog korisnika
+      jest.spyOn(User, 'findOne').mockResolvedValue({
+        username: 'student1',
+        role: 'student',
+      });
+      const res = await request(app)
+        .get('/debug-token')
+        .set('Authorization', 'Bearer validStudentToken');
+      expect(res.statusCode).toBe(200);
+      expect(res.body).toHaveProperty('idUser');
+      expect(res.body.idUser).toEqual({ username: 'student1', role: 'student' });
     });
   });
 
   describe('POST /register', () => {
-    beforeEach(() => {
-      jest.clearAllMocks();
-    });
-    
-    test('registers a new user', async () => {
-      // Simuliraj da korisnik ne postoji
-      jest.spyOn(User, 'findOne').mockResolvedValue(null);
-      // Mockiraj save metodu
-      User.prototype.save = jest.fn().mockResolvedValue(true);
-      
-      const newUser = {
-        firstName: 'Test',
-        lastName: 'User',
-        username: 'student@example.com',
-        password: 'password123',
-        role: 'student'
-      };
-
+    it('ako korisnik već postoji, vraća 400', async () => {
+      // Mokiraj User.findOne da simulira da korisnik postoji
+      jest.spyOn(User, 'findOne').mockResolvedValue({ username: 'postojeci@primjer.hr' });
       const res = await request(app)
         .post('/register')
-        .send(newUser);
-
-      expect(res.statusCode).toBe(200);
-      expect(res.body.message).toMatch(/Registracija uspješna/);
-      expect(User.findOne).toHaveBeenCalledWith({ username: newUser.username });
-    });
-
-    test('does not register if user already exists', async () => {
-      jest.spyOn(User, 'findOne').mockResolvedValue({ username: 'student@example.com' });
-      
-      const newUser = {
-        firstName: 'Test',
-        lastName: 'User',
-        username: 'student@example.com',
-        password: 'password123',
-        role: 'student'
-      };
-
-      const res = await request(app)
-        .post('/register')
-        .send(newUser);
-
+        .send({
+          firstName: 'Ana',
+          lastName: 'Anić',
+          username: 'postojeci@primjer.hr',
+          password: 'lozinka123',
+          role: 'student',
+        });
       expect(res.statusCode).toBe(400);
-      expect(res.body.message).toMatch(/Korisnik s tim emailom već postoji/);
+      expect(res.body).toHaveProperty('message', 'Korisnik s tim emailom već postoji.');
+    });
+
+    it('uspješna registracija vraća poruku', async () => {
+      // Mokiraj User.findOne da simulira da korisnik ne postoji
+      jest.spyOn(User, 'findOne').mockResolvedValue(null);
+      // Mokiraj metodu save na instanci korisnika
+      const saveMock = jest.fn().mockResolvedValue(true);
+      jest.spyOn(User.prototype, 'save').mockImplementation(saveMock);
+
+      const res = await request(app)
+        .post('/register')
+        .send({
+          firstName: 'Marko',
+          lastName: 'Markić',
+          username: 'novi@primjer.hr',
+          password: 'lozinka123!',
+          role: 'student',
+        });
+      expect(res.statusCode).toBe(200);
+      expect(res.body).toHaveProperty('message', 'Registracija uspješna!');
+      expect(saveMock).toHaveBeenCalled();
     });
   });
 
   describe('POST /login', () => {
-    beforeEach(() => {
-      jest.clearAllMocks();
-    });
-
-    test('logs in with correct credentials', async () => {
-      const user = { username: 'student@example.com', password: 'password123', role: 'student' };
-      jest.spyOn(User, 'findOne').mockResolvedValue(user);
-
+    it('ako korisnik ne postoji, vraća 401', async () => {
+      jest.spyOn(User, 'findOne').mockResolvedValue(null);
       const res = await request(app)
         .post('/login')
-        .send({ username: 'student@example.com', password: 'password123' });
-
-      expect(res.statusCode).toBe(200);
-      expect(res.body.token).toBeDefined();
-      expect(res.body.message).toMatch(/Uspješna prijava/);
+        .send({
+          username: 'nepostojeci@primjer.hr',
+          password: 'lozinka123',
+        });
+      expect(res.statusCode).toBe(401);
+      expect(res.body).toHaveProperty('message');
+      // Poruka u kodu je " Neispravan email ili lozinka!"
+      expect(res.body.message).toMatch(/Neispravan email ili lozinka/);
     });
 
-    test('does not login with incorrect password', async () => {
-      const user = { username: 'student@example.com', password: 'password123', role: 'student' };
-      jest.spyOn(User, 'findOne').mockResolvedValue(user);
-
+    it('ako je lozinka neispravna, vraća 401', async () => {
+      // Mokiraj User.findOne da vrati korisnika s određenom lozinkom
+      jest.spyOn(User, 'findOne').mockResolvedValue({
+        username: 'student1@primjer.hr',
+        password: 'tocnaLozinka',
+        role: 'student',
+      });
       const res = await request(app)
         .post('/login')
-        .send({ username: 'student@example.com', password: 'wrongpassword' });
-
+        .send({
+          username: 'student1@primjer.hr',
+          password: 'netocnaLozinka',
+        });
       expect(res.statusCode).toBe(401);
       expect(res.body.message).toMatch(/Neispravna lozinka/);
     });
 
-    test('does not login if user not found', async () => {
-      jest.spyOn(User, 'findOne').mockResolvedValue(null);
-
+    it('uspješna prijava vraća token', async () => {
+      jest.spyOn(User, 'findOne').mockResolvedValue({
+        username: 'student1@primjer.hr',
+        password: 'tocnaLozinka',
+        role: 'student',
+      });
       const res = await request(app)
         .post('/login')
-        .send({ username: 'nonexistent@example.com', password: 'password123' });
-
-      expect(res.statusCode).toBe(401);
-      expect(res.body.message).toMatch(/Neispravan email ili lozinka/);
+        .send({
+          username: 'student1@primjer.hr',
+          password: 'tocnaLozinka',
+        });
+      expect(res.statusCode).toBe(200);
+      expect(res.body).toHaveProperty('token', 'fakeSignedToken');
+      expect(res.body).toHaveProperty('message', expect.stringContaining('Uspješna prijava'));
     });
   });
 
-  // Dinamičke rute za predmete (primjer s "matematika")
-  describe('Dynamic Subject Routes', () => {
-    test('GET /matematika/grades returns an empty array if no data', async () => {
-      // Ako za predmet nema podataka, očekujemo prazni niz
-      const res = await request(app).get('/matematika/grades');
-      expect(res.statusCode).toBe(200);
-      expect(res.body).toEqual([]);
+  describe('POST /updateProfile', () => {
+    it('ako korisnik nije pronađen, vraća 404', async () => {
+      // Mokiraj User.findOne da vrati null
+      jest.spyOn(User, 'findOne').mockResolvedValue(null);
+      const res = await request(app)
+        .post('/updateProfile')
+        .set('Authorization', 'Bearer validStudentToken')
+        .send({
+          fullName: 'Novo Ime',
+          username: 'novi@primjer.hr',
+          password: 'novaLozinka123!',
+        });
+      expect(res.statusCode).toBe(404);
+      expect(res.body).toHaveProperty('message', 'Korisnik nije pronađen!');
     });
 
+    it('uspješno ažuriranje profila vraća poruku', async () => {
+      // Kreiraj fiktivnog korisnika
+      const fakeUser = {
+        username: 'student1',
+        firstName: 'Stari',
+        lastName: 'Naziv',
+        password: 'staraLozinka',
+        save: jest.fn().mockResolvedValue(true),
+      };
+      jest.spyOn(User, 'findOne').mockResolvedValue(fakeUser);
+
+      const res = await request(app)
+        .post('/updateProfile')
+        .set('Authorization', 'Bearer validStudentToken')
+        .send({
+          fullName: 'Novi Ime Prezime',
+          username: 'student1',
+          password: 'novaLozinka123!',
+        });
+      expect(res.statusCode).toBe(200);
+      expect(res.body).toHaveProperty('message', 'Profil uspješno ažuriran!');
+      expect(fakeUser.save).toHaveBeenCalled();
+    });
+  });
+
+  describe('GET /current-user', () => {
+    it('ako korisnik nije pronađen, vraća 404', async () => {
+      jest.spyOn(User, 'findOne').mockResolvedValue(null);
+      const res = await request(app)
+        .get('/current-user')
+        .set('Authorization', 'Bearer validStudentToken');
+      expect(res.statusCode).toBe(404);
+      expect(res.body).toHaveProperty('message', 'Korisnik nije pronađen!');
+    });
+
+    it('uspješno vraća podatke o trenutnom korisniku', async () => {
+      const fakeUser = {
+        username: 'student1',
+        firstName: 'Student',
+        lastName: 'Test',
+        role: 'student',
+      };
+      jest.spyOn(User, 'findOne').mockResolvedValue(fakeUser);
+      const res = await request(app)
+        .get('/current-user')
+        .set('Authorization', 'Bearer validStudentToken');
+      expect(res.statusCode).toBe(200);
+      expect(res.body).toMatchObject(fakeUser);
+    });
   });
 });
+
+// ------------------ TESTOVI ZA RUTE KOJE NE ZAHTJEVAJU TOKEN (dinamične rute) ------------------
+
+describe('Dinamičke rute za predmete', () => {
+  it('GET /matematika/notes vraća prazan niz (po defaultu)', async () => {
+    const res = await request(app).get('/matematika/notes');
+    expect(res.statusCode).toBe(200);
+    expect(Array.isArray(res.body)).toBe(true);
+    // Po defaultu su inicijalno postavljeni kao prazni nizovi
+    expect(res.body).toEqual([]);
+  });
+
+  it('GET /nepostojeciPredmet/notes vraća 404', async () => {
+    const res = await request(app).get('/nepostojeciPredmet/notes');
+    expect(res.statusCode).toBe(404);
+    expect(res.body).toHaveProperty('message', 'Predmet ili tip podataka nije pronađen!');
+  });
+});
+
+
+
+
+
 
 
