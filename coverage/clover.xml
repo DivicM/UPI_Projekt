@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1738690350503" clover="3.2.0">
-  <project timestamp="1738690350503" name="All files">
+<coverage generated="1738690837677" clover="3.2.0">
+  <project timestamp="1738690837678" name="All files">
     <metrics statements="317" coveredstatements="143" conditionals="100" coveredconditionals="25" methods="35" coveredmethods="11" elements="452" coveredelements="179" complexity="0" loc="317" ncloc="317" packages="2" files="3" classes="3"/>
     <package name="UPI_Projekt-2">
       <metrics statements="311" coveredstatements="137" conditionals="100" coveredconditionals="25" methods="35" coveredmethods="11"/>
