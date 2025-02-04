@@ -288,7 +288,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         alert("Unesite email učenika!");
         return;
       }
-      await fetchAndDisplayAbsences(studentEmail);
+      await fetchAndDisplayAbsences(username);
     });
   }
 });
