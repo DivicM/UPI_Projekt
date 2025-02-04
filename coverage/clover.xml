@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1738684044092" clover="3.2.0">
-  <project timestamp="1738684044092" name="All files">
-    <metrics statements="317" coveredstatements="126" conditionals="100" coveredconditionals="20" methods="35" coveredmethods="10" elements="452" coveredelements="156" complexity="0" loc="317" ncloc="317" packages="2" files="3" classes="3"/>
-    <package name="UPI_Projekt-1">
-      <metrics statements="311" coveredstatements="120" conditionals="100" coveredconditionals="20" methods="35" coveredmethods="10"/>
-      <file name="server.js" path="C:\Users\Mate\Desktop\UPI_Projekt-1\server.js">
-        <metrics statements="311" coveredstatements="120" conditionals="100" coveredconditionals="20" methods="35" coveredmethods="10"/>
+<coverage generated="1738690350503" clover="3.2.0">
+  <project timestamp="1738690350503" name="All files">
+    <metrics statements="317" coveredstatements="143" conditionals="100" coveredconditionals="25" methods="35" coveredmethods="11" elements="452" coveredelements="179" complexity="0" loc="317" ncloc="317" packages="2" files="3" classes="3"/>
+    <package name="UPI_Projekt-2">
+      <metrics statements="311" coveredstatements="137" conditionals="100" coveredconditionals="25" methods="35" coveredmethods="11"/>
+      <file name="server.js" path="C:\Users\Mate\Desktop\UPI_Projekt-2\server.js">
+        <metrics statements="311" coveredstatements="137" conditionals="100" coveredconditionals="25" methods="35" coveredmethods="11"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -173,27 +173,27 @@
         <line num="371" count="0" type="stmt"/>
         <line num="375" count="1" type="stmt"/>
         <line num="377" count="1" type="stmt"/>
-        <line num="378" count="0" type="stmt"/>
-        <line num="380" count="0" type="stmt"/>
-        <line num="382" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="378" count="2" type="stmt"/>
+        <line num="380" count="2" type="stmt"/>
+        <line num="382" count="2" type="cond" truecount="1" falsecount="1"/>
         <line num="383" count="0" type="stmt"/>
-        <line num="387" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="387" count="2" type="cond" truecount="1" falsecount="1"/>
         <line num="388" count="0" type="stmt"/>
-        <line num="391" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="392" count="0" type="stmt"/>
-        <line num="396" count="0" type="stmt"/>
-        <line num="397" count="0" type="stmt"/>
-        <line num="398" count="0" type="stmt"/>
-        <line num="400" count="0" type="stmt"/>
-        <line num="407" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="391" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="392" count="1" type="stmt"/>
+        <line num="396" count="1" type="stmt"/>
+        <line num="397" count="1" type="stmt"/>
+        <line num="398" count="1" type="stmt"/>
+        <line num="400" count="1" type="stmt"/>
+        <line num="407" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="408" count="0" type="stmt"/>
-        <line num="412" count="0" type="stmt"/>
-        <line num="413" count="0" type="stmt"/>
-        <line num="414" count="0" type="stmt"/>
-        <line num="415" count="0" type="stmt"/>
+        <line num="412" count="1" type="stmt"/>
+        <line num="413" count="1" type="stmt"/>
+        <line num="414" count="1" type="stmt"/>
+        <line num="415" count="1" type="stmt"/>
         <line num="417" count="0" type="stmt"/>
-        <line num="419" count="0" type="stmt"/>
-        <line num="420" count="0" type="stmt"/>
+        <line num="419" count="1" type="stmt"/>
+        <line num="420" count="1" type="stmt"/>
         <line num="424" count="1" type="stmt"/>
         <line num="425" count="1" type="stmt"/>
         <line num="427" count="1" type="stmt"/>
@@ -316,18 +316,18 @@
         <line num="673" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="674" count="0" type="stmt"/>
         <line num="675" count="0" type="stmt"/>
-        <line num="679" count="1" type="stmt"/>
+        <line num="678" count="1" type="stmt"/>
       </file>
     </package>
-    <package name="UPI_Projekt-1.models">
+    <package name="UPI_Projekt-2.models">
       <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-      <file name="Absence.js" path="C:\Users\Mate\Desktop\UPI_Projekt-1\models\Absence.js">
+      <file name="Absence.js" path="C:\Users\Mate\Desktop\UPI_Projekt-2\models\Absence.js">
         <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
         <line num="15" count="1" type="stmt"/>
       </file>
-      <file name="Grade.js" path="C:\Users\Mate\Desktop\UPI_Projekt-1\models\Grade.js">
+      <file name="Grade.js" path="C:\Users\Mate\Desktop\UPI_Projekt-2\models\Grade.js">
         <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>

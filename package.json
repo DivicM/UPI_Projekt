@@ -2,7 +2,6 @@
   "name": "upi_ednevnik",
   "version": "1.0.0",
   "main": "index.js",
-  "type":"module",
   "scripts": {
     "test": "jest --watchAll --verbose --coverage --detectOpenHandles",
     "start": "nodemon server.js"

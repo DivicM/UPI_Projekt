@@ -3,6 +3,11 @@ const request = require('supertest');
 const { app } = require('./server'); // pretpostavljamo da je glavni fajl nazvan app.js i da exporta { app }
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
+const validator = require('validator');
+const path = require('path');
+
+
+jest.mock('validator')
 
 const User = mongoose.model('User');
 jest.mock('jsonwebtoken', () => ({
@@ -255,6 +260,46 @@ describe('Dinamičke rute za predmete', () => {
     const res = await request(app).get('/nepostojeciPredmet/notes');
     expect(res.statusCode).toBe(404);
     expect(res.body).toHaveProperty('message', 'Predmet ili tip podataka nije pronađen!');
+  });
+});
+
+
+describe('POST /reset-password - Provjera jačine lozinke', () => {
+  beforeEach(() => {
+    jest.clearAllMocks(); // Očisti mock-ove između testova
+  });
+
+  test('treba vratiti 400 ako lozinka nije dovoljno jaka', async () => {
+    // Mock-ujemo validator.isStrongPassword da vrati false
+    validator.isStrongPassword.mockReturnValue(false);
+
+    const response = await request(app)
+      .post('/reset-password')
+      .send({
+        token: 'valid-token',
+        newPassword: 'weak', // Slaba lozinka
+        confirmPassword: 'weak',
+      });
+
+    expect(response.status).toBe(400);
+    expect(response.text).toBe('Password is too weak! Use at least 8 characters, 1 symbol, and 1 uppercase letter.');
+    expect(validator.isStrongPassword).toHaveBeenCalledWith('weak', { minLength: 8, minSymbols: 1 });
+  });
+
+  test('treba proći ako je lozinka dovoljno jaka', async () => {
+    // Mock-ujemo validator.isStrongPassword da vrati true
+    validator.isStrongPassword.mockReturnValue(true);
+
+    const response = await request(app)
+      .post('/reset-password')
+      .send({
+        token: 'valid-token',
+        newPassword: 'StrongPass123!', // Jaka lozinka
+        confirmPassword: 'StrongPass123!',
+      });
+
+    expect(response.status).not.toBe(400); // Ne smije vratiti 400
+    expect(validator.isStrongPassword).toHaveBeenCalledWith('StrongPass123!', { minLength: 8, minSymbols: 1 });
   });
 });
 
