@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     let currentUser = await fetchCurrentUser();
 
     if (!currentUser) {
-        console.error("❌ Nema prijavljenog korisnika!");
+        console.error("Nema prijavljenog korisnika!");
         return;
     }
 
@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             renderAbsenceChart(absencesData);
 
         } catch (error) {
-            console.error("❌ Greška pri dohvaćanju izostanaka:", error.message);
+            console.error("Greška pri dohvaćanju izostanaka:", error.message);
         }
     }
 
@@ -147,7 +147,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             await fetchAndRenderAbsences(currentUser.username);
 
         } catch (error) {
-            console.error("❌ Greška pri brisanju:", error.message);
+            console.error("Greška pri brisanju:", error.message);
             alert(error.message);
         }
     }
@@ -181,7 +181,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const token = localStorage.getItem("token");
 
         if (!token) {
-            console.error("❌ Nema tokena! Korisnik nije prijavljen.");
+            console.error("Nema tokena! Korisnik nije prijavljen.");
             return null;
         }
 
@@ -195,7 +195,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             return await response.json();
 
         } catch (error) {
-            console.error("❌ Greška pri dohvaćanju korisnika:", error.message);
+            console.error("Greška pri dohvaćanju korisnika:", error.message);
             return null;
         }
     }
@@ -213,7 +213,7 @@ async function fetchAndDisplayAbsenceWarning(username) {
         const token = localStorage.getItem("token");
 
         if (!token) {
-            console.error("❌ Greška: Nema tokena! Korisnik nije prijavljen.");
+            console.error("Greška: Nema tokena! Korisnik nije prijavljen.");
             return;
         }
 
@@ -231,7 +231,7 @@ async function fetchAndDisplayAbsenceWarning(username) {
         }
 
         const { totalHours } = await response.json();
-        console.log(`📌 Ukupan broj sati izostanaka:`, totalHours);
+        console.log(`Ukupan broj sati izostanaka:`, totalHours);
 
         const warningText = document.getElementById("warning-text");
         const warningSection = document.querySelector(".warning");
@@ -244,12 +244,12 @@ async function fetchAndDisplayAbsenceWarning(username) {
             warningText.innerText = "⚠ Nesmiješ više izostati!";
             warningSection.style.backgroundColor = "#fff3cd"; // Žuto
         } else {
-            warningText.innerText = "❌ Prešao si dopušteni prag izostanaka!";
+            warningText.innerText = "Prešao si dopušteni prag izostanaka!";
             warningSection.style.backgroundColor = "#f8d7da"; // Crveno
         }
 
     } catch (error) {
-        console.error("❌ Greška pri dohvaćanju upozorenja:", error.message);
+        console.error("Greška pri dohvaćanju upozorenja:", error.message);
     }
 }
 
@@ -257,7 +257,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const token = localStorage.getItem("token");
 
     if (!token) {
-        console.error("❌ Nema tokena! Korisnik nije prijavljen.");
+        console.error("Nema tokena! Korisnik nije prijavljen.");
         return;
     }
 
@@ -279,6 +279,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             document.getElementById("profile-picture").src = `http://localhost:5000/uploads/${user.profileImage}`;
         }
     } catch (error) {
-        console.error("❌ Greška pri dohvaćanju korisnika:", error.message);
+        console.error("Greška pri dohvaćanju korisnika:", error.message);
     }
 });
