@@ -41,17 +41,17 @@ document.addEventListener("DOMContentLoaded", async () => {
             return;
         }
 
-        const response = await fetch(http://localhost:5000/grades/${subjectName}/${studentEmail}, {
+        const response = await fetch(`http://localhost:5000/grades/${subjectName}/${studentEmail}`, {
             method: "GET",
             headers: {
-                "Authorization": Bearer ${token}, // ✅ DODANO: Autorizacija
+                "Authorization": `Bearer ${token}`, 
                 "Content-Type": "application/json"
             }
         });
         
         if (!response.ok) {
             const errorText = await response.text();
-            throw new Error(Greška ${response.status}: ${errorText});
+            throw new Error(`Greška ${response.status}: ${errorText}`);
         }
 
         const grades = await response.json();
@@ -129,10 +129,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     });
 
-    const response = await fetch(http://localhost:5000/grades/${subjectName}/${studentEmail}, {
+    const response = await fetch(`http://localhost:5000/grades/${subjectName}/${studentEmail}`, {
         method: "POST",
         headers: { 
-            "Authorization": Bearer ${token},
+            "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json" 
         },
         body: JSON.stringify({ grades: rows }),
@@ -154,7 +154,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     try {
         const response = await fetch("http://localhost:5000/current-user", {
             method: "GET",
-            headers: { "Authorization": Bearer ${token} }
+            headers: { "Authorization": `Bearer ${token}` }
         });
 
         if (!response.ok) throw new Error("Neispravan token ili nije prijavljen korisnik.");
@@ -178,17 +178,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     try {
-        const response = await fetch(http://localhost:5000/grades/${subjectName}/${studentEmail}/${index}, {
+        const response = await fetch(`http://localhost:5000/grades/${subjectName}/${studentEmail}/${index}`, {
             method: "DELETE",
             headers: {
-                "Authorization": Bearer ${token},
+                "Authorization": `Bearer ${token}`,
                 "Content-Type": "application/json",
             }
         });
 
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(Greška pri brisanju: ${errorData.message});
+            throw new Error(`Greška pri brisanju: ${errorData.message}`);
         }
 
         alert("Ocjena uspješno obrisana!");
