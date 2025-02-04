@@ -2,198 +2,205 @@ const subjectName = document.body.dataset.subject || window.location.pathname.sp
 console.log("📌 Trenutno odabrani predmet:", subjectName);
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const gradesTable = document.getElementById("grades-table");
-    const editGradesButton = document.getElementById("editGradesButton");
-    const addRowButton = document.getElementById("addRowButton");
-    const saveGradesButton = document.getElementById("saveGradesButton");
+  const gradesTable = document.getElementById("grades-table");
+  const editGradesButton = document.getElementById("editGradesButton");
+  const addRowButton = document.getElementById("addRowButton");
+  const saveGradesButton = document.getElementById("saveGradesButton");
+  const fetchGradesButton = document.getElementById("fetchGrades");
+  const currentUser = await fetchCurrentUser();
 
-    const currentUser = await fetchCurrentUser();
+  // Ako je korisnik nastavnik, prikaži gumbe
+  if (currentUser.role === "nastavnik") {
+      editGradesButton.classList.remove("hidden");
+      addRowButton.classList.remove("hidden");
+      saveGradesButton.classList.remove("hidden");
+      fetchGradesButton.addEventListener("click", async () => {
+        studentEmail = getCurrentStudentEmail();
+        await fetchAndRenderGrades();
+  })
+    
+  } else {
+    console.warn("⛔ Korisnik NIJE nastavnik – skrivam gumbe!");
+  }
 
-    // Ako je korisnik nastavnik, prikaži gumbe
-    if (currentUser.role === "nastavnik") {
-        editGradesButton.classList.remove("hidden");
-        addRowButton.classList.remove("hidden");
-        saveGradesButton.classList.remove("hidden");
-    } else {
-        console.warn("⛔ Korisnik NIJE nastavnik – skrivam gumbe!");
-    }
+  await fetchAndRenderGrades();
+  
+  editGradesButton.addEventListener("click", () => enableEditing());
 
-    await fetchAndRenderGrades("grades");
+  async function fetchAndRenderGrades() {
+    try {
+        const token = localStorage.getItem("token"); // ✅ Dohvati JWT token
+        const studentEmail = await getCurrentStudentEmail();
+        
+        if (!token) {
+            console.error("❌ Nema tokena! Korisnik nije prijavljen.");
+            return;
+        }
+        if (!studentEmail) {
+            console.warn("⛔ Nema emaila učenika!");
+            return;
+        }
 
-    editGradesButton.addEventListener("click", () => enableEditing());
-
-    async function fetchAndRenderGrades() {
-        try {
-            const token = localStorage.getItem("token"); //  Dohvati JWT token
-            const studentEmail = await getCurrentStudentEmail();
-
-            if (!token) {
-                console.error("❌ Nema tokena! Korisnik nije prijavljen.");
-                return;
+        const response = await fetch(http://localhost:5000/grades/${subjectName}/${studentEmail}, {
+            method: "GET",
+            headers: {
+                "Authorization": Bearer ${token}, // ✅ DODANO: Autorizacija
+                "Content-Type": "application/json"
             }
-            if (!studentEmail) {
-                console.warn("⛔ Nema emaila učenika!");
-                return;
-            }
+        });
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(Greška ${response.status}: ${errorText});
+        }
 
-            const response = await fetch(`http://localhost:5000/grades/${subjectName}/${studentEmail}`, {
-                method: "GET",
-                headers: {
-                    "Authorization": `Bearer ${token}`, //  DODANO: Autorizacija
-                    "Content-Type": "application/json"
-                }
-            });
+        const grades = await response.json();
+        console.log("📌 Dohvaćene ocjene:", grades);
+        
+        if (!Array.isArray(grades)) {
+            throw new Error("Podaci nisu u JSON formatu!");
+        }
 
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`Greška ${response.status}: ${errorText}`);
-            }
+        
+        gradesTable.innerHTML = ""; // Očisti tablicu
 
-            const grades = await response.json();
-            console.log("📌 Dohvaćene ocjene:", grades);
-
-            if (!Array.isArray(grades)) {
-                throw new Error("Podaci nisu u JSON formatu!");
-            }
-
-            gradesTable.innerHTML = ""; // Očisti tablicu
-            grades.forEach((entry, index) => {
-                let row = document.createElement("tr");
-                row.innerHTML = `
+        grades.forEach((entry, index) => {
+            let row = document.createElement("tr");
+            row.innerHTML = `
                 <td contenteditable="true">${entry.date}</td>
                 <td contenteditable="true">${entry.grade}</td>
                 <td contenteditable="true">${entry.note}</td>
                 <button class="deleteRowButton" data-index="${index}">🗑</button>
             `;
-                gradesTable.appendChild(row);
-            });
-
-            // Omogući brisanje redova
-            document.querySelectorAll(".deleteRowButton").forEach((button) => {
-                button.addEventListener("click", async (event) => {
-                    const index = event.target.dataset.index;
-                    await deleteRow(index);
-                });
-            });
-
-        } catch (error) {
-            console.error("❌ Greška pri dohvaćanju ocjena:", error.message);
-        }
-    }
-
-    function enableEditing() {
-        document.querySelectorAll("#grades-table td").forEach((cell) => {
-            cell.contentEditable = true;
+            gradesTable.appendChild(row);
         });
 
-        saveGradesButton.style.display = "inline-block";
-        addRowButton.style.display = "inline-block";
-    }
+        // Omogući brisanje redova
+        document.querySelectorAll(".deleteRowButton").forEach((button) => {
+            button.addEventListener("click", async (event) => {
+                const index = event.target.dataset.index;
+                await deleteRow(index);
+            });
+        });
 
-    addRowButton.addEventListener("click", () => {
-        let newRow = document.createElement("tr");
-        newRow.innerHTML = `
+    } catch (error) {
+        console.error("❌ Greška pri dohvaćanju ocjena:", error.message);
+    }
+  }
+
+  function enableEditing() {
+      document.querySelectorAll("#grades-table td").forEach((cell) => {
+          cell.contentEditable = true;
+      });
+
+      saveGradesButton.style.display = "inline-block";
+      addRowButton.style.display = "inline-block";
+  }
+
+  addRowButton.addEventListener("click", () => {
+      let newRow = document.createElement("tr");
+      newRow.innerHTML = `
           <td contenteditable="true">Unesi datum</td>
           <td contenteditable="true">Unesi ocjenu</td>
           <td contenteditable="true">Unesi bilješku</td>
           <button class="deleteRowButton">🗑</button>
       `;
-        gradesTable.appendChild(newRow);
+      gradesTable.appendChild(newRow);
+  });
+
+  saveGradesButton.addEventListener("click", async () => {
+    const token = localStorage.getItem("token");  
+    const studentEmail = getCurrentStudentEmail();
+
+    if (!studentEmail) {
+        alert("Unesite email učenika!");
+        return;
+    }
+
+    let rows = [];
+    document.querySelectorAll("#grades-table tr").forEach((row) => {
+        let columns = row.querySelectorAll("td");
+        if (columns.length > 0) {
+            rows.push({
+                date: columns[0].innerText,
+                grade: columns[1].innerText,
+                note: columns[2].innerText,
+            });
+        }
     });
 
-    saveGradesButton.addEventListener("click", async () => {
-        const token = localStorage.getItem("token");
-        const studentEmail = getCurrentStudentEmail();
+    const response = await fetch(http://localhost:5000/grades/${subjectName}/${studentEmail}, {
+        method: "POST",
+        headers: { 
+            "Authorization": Bearer ${token},
+            "Content-Type": "application/json" 
+        },
+        body: JSON.stringify({ grades: rows }),
+    });
 
-        if (!studentEmail) {
-            alert("Unesite email učenika!");
-            return;
-        }
+    const result = await response.json();
+    alert(result.message);
+    await fetchAndRenderGrades(); // 🔄 Ponovno učitaj ocjene
+  });
 
-        let rows = [];
-        document.querySelectorAll("#grades-table tr").forEach((row) => {
-            let columns = row.querySelectorAll("td");
-            if (columns.length > 0) {
-                rows.push({
-                    date: columns[0].innerText,
-                    grade: columns[1].innerText,
-                    note: columns[2].innerText,
-                });
-            }
+  async function fetchCurrentUser() {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        console.error("❌ Nema tokena! Korisnik nije prijavljen.");
+        return { username: "", role: "student" }; // Student je default
+    }
+
+    try {
+        const response = await fetch("http://localhost:5000/current-user", {
+            method: "GET",
+            headers: { "Authorization": Bearer ${token} }
         });
 
-        const response = await fetch(`http://localhost:5000/grades/${subjectName}/${studentEmail}`, {
-            method: "POST",
+        if (!response.ok) throw new Error("Neispravan token ili nije prijavljen korisnik.");
+        const data = await response.json();
+        console.log("📌 Trenutni korisnik:", data);
+        return { username: data.username, role: data.role || "student" };
+
+    } catch (error) {
+        console.error("❌ Greška pri dohvaćanju korisnika:", error.message);
+        return { username: "", role: "student" };
+    }
+  }
+
+  async function deleteRow(index) {
+    const token = localStorage.getItem("token");
+    const studentEmail = getCurrentStudentEmail();
+
+    if (!studentEmail) {
+        alert("Unesite email učenika!");
+        return;
+    }
+
+    try {
+        const response = await fetch(http://localhost:5000/grades/${subjectName}/${studentEmail}/${index}, {
+            method: "DELETE",
             headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ grades: rows }),
+                "Authorization": Bearer ${token},
+                "Content-Type": "application/json",
+            }
         });
 
-        const result = await response.json();
-        alert(result.message);
-        await fetchAndRenderGrades(); //  Ponovno učitaj ocjene
-    });
-
-    async function fetchCurrentUser() {
-        const token = localStorage.getItem("token");
-
-        if (!token) {
-            console.error("❌ Nema tokena! Korisnik nije prijavljen.");
-            return { username: "", role: "student" }; // Student je default
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(Greška pri brisanju: ${errorData.message});
         }
 
-        try {
-            const response = await fetch("http://localhost:5000/current-user", {
-                method: "GET",
-                headers: { "Authorization": `Bearer ${token}` }
-            });
+        alert("Ocjena uspješno obrisana!");
+        await fetchAndRenderGrades(); // Ponovno učitavanje nakon brisanja
 
-            if (!response.ok) throw new Error("Neispravan token ili nije prijavljen korisnik.");
-            const data = await response.json();
-            console.log("📌 Trenutni korisnik:", data);
-            return { username: data.username, role: data.role || "student" };
-
-        } catch (error) {
-            console.error("❌ Greška pri dohvaćanju korisnika:", error.message);
-            return { username: "", role: "student" };
-        }
+    } catch (error) {
+        console.error("❌ Greška pri brisanju:", error.message);
+        alert(error.message);
     }
+  }
 
-    async function deleteRow(index) {
-        const token = localStorage.getItem("token");
-        const studentEmail = getCurrentStudentEmail();
-
-        if (!studentEmail) {
-            alert("Unesite email učenika!");
-            return;
-        }
-
-        try {
-            const response = await fetch(`http://localhost:5000/grades/${subjectName}/${studentEmail}/${index}`, {
-                method: "DELETE",
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                    "Content-Type": "application/json",
-                }
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(`Greška pri brisanju: ${errorData.message}`);
-            }
-
-            alert("Ocjena uspješno obrisana!");
-            await fetchAndRenderGrades(); // Ponovno učitavanje nakon brisanja
-
-        } catch (error) {
-            console.error("❌ Greška pri brisanju:", error.message);
-            alert(error.message);
-        }
-    }
-
-    async function getCurrentStudentEmail() {
+  async function getCurrentStudentEmail() {
     const currentUser = await fetchCurrentUser();
     if (currentUser.role === "student") {
         return currentUser.username; // Automatski dohvaća email prijavljenog učenika
@@ -201,6 +208,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const emailInput = document.getElementById("studentEmail");
     return emailInput ? emailInput.value.trim() : "";
   }
+
 });
 
 // Ažuriranje bilješki
